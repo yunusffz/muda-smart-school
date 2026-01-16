@@ -34,11 +34,13 @@ export default function Beranda() {
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg animate-fade-in-up">
-              Selamat Datang di{" "}
-              <span className="text-secondary-400">SMK Muhammadiyah 2 Cibiru</span>
+              Mencetak Generasi{" "}
+              <span className="text-secondary-400">Unggul</span>,{" "}
+              <span className="text-primary-300">Berkarakter Islami</span>, dan{" "}
+              <span className="text-yellow-400">Siap Bersaing</span>
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-md animate-fade-in-up animation-delay-200">
-              Mencetak generasi unggul, berkarakter Islami, dan siap bersaing di era global
+              SMK Muhammadiyah 2 Cibiru - Pendidikan kejuruan berkualitas untuk masa depan cemerlang
             </p>
           </div>
         </div>
