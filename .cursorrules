@@ -1,0 +1,33 @@
+# Commit Message Guidelines
+
+When generating commit messages, follow these rules:
+
+## Format
+- Use Conventional Commits format: `<type>: <short description>`
+- Keep messages concise (50-72 characters for the subject line)
+- Use imperative mood (e.g., "add feature" not "added feature" or "adds feature")
+
+## Commit Types
+Use standard prefixes:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, missing semicolons, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks, build config, dependencies
+- `perf`: Performance improvements
+- `ci`: CI/CD changes
+
+## Examples
+- `feat: add user authentication`
+- `fix: resolve login redirect issue`
+- `docs: update API documentation`
+- `refactor: simplify user service`
+- `chore: update dependencies`
+
+## Rules
+- Never write long commit messages
+- Keep descriptions clear and specific
+- One change per commit message
+- No period at the end of the subject line
