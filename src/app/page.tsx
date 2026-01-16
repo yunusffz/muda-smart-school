@@ -223,6 +223,180 @@ export default function Beranda() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 md:py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Testimoni <span className="text-primary-600">Alumni & Orang Tua</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Apa kata mereka tentang pengalaman belajar di SMK Muhammadiyah 2 Cibiru
+            </p>
+          </div>
+
+          {/* Testimonials Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Testimonial 1 - Alumni */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Berkat pendidikan di SMK Muhammadiyah 2 Cibiru, saya mendapatkan ilmu dan keterampilan yang sangat berguna. Sekarang saya bekerja sebagai Software Developer di perusahaan teknologi ternama.&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    RA
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Rizki Ananda</h4>
+                    <p className="text-sm text-gray-500">Alumni 2020 - Software Developer</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-primary-100 text-primary-600 text-xs font-semibold px-3 py-1 rounded-full">Alumni</span>
+            </div>
+
+            {/* Testimonial 2 - Orang Tua */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Saya sangat bersyukur menyekolahkan anak di sini. Selain akademik yang bagus, pembinaan karakter Islami membuat anak saya tumbuh menjadi pribadi yang berakhlak mulia.&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    SH
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Ibu Siti Hartini</h4>
+                    <p className="text-sm text-gray-500">Orang Tua Siswa Kelas XII</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-secondary-100 text-secondary-600 text-xs font-semibold px-3 py-1 rounded-full">Orang Tua</span>
+            </div>
+
+            {/* Testimonial 3 - Alumni */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Program magang yang difasilitasi sekolah membuka jalan karir saya. Langsung setelah lulus, saya diterima bekerja di tempat magang dengan posisi yang bagus.&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    DN
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Dina Nurhaliza</h4>
+                    <p className="text-sm text-gray-500">Alumni 2022 - Admin Finance</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-primary-100 text-primary-600 text-xs font-semibold px-3 py-1 rounded-full">Alumni</span>
+            </div>
+
+            {/* Testimonial 4 - Orang Tua */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Guru-guru di sini sangat perhatian dan komunikatif dengan orang tua. Kami selalu mendapat update perkembangan anak melalui berbagai media komunikasi.&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    AW
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Bapak Ahmad Wijaya</h4>
+                    <p className="text-sm text-gray-500">Orang Tua Siswa Kelas X</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-secondary-100 text-secondary-600 text-xs font-semibold px-3 py-1 rounded-full">Orang Tua</span>
+            </div>
+
+            {/* Testimonial 5 - Alumni */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Saya melanjutkan kuliah di PTN favorit berkat bekal ilmu dari SMK ini. Ternyata lulusan SMK juga bisa bersaing dan berprestasi di perguruan tinggi!&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    MF
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Muhammad Farhan</h4>
+                    <p className="text-sm text-gray-500">Alumni 2021 - Mahasiswa ITB</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-primary-100 text-primary-600 text-xs font-semibold px-3 py-1 rounded-full">Alumni</span>
+            </div>
+
+            {/* Testimonial 6 - Orang Tua */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+              <div className="absolute -top-4 left-8">
+                <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="pt-4">
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  &ldquo;Biaya pendidikan yang terjangkau dengan kualitas yang baik. Banyak program beasiswa juga untuk siswa berprestasi. Sangat membantu keluarga kami.&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    RK
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Ibu Ratna Kusuma</h4>
+                    <p className="text-sm text-gray-500">Orang Tua Siswa Kelas XI</p>
+                  </div>
+                </div>
+              </div>
+              <span className="absolute top-4 right-4 bg-secondary-100 text-secondary-600 text-xs font-semibold px-3 py-1 rounded-full">Orang Tua</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
