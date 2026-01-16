@@ -1,0 +1,335 @@
+# School Website Development Rules - Claude Code
+
+## Project Overview
+Enterprise Next.js school website with TypeScript, Tailwind CSS, Shadcn/ui, Prisma, and Supabase.
+
+## Folder Structure - STRICTLY FOLLOW
+
+### Directory Layout:
+```
+src/
+├── app/                          # Next.js App Router - routes ONLY
+│   ├── (public)/                 # Public pages group
+│   │   ├── page.tsx
+│   │   ├── courses/
+│   │   │   ├── page.tsx
+│   │   │   ├── [id]/page.tsx
+│   │   │   └── _components/      # Page-specific components ONLY
+│   │   └── layout.tsx
+│   ├── (dashboard)/              # Protected pages group
+│   │   ├── dashboard/
+│   │   ├── courses/
+│   │   │   └── _components/      # Page-specific components ONLY
+│   │   └── layout.tsx
+│   └── api/                      # API routes
+│       └── [feature]/
+├── features/                     # Business logic by domain
+│   └── [feature-name]/
+│       ├── components/           # Shared within feature (2+ uses)
+│       ├── hooks/
+│       ├── services/             # API calls
+│       ├── types/                # TypeScript interfaces
+│       └── utils/
+├── components/                   # Global shared components
+│   ├── ui/                       # Shadcn components
+│   ├── layout/                   # Header, Footer, Sidebar
+│   └── common/                   # LoadingSpinner, ErrorMessage
+└── lib/                          # Global utilities, DB client
+```
+
+## Component Placement Rules - CRITICAL
+
+### Rule 1: Page-Specific Components
+Location: `app/[route]/_components/`
+When: Component used ONLY on that specific page
+Example: `app/(public)/courses/_components/PublicCourseCard.tsx`
+- PublicCourseCard only shows on public courses listing
+- NOT reused anywhere else
+
+### Rule 2: Feature-Shared Components  
+Location: `features/[feature]/components/`
+When: Component used 2+ times within SAME feature
+Example: `features/courses/components/CourseForm.tsx`
+- CourseForm used in both create and edit pages
+- Still courses-specific, not used in students/teachers
+
+### Rule 3: Global Shared Components
+Location: `components/`
+When: Component used across MULTIPLE features
+Example: `components/common/LoadingSpinner.tsx`
+- Used in courses, students, teachers, etc.
+- Pure UI, no business logic
+
+## Naming Conventions
+
+### Files:
+- Components: PascalCase (e.g., `CourseCard.tsx`)
+- Utilities: camelCase (e.g., `formatDate.ts`)
+- API routes: kebab-case folders (e.g., `api/courses/`)
+
+### Components:
+- Page components: Descriptive (e.g., `PublicCourseCard`, `DashboardCourseCard`)
+- Shared components: Generic (e.g., `CourseCard`, `CourseForm`)
+- Prefix page-specific: Add context (e.g., `PublicCourseCard` vs `DashboardCourseCard`)
+
+## Technology Stack - ALWAYS USE
+
+### Core:
+- Next.js 14+ (App Router)
+- TypeScript (strict mode)
+- React 18+
+
+### Styling:
+- Tailwind CSS
+- Shadcn/ui components (prefer over custom)
+- Lucide React icons
+
+### Database:
+- Prisma ORM
+- Supabase PostgreSQL
+- Connection pooling for production
+
+### Forms & Validation:
+- React Hook Form
+- Zod schemas
+- @hookform/resolvers
+
+### State Management:
+- React Query (@tanstack/react-query) for server state
+- Zustand for client state (if needed)
+
+## Code Standards
+
+### TypeScript:
+```typescript
+// ✅ DO: Use interfaces for objects
+interface Course {
+  id: string
+  title: string
+  description: string
+}
+
+// ✅ DO: Type function parameters and returns
+export async function getCourses(): Promise<Course[]> {
+  // ...
+}
+
+// ❌ DON'T: Use 'any'
+// ❌ DON'T: Skip type annotations
+```
+
+### Components:
+```typescript
+// ✅ DO: Functional components with TypeScript
+interface CourseCardProps {
+  course: Course
+  variant?: 'public' | 'dashboard'
+}
+
+export function CourseCard({ course, variant = 'public' }: CourseCardProps) {
+  // ...
+}
+
+// ✅ DO: Named exports (except pages)
+// ❌ DON'T: Default exports for components
+```
+
+### Imports:
+```typescript
+// ✅ DO: Use path aliases
+import { Button } from '@/components/ui/button'
+import { Course } from '@/features/courses/types/course.types'
+
+// ✅ DO: Group imports
+// 1. React/Next
+// 2. Third-party
+// 3. Local (@/)
+```
+
+### API Routes:
+```typescript
+// ✅ DO: Use Route Handlers pattern
+// app/api/courses/route.ts
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
+export async function GET() {
+  const courses = await prisma.course.findMany()
+  return NextResponse.json(courses)
+}
+
+// ✅ DO: Validate with Zod
+import { z } from 'zod'
+
+const courseSchema = z.object({
+  title: z.string().min(1),
+  description: z.string()
+})
+```
+
+## Prisma Guidelines
+
+### Schema:
+```prisma
+// ✅ DO: Use meaningful model names
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("courses") // Map to plural table name
+}
+```
+
+### Client Usage:
+```typescript
+// ✅ DO: Create singleton client
+// lib/prisma.ts
+import { PrismaClient } from '@prisma/client'
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
+```
+
+## Before Creating Any Component - ASK:
+
+1. **Where will this component be used?**
+   - One page only? → `app/[route]/_components/`
+   - Multiple places in same feature? → `features/[feature]/components/`
+   - Multiple features? → `components/`
+
+2. **Does a similar component exist?**
+   - Check existing components first
+   - Reuse with variants if possible
+
+3. **What's the feature domain?**
+   - Courses, Students, Teachers, Auth, etc.
+   - Place in correct feature folder
+
+## Common Patterns
+
+### Feature Service:
+```typescript
+// features/courses/services/courseService.ts
+export const courseService = {
+  async getCourses() {
+    const res = await fetch('/api/courses')
+    if (!res.ok) throw new Error('Failed to fetch')
+    return res.json()
+  },
+  
+  async getCourse(id: string) {
+    const res = await fetch(`/api/courses/${id}`)
+    if (!res.ok) throw new Error('Failed to fetch')
+    return res.json()
+  }
+}
+```
+
+### Custom Hook:
+```typescript
+// features/courses/hooks/useCourses.ts
+import { useQuery } from '@tanstack/react-query'
+import { courseService } from '../services/courseService'
+
+export function useCourses() {
+  return useQuery({
+    queryKey: ['courses'],
+    queryFn: courseService.getCourses
+  })
+}
+```
+
+### Page Component:
+```typescript
+// app/(public)/courses/page.tsx
+import { PublicCourseCard } from './_components/PublicCourseCard'
+import { courseService } from '@/features/courses/services/courseService'
+
+export default async function CoursesPage() {
+  const courses = await courseService.getCourses()
+  
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6">Our Courses</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {courses.map(course => (
+          <PublicCourseCard key={course.id} course={course} />
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+## Environment Variables
+
+Required in `.env.local`:
+```bash
+# Database
+DATABASE_URL="postgresql://..."
+DIRECT_URL="postgresql://..."
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL="https://..."
+NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
+
+# Auth (if using NextAuth)
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="..."
+```
+
+## Git Ignore
+
+Always ignore:
+```
+node_modules/
+.next/
+.env.local
+.env*.local
+prisma/migrations/dev.db*
+```
+
+## Questions to Ask Before Coding
+
+1. "Where should this component be placed based on usage?"
+2. "Is this feature-specific or global?"
+3. "Do types/services for this feature already exist?"
+4. "Should this use an existing Shadcn component?"
+5. "Does this need to be a server or client component?"
+
+## Red Flags - NEVER DO
+
+❌ Putting page-specific components in `features/`
+❌ Duplicating types across features
+❌ Creating new components without checking `components/ui/`
+❌ Using `any` type
+❌ Skipping Zod validation in API routes
+❌ Not using Prisma client singleton
+❌ Mixing server and client components incorrectly
+
+## When in Doubt
+
+1. Ask: "Where is this used?"
+2. Check: Existing similar components
+3. Follow: The decision tree in rules
+4. Prefer: Simplicity and reusability
+
+## Summary Checklist
+
+Before creating ANY file, confirm:
+- [ ] Correct folder location
+- [ ] TypeScript interfaces defined
+- [ ] Imports use `@/` alias
+- [ ] Component naming is clear
+- [ ] Following Shadcn/ui patterns
+- [ ] Using shared types from features/

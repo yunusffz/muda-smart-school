@@ -31,3 +31,667 @@ Use standard prefixes:
 - Keep descriptions clear and specific
 - One change per commit message
 - No period at the end of the subject line
+
+# School Website - Next.js Development Rules
+
+You are an expert Next.js developer building an enterprise school website. Follow these rules strictly.
+
+## Tech Stack
+- Next.js 14+ (App Router)
+- TypeScript (strict mode)
+- Tailwind CSS
+- Shadcn/ui components
+- Prisma + Supabase PostgreSQL
+- React Hook Form + Zod
+
+## Folder Structure - CRITICAL
+```
+src/
+├── app/                          # Routes ONLY
+│   ├── (public)/                 # Public pages
+│   │   ├── courses/
+│   │   │   ├── page.tsx
+│   │   │   └── _components/      # Page-specific components
+│   │   └── layout.tsx
+│   ├── (dashboard)/              # Protected pages
+│   │   ├── courses/
+│   │   │   └── _components/      # Page-specific components
+│   │   └── layout.tsx
+│   └── api/                      # API routes
+├── features/                     # Business logic by domain
+│   └── [feature]/
+│       ├── components/           # Shared within feature
+│       ├── hooks/
+│       ├── services/             # API calls
+│       ├── types/
+│       └── utils/
+├── components/                   # Global shared
+│   ├── ui/                       # Shadcn
+│   ├── layout/
+│   └── common/
+└── lib/                          # Utils, DB client
+```
+
+## Component Placement Rules
+
+### 1. Page-Specific Components
+**Location:** `app/[route]/_components/`
+**When:** Used ONLY on that specific page
+**Example:** 
+```typescript
+// app/(public)/courses/_components/PublicCourseCard.tsx
+// Only used on public courses listing page
+```
+
+### 2. Feature-Shared Components
+**Location:** `features/[feature]/components/`
+**When:** Used 2+ times within SAME feature
+**Example:**
+```typescript
+// features/courses/components/CourseForm.tsx
+// Used in both create and edit pages
+```
+
+### 3. Global Components
+**Location:** `components/`
+**When:** Used across MULTIPLE features
+**Example:**
+```typescript
+// components/common/LoadingSpinner.tsx
+// Used everywhere
+```
+
+## Decision Tree - Follow This
+```
+Creating a new component?
+│
+├─ Used in ONE page only?
+│  └─ YES → app/[route]/_components/ComponentName.tsx
+│
+├─ Used multiple times in ONE feature?
+│  └─ YES → features/[feature]/components/ComponentName.tsx
+│
+└─ Used across multiple features?
+   └─ YES → components/ComponentName.tsx
+```
+
+## TypeScript Standards
+
+### Interfaces (preferred over types)
+```typescript
+// ✅ DO
+interface Course {
+  id: string
+  title: string
+  description: string
+  teacherId: string
+  teacher?: Teacher
+  createdAt: Date
+  updatedAt: Date
+}
+
+// ❌ DON'T use 'any'
+// ❌ DON'T skip type annotations
+```
+
+### Component Props
+```typescript
+// ✅ DO
+interface CourseCardProps {
+  course: Course
+  variant?: 'public' | 'dashboard'
+  onEnroll?: (courseId: string) => void
+}
+
+export function CourseCard({ 
+  course, 
+  variant = 'public',
+  onEnroll 
+}: CourseCardProps) {
+  // ...
+}
+```
+
+### Function Types
+```typescript
+// ✅ DO - Type parameters and returns
+export async function getCourses(): Promise<Course[]> {
+  const courses = await prisma.course.findMany()
+  return courses
+}
+```
+
+## Component Standards
+
+### Functional Components Only
+```typescript
+// ✅ DO - Named export functional component
+export function CourseCard({ course }: CourseCardProps) {
+  return (
+    <Card>
+      <h3>{course.title}</h3>
+    </Card>
+  )
+}
+
+// ❌ DON'T - Default exports (except pages)
+// ❌ DON'T - Class components
+```
+
+### Server vs Client Components
+```typescript
+// Server Component (default)
+// app/(public)/courses/page.tsx
+export default async function CoursesPage() {
+  const courses = await getCourses() // Direct DB access
+  return <div>...</div>
+}
+
+// Client Component (when needed)
+// Add 'use client' at top
+'use client'
+import { useState } from 'react'
+
+export function CourseForm() {
+  const [title, setTitle] = useState('')
+  // ...
+}
+```
+
+## Import Standards
+
+### Order and Grouping
+```typescript
+// 1. React/Next
+import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+
+// 2. Third-party libraries
+import { useQuery } from '@tanstack/react-query'
+import { z } from 'zod'
+
+// 3. Components (Shadcn)
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+
+// 4. Local imports
+import { Course } from '@/features/courses/types/course.types'
+import { courseService } from '@/features/courses/services/courseService'
+import { useCourses } from '@/features/courses/hooks/useCourses'
+
+// 5. Styles
+import styles from './styles.module.css'
+```
+
+### Path Aliases
+```typescript
+// ✅ DO - Always use @ alias
+import { Button } from '@/components/ui/button'
+import { Course } from '@/features/courses/types/course.types'
+
+// ❌ DON'T - Relative imports for cross-directory
+import { Button } from '../../../components/ui/button'
+```
+
+## API Route Patterns
+
+### Route Handlers (Next.js 14+)
+```typescript
+// app/api/courses/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
+
+// GET /api/courses
+export async function GET(request: NextRequest) {
+  try {
+    const courses = await prisma.course.findMany({
+      include: { teacher: true }
+    })
+    return NextResponse.json(courses)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch courses' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST /api/courses
+const createCourseSchema = z.object({
+  title: z.string().min(1),
+  description: z.string(),
+  teacherId: z.string()
+})
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const validated = createCourseSchema.parse(body)
+    
+    const course = await prisma.course.create({
+      data: validated
+    })
+    
+    return NextResponse.json(course, { status: 201 })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: error.errors },
+        { status: 400 }
+      )
+    }
+    return NextResponse.json(
+      { error: 'Failed to create course' },
+      { status: 500 }
+    )
+  }
+}
+```
+
+### Dynamic Routes
+```typescript
+// app/api/courses/[id]/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const course = await prisma.course.findUnique({
+    where: { id: params.id },
+    include: { teacher: true }
+  })
+  
+  if (!course) {
+    return NextResponse.json(
+      { error: 'Course not found' },
+      { status: 404 }
+    )
+  }
+  
+  return NextResponse.json(course)
+}
+```
+
+## Prisma Patterns
+
+### Client Setup
+```typescript
+// lib/prisma.ts
+import { PrismaClient } from '@prisma/client'
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+export const prisma = 
+  globalForPrisma.prisma ?? 
+  new PrismaClient({
+    log: ['query', 'error', 'warn'],
+  })
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
+```
+
+### Schema Conventions
+```prisma
+// prisma/schema.prisma
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String?
+  teacherId   String?
+  teacher     Teacher? @relation(fields: [teacherId], references: [id])
+  students    StudentCourse[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("courses")  // Always map to plural table names
+}
+```
+
+## Service Layer Pattern
+
+### Feature Service
+```typescript
+// features/courses/services/courseService.ts
+import { Course } from '../types/course.types'
+
+export const courseService = {
+  async getCourses(): Promise<Course[]> {
+    const response = await fetch('/api/courses')
+    if (!response.ok) {
+      throw new Error('Failed to fetch courses')
+    }
+    return response.json()
+  },
+
+  async getCourse(id: string): Promise<Course> {
+    const response = await fetch(`/api/courses/${id}`)
+    if (!response.ok) {
+      throw new Error('Failed to fetch course')
+    }
+    return response.json()
+  },
+
+  async createCourse(data: Omit<Course, 'id' | 'createdAt' | 'updatedAt'>): Promise<Course> {
+    const response = await fetch('/api/courses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+      throw new Error('Failed to create course')
+    }
+    return response.json()
+  },
+
+  async updateCourse(id: string, data: Partial<Course>): Promise<Course> {
+    const response = await fetch(`/api/courses/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+      throw new Error('Failed to update course')
+    }
+    return response.json()
+  },
+
+  async deleteCourse(id: string): Promise<void> {
+    const response = await fetch(`/api/courses/${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      throw new Error('Failed to delete course')
+    }
+  }
+}
+```
+
+## Custom Hooks Pattern
+
+### React Query Hook
+```typescript
+// features/courses/hooks/useCourses.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { courseService } from '../services/courseService'
+import { Course } from '../types/course.types'
+
+export function useCourses() {
+  return useQuery({
+    queryKey: ['courses'],
+    queryFn: courseService.getCourses,
+  })
+}
+
+export function useCourse(id: string) {
+  return useQuery({
+    queryKey: ['courses', id],
+    queryFn: () => courseService.getCourse(id),
+    enabled: !!id,
+  })
+}
+
+export function useCreateCourse() {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: courseService.createCourse,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] })
+    },
+  })
+}
+```
+
+## Form Handling Pattern
+
+### React Hook Form + Zod
+```typescript
+// features/courses/components/CourseForm.tsx
+'use client'
+
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+
+const courseSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+  teacherId: z.string().min(1, 'Teacher is required'),
+})
+
+type CourseFormValues = z.infer<typeof courseSchema>
+
+interface CourseFormProps {
+  defaultValues?: Partial<CourseFormValues>
+  onSubmit: (data: CourseFormValues) => void
+}
+
+export function CourseForm({ defaultValues, onSubmit }: CourseFormProps) {
+  const form = useForm<CourseFormValues>({
+    resolver: zodResolver(courseSchema),
+    defaultValues,
+  })
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Course title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        {/* More fields... */}
+        
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  )
+}
+```
+
+## Styling Standards
+
+### Tailwind Classes
+```typescript
+// ✅ DO - Use Tailwind utility classes
+<div className="container mx-auto py-8">
+  <h1 className="text-3xl font-bold mb-6">Courses</h1>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {/* Content */}
+  </div>
+</div>
+
+// ✅ DO - Use cn() for conditional classes
+import { cn } from '@/lib/utils'
+
+<Button 
+  className={cn(
+    "w-full",
+    variant === 'primary' && "bg-blue-500",
+    variant === 'secondary' && "bg-gray-500"
+  )}
+>
+  Click Me
+</Button>
+```
+
+### Shadcn Components
+```typescript
+// ✅ ALWAYS prefer Shadcn components over custom
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+
+// ❌ DON'T create custom buttons, cards, etc.
+```
+
+## Naming Conventions
+
+### Files
+```
+Components:     PascalCase      CourseCard.tsx
+Utilities:      camelCase       formatDate.ts
+Services:       camelCase       courseService.ts
+Hooks:          camelCase       useCourses.ts
+Types:          camelCase       course.types.ts
+API routes:     kebab-case      /api/courses/[id]
+```
+
+### Variables
+```typescript
+// Components
+const CourseCard = () => {}
+
+// Functions
+const getCourses = () => {}
+
+// Constants
+const MAX_COURSES = 100
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+
+// Boolean variables
+const isLoading = false
+const hasError = false
+const canEdit = true
+```
+
+## Error Handling
+
+### Try-Catch Pattern
+```typescript
+// ✅ DO - Always handle errors
+try {
+  const courses = await courseService.getCourses()
+  return courses
+} catch (error) {
+  console.error('Failed to fetch courses:', error)
+  throw error // or handle gracefully
+}
+```
+
+### React Error Boundaries
+```typescript
+// components/common/ErrorBoundary.tsx
+'use client'
+
+export function ErrorBoundary({ 
+  children, 
+  fallback 
+}: { 
+  children: React.ReactNode
+  fallback: React.ReactNode
+}) {
+  // Implementation
+}
+```
+
+## Before Creating Any File - Ask These Questions
+
+1. **Where will this be used?**
+   - One page? → `app/[route]/_components/`
+   - One feature, multiple places? → `features/[feature]/components/`
+   - Multiple features? → `components/`
+
+2. **Does it already exist?**
+   - Check `components/ui/` for Shadcn components
+   - Check `features/[feature]/components/` for feature components
+   - Check `components/` for global components
+
+3. **What's the feature domain?**
+   - Courses? → `features/courses/`
+   - Students? → `features/students/`
+   - Auth? → `features/auth/`
+
+4. **Server or client component?**
+   - Needs interactivity/hooks? → Client ('use client')
+   - Can be static/data fetching? → Server (default)
+
+## Red Flags - NEVER DO
+
+❌ Putting page-specific components in `features/` or `components/`
+❌ Creating custom buttons, inputs when Shadcn has them
+❌ Using `any` type
+❌ Skipping validation in API routes
+❌ Not using Prisma client singleton
+❌ Relative imports across directories
+❌ Default exports for components
+❌ Class components
+❌ Inline styles
+
+## When Suggesting Code
+
+1. **Always ask for clarification** on component placement if unclear
+2. **Check existing patterns** before creating new ones
+3. **Prefer Shadcn components** over custom
+4. **Use TypeScript strictly** - no any, no missing types
+5. **Follow the folder structure** exactly as specified
+
+## Quick Reference
+
+### Create Page Component
+```
+Location: app/(public)/courses/page.tsx
+Type: Server Component (default)
+Imports: Use @ alias
+```
+
+### Create Page-Specific Component
+```
+Location: app/(public)/courses/_components/PublicCourseCard.tsx
+Type: Client or Server (based on need)
+Export: Named export
+```
+
+### Create Feature Service
+```
+Location: features/courses/services/courseService.ts
+Pattern: Object with async methods
+Export: Named export (courseService)
+```
+
+### Create Feature Hook
+```
+Location: features/courses/hooks/useCourses.ts
+Pattern: React Query hook
+Export: Named export
+```
+
+### Create API Route
+```
+Location: app/api/courses/route.ts
+Pattern: Named exports (GET, POST, etc.)
+Validation: Use Zod
+```
+
+## Summary Checklist
+
+Before writing ANY code, verify:
+- [ ] Correct folder placement
+- [ ] TypeScript interfaces defined
+- [ ] Using @ alias for imports
+- [ ] Shadcn components where possible
+- [ ] Named exports (except pages)
+- [ ] Error handling included
+- [ ] Zod validation for forms/API
+- [ ] No 'any' types
