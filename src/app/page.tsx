@@ -15,6 +15,21 @@ export default function Beranda() {
         {/* Gradient overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
+        {/* Accreditation Badge */}
+        <div className="absolute top-4 right-4 md:top-8 md:right-8 animate-fade-in">
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-lg border border-primary-200">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-md">
+                <span className="text-2xl md:text-3xl font-bold text-white">A</span>
+              </div>
+              <div className="text-left">
+                <p className="text-xs md:text-sm font-semibold text-gray-600">Terakreditasi</p>
+                <p className="text-lg md:text-xl font-bold text-primary-600">Akreditasi A</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Title overlay at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
           <div className="max-w-7xl mx-auto">

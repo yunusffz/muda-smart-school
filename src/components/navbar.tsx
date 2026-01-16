@@ -13,8 +13,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { label: "BERANDA", href: "/" },
-    { label: "TENTANG", href: "/tentang" },
+    { label: "TENTANG", href: "/" },
     { label: "FASILITAS", href: "/fasilitas" },
     { label: "KONTAK", href: "/kontak" },
   ];
