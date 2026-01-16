@@ -212,8 +212,8 @@ import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
 // 3. Components (Shadcn)
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Button } from '@/src/components/ui/button'
+import { Card } from '@/src/components/ui/card'
 
 // 4. Local imports
 import { Course } from '@/features/courses/types/course.types'
@@ -227,7 +227,7 @@ import styles from './styles.module.css'
 ### Path Aliases
 ```typescript
 // ✅ DO - Always use @ alias
-import { Button } from '@/components/ui/button'
+import { Button } from '@/src/components/ui/button'
 import { Course } from '@/features/courses/types/course.types'
 
 // ❌ DON'T - Relative imports for cross-directory
@@ -240,7 +240,7 @@ import { Button } from '../../../components/ui/button'
 ```typescript
 // app/api/courses/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/src/lib/prisma'
 import { z } from 'zod'
 
 // GET /api/courses
@@ -460,9 +460,9 @@ export function useCreateCourse() {
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Button } from '@/src/components/ui/button'
+import { Input } from '@/src/components/ui/input'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/src/components/ui/form'
 
 const courseSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -522,7 +522,7 @@ export function CourseForm({ defaultValues, onSubmit }: CourseFormProps) {
 </div>
 
 // ✅ DO - Use cn() for conditional classes
-import { cn } from '@/lib/utils'
+import { cn } from '@/src/lib/utils'
 
 <Button 
   className={cn(
@@ -538,10 +538,10 @@ import { cn } from '@/lib/utils'
 ### Shadcn Components
 ```typescript
 // ✅ ALWAYS prefer Shadcn components over custom
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
+import { Button } from '@/src/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/src/components/ui/card'
+import { Input } from '@/src/components/ui/input'
+import { Badge } from '@/src/components/ui/badge'
 
 // ❌ DON'T create custom buttons, cards, etc.
 ```

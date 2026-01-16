@@ -137,7 +137,7 @@ export function CourseCard({ course, variant = 'public' }: CourseCardProps) {
 ### Imports:
 ```typescript
 // ✅ DO: Use path aliases
-import { Button } from '@/components/ui/button'
+import { Button } from '@/src/components/ui/button'
 import { Course } from '@/features/courses/types/course.types'
 
 // ✅ DO: Group imports
@@ -151,7 +151,7 @@ import { Course } from '@/features/courses/types/course.types'
 // ✅ DO: Use Route Handlers pattern
 // app/api/courses/route.ts
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/src/lib/prisma'
 
 export async function GET() {
   const courses = await prisma.course.findMany()
