@@ -137,6 +137,92 @@ export default function Beranda() {
           </div>
         </div>
       </section>
+
+      {/* Awards Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Prestasi & <span className="text-primary-600">Penghargaan</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Berbagai pencapaian yang telah diraih oleh siswa dan sekolah kami
+            </p>
+          </div>
+
+          {/* Awards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Award 1 */}
+            <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-6 border border-yellow-200 hover:shadow-lg transition-shadow duration-300">
+              <div className="w-14 h-14 bg-yellow-400 rounded-xl flex items-center justify-center mb-4 shadow-md">
+                <svg className="w-8 h-8 text-yellow-800" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Juara 1 LKS</h3>
+              <p className="text-gray-600 text-sm mb-3">Lomba Kompetensi Siswa Tingkat Provinsi Jawa Barat</p>
+              <span className="inline-block bg-yellow-200 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">2024</span>
+            </div>
+
+            {/* Award 2 */}
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-lg transition-shadow duration-300">
+              <div className="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Sekolah Adiwiyata</h3>
+              <p className="text-gray-600 text-sm mb-3">Penghargaan Sekolah Berwawasan Lingkungan</p>
+              <span className="inline-block bg-blue-200 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">2023</span>
+            </div>
+
+            {/* Award 3 */}
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-lg transition-shadow duration-300">
+              <div className="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Juara 2 OSN</h3>
+              <p className="text-gray-600 text-sm mb-3">Olimpiade Sains Nasional Bidang Komputer</p>
+              <span className="inline-block bg-green-200 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">2024</span>
+            </div>
+
+            {/* Award 4 */}
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-lg transition-shadow duration-300">
+              <div className="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Best Partner</h3>
+              <p className="text-gray-600 text-sm mb-3">Mitra Terbaik Program Magang IDUKA</p>
+              <span className="inline-block bg-purple-200 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">2024</span>
+            </div>
+          </div>
+
+          {/* Stats Row */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">50+</div>
+              <p className="text-gray-600">Penghargaan</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">100+</div>
+              <p className="text-gray-600">Prestasi Siswa</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">25+</div>
+              <p className="text-gray-600">Mitra Industri</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">95%</div>
+              <p className="text-gray-600">Lulusan Bekerja</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
