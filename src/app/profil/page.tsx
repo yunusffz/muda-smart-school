@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Beranda() {
+export default function Tentang() {
   return (
     <main className="pt-16">
       {/* Hero Banner */}
@@ -20,7 +20,7 @@ export default function Beranda() {
           <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-lg border border-primary-200">
             <div className="flex items-center gap-2 md:gap-3">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-md">
-                <span className="text-2xl md:text-3xl font-bold text-white">B</span>
+                <span className="text-2xl md:text-3xl font-bold text-white">A</span>
               </div>
               <div className="text-left">
                 <p className="text-xs md:text-sm font-semibold text-gray-600">Terakreditasi</p>
@@ -34,12 +34,10 @@ export default function Beranda() {
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg animate-fade-in-up">
-              Mewujudkan lulusan yang{" "}
-              <span className="text-secondary-400">cerdas</span>,{" "}
-              <span className="text-primary-300">berkualitas</span>,{" "}
-              <span className="text-yellow-400">terampil</span>,{" "}
-              kompetitif, berjiwa wirausaha, berkemajuan dan{" "}
-              <span className="text-green-400">berakhlak karimah</span>
+              Mencetak Generasi{" "}
+              <span className="text-secondary-400">Unggul</span>,{" "}
+              <span className="text-primary-300">Berkarakter Islami</span>, dan{" "}
+              <span className="text-yellow-400">Siap Bersaing</span>
             </h1>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-md animate-fade-in-up animation-delay-200">
               SMK Muhammadiyah 2 Cibiru - Pendidikan kejuruan berkualitas untuk masa depan cemerlang

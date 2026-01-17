@@ -13,8 +13,9 @@ export function Navbar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { label: "TENTANG", href: "/" },
-    { label: "FASILITAS", href: "/fasilitas" },
+    { label: "BERANDA", href: "/" },
+    { label: "PROFIL", href: "/profil" },
+    { label: "JURUSAN", href: "/kontak" },
     { label: "KONTAK", href: "/kontak" },
   ];
 
