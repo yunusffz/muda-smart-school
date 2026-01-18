@@ -506,6 +506,204 @@ export default function Beranda() {
         </div>
       </section>
 
+      {/* Berita & Pengumuman Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          {/* Section Header */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                Berita & <span className="text-primary-600">Pengumuman</span>
+              </h2>
+              <p className="text-lg text-gray-600">
+                Informasi terbaru seputar kegiatan dan pengumuman sekolah
+              </p>
+            </div>
+            <a
+              href="/berita"
+              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold transition-colors"
+            >
+              Lihat Semua
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Featured News */}
+            <div className="lg:col-span-2">
+              <div className="group relative h-[400px] rounded-2xl overflow-hidden">
+                <Image
+                  src="/gambar-1.jpg"
+                  alt="Berita Utama"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                  <span className="inline-block bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full mb-3">
+                    BERITA TERBARU
+                  </span>
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors">
+                    SMK Muhammadiyah 2 Cibiru Raih 3 Medali Emas di Olimpiade Nasional 2024
+                  </h3>
+                  <p className="text-white/80 mb-4 line-clamp-2">
+                    Prestasi membanggakan ditorehkan oleh siswa-siswi SMK Muhammadiyah 2 Cibiru dalam ajang Olimpiade Nasional Sains dan Bahasa (ONSB) 2024.
+                  </p>
+                  <div className="flex items-center gap-4 text-white/60 text-sm">
+                    <span className="flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      15 Januari 2024
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* News List */}
+            <div className="space-y-4">
+              {/* News Item 1 */}
+              <a href="#" className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors">
+                <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
+                  <Image src="/gambar-2.jpg" alt="Berita" fill className="object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="inline-block bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full mb-2">
+                    PENGUMUMAN
+                  </span>
+                  <h4 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 mb-1">
+                    Jadwal Ujian Akhir Semester Genap 2024
+                  </h4>
+                  <p className="text-xs text-gray-500">12 Januari 2024</p>
+                </div>
+              </a>
+
+              {/* News Item 2 */}
+              <a href="#" className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors">
+                <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
+                  <Image src="/gambar-3.jpg" alt="Berita" fill className="object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="inline-block bg-primary-100 text-primary-700 text-[10px] font-bold px-2 py-0.5 rounded-full mb-2">
+                    KEGIATAN
+                  </span>
+                  <h4 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 mb-1">
+                    Kunjungan Industri ke PT Telkom Indonesia
+                  </h4>
+                  <p className="text-xs text-gray-500">10 Januari 2024</p>
+                </div>
+              </a>
+
+              {/* News Item 3 */}
+              <a href="#" className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors">
+                <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
+                  <Image src="/gambar-4.jpg" alt="Berita" fill className="object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="inline-block bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full mb-2">
+                    PRESTASI
+                  </span>
+                  <h4 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 mb-1">
+                    Juara 1 Lomba Cerdas Cermat Tingkat Provinsi
+                  </h4>
+                  <p className="text-xs text-gray-500">8 Januari 2024</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Registration Banner */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-400/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl">
+            <svg className="w-full h-full opacity-5" viewBox="0 0 200 200">
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="0.5" />
+              </pattern>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 md:px-8 relative z-10">
+          <div className="text-center">
+            {/* Badge */}
+            <span className="inline-flex items-center gap-2 bg-yellow-400 text-yellow-900 text-sm font-bold px-4 py-2 rounded-full mb-6 animate-pulse">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
+              PENDAFTARAN DIBUKA
+            </span>
+
+            {/* Main Heading */}
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+              Bergabunglah Bersama Kami di
+              <br />
+              <span className="text-yellow-400">Tahun Ajaran 2024/2025</span>
+            </h2>
+
+            {/* Description */}
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8">
+              Wujudkan masa depan cemerlang bersama SMK Muhammadiyah 2 Cibiru.
+              Fasilitas lengkap, pengajar profesional, dan program keahlian yang relevan dengan industri.
+            </p>
+
+            {/* Features */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-10">
+              <div className="flex items-center gap-2 text-white/90">
+                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                Terakreditasi A
+              </div>
+              <div className="flex items-center gap-2 text-white/90">
+                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                5 Program Keahlian
+              </div>
+              <div className="flex items-center gap-2 text-white/90">
+                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                Beasiswa Tersedia
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a
+                href="#pendaftaran"
+                className="inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-bold text-lg px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-yellow-400/25"
+              >
+                Daftar Sekarang
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </a>
+              <a
+                href="#info-pendaftaran"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-lg px-8 py-4 rounded-xl border-2 border-white/30 transition-all duration-300"
+              >
+                Info Pendaftaran
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
