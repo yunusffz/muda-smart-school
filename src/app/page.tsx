@@ -126,20 +126,7 @@ export default function Beranda() {
           ))}
         </Swiper>
 
-        {/* Accreditation Badge - Fixed Position */}
-        <div className="absolute top-4 right-4 md:top-8 md:right-8 z-10">
-          <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-lg border border-primary-200">
-            <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-md">
-                <span className="text-2xl md:text-3xl font-bold text-white">A</span>
-              </div>
-              <div className="text-left">
-                <p className="text-xs md:text-sm font-semibold text-gray-600">Terakreditasi</p>
-                <p className="text-lg md:text-xl font-bold text-primary-600">Akreditasi A</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </section>
       {/* Program Keahlian Section */}
       <section className="py-16 md:py-24 bg-white">

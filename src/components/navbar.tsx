@@ -62,7 +62,7 @@ export function Navbar() {
           <div className="hidden lg:block">
             <Button
               asChild
-              className="bg-primary hover:bg-primary/90 text-white rounded-lg"
+              className="bg-primary hover:bg-primary hover:scale-110 transition-transform text-white rounded-lg"
             >
               <Link href="/hubungi">Daftar Sekarang</Link>
             </Button>
@@ -101,7 +101,7 @@ export function Navbar() {
               })}
               <Button
                 asChild
-                className="bg-primary hover:bg-primary/90 text-white w-full "
+                className="bg-primary hover:bg-primary/90 hover:scale-105 transition-transform text-white w-full"
               >
                 <Link href="/hubungi">Daftar Sekarang</Link>
               </Button>
