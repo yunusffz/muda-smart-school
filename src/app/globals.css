@@ -47,6 +47,32 @@
   --color-accent-900: var(--accent-900);
   --color-accent-950: var(--accent-950);
 
+  /* Green color scale (Success) */
+  --color-green-50: var(--green-50);
+  --color-green-100: var(--green-100);
+  --color-green-200: var(--green-200);
+  --color-green-300: var(--green-300);
+  --color-green-400: var(--green-400);
+  --color-green-500: var(--green-500);
+  --color-green-600: var(--green-600);
+  --color-green-700: var(--green-700);
+  --color-green-800: var(--green-800);
+  --color-green-900: var(--green-900);
+  --color-green-950: var(--green-950);
+
+  /* Yellow color scale (Warning) */
+  --color-yellow-50: var(--yellow-50);
+  --color-yellow-100: var(--yellow-100);
+  --color-yellow-200: var(--yellow-200);
+  --color-yellow-300: var(--yellow-300);
+  --color-yellow-400: var(--yellow-400);
+  --color-yellow-500: var(--yellow-500);
+  --color-yellow-600: var(--yellow-600);
+  --color-yellow-700: var(--yellow-700);
+  --color-yellow-800: var(--yellow-800);
+  --color-yellow-900: var(--yellow-900);
+  --color-yellow-950: var(--yellow-950);
+
   /* Neutral color scale */
   --color-neutral-50: var(--neutral-50);
   --color-neutral-100: var(--neutral-100);
@@ -121,6 +147,32 @@
   --primary-800: #3a3d81;
   --primary-900: #32368c;
   --primary-950: #1f2154;
+
+  /* GREEN - Teal/Mint (from #4CAF93) */
+  --green-50: #ecfdf6;
+  --green-100: #d1fae8;
+  --green-200: #a6f4d3;
+  --green-300: #6de9b8;
+  --green-400: #35d69c;
+  --green-500: #4caf93;
+  --green-600: #0e9474;
+  --green-700: #0c765d;
+  --green-800: #0e5e4b;
+  --green-900: #0d4d3e;
+  --green-950: #052b23;
+
+  /* YELLOW - Golden (from #F2C94C) */
+  --yellow-50: #fefce8;
+  --yellow-100: #fef9c3;
+  --yellow-200: #fef08a;
+  --yellow-300: #fde047;
+  --yellow-400: #f2c94c;
+  --yellow-500: #eab308;
+  --yellow-600: #ca8a04;
+  --yellow-700: #a16207;
+  --yellow-800: #854d0e;
+  --yellow-900: #713f12;
+  --yellow-950: #422006;
 
   /* SECONDARY - Gold/Amber */
   --secondary-50: #fffbeb;
