@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Muda Smart School
 
-## Getting Started
+A modern school website built with Next.js, featuring a clean design system and enterprise-grade architecture.
 
-First, run the development server:
+## Tech Stack
+
+| Category       | Technology                          |
+|----------------|-------------------------------------|
+| Framework      | Next.js 16 (App Router)             |
+| Language       | TypeScript                          |
+| Styling        | Tailwind CSS 4 + Shadcn/ui          |
+| Icons          | Lucide React                        |
+| Database       | Prisma ORM + PostgreSQL (Supabase)  |
+| Authentication | NextAuth.js                         |
+| Forms          | React Hook Form + Zod               |
+| Server State   | React Query (@tanstack/react-query) |
+| Client State   | Zustand                             |
+| Carousel       | Swiper                              |
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v18.17 or higher)
+- [pnpm](https://pnpm.io/) (recommended) or npm/yarn
+- [PostgreSQL](https://www.postgresql.org/) database (or [Supabase](https://supabase.com/) account)
+
+## Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/muda-smart-school.git
+   cd muda-smart-school
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+
+   Create a `.env` file in the root directory:
+
+   ```env
+   # Database
+   DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+
+   # NextAuth
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-secret-key"
+   ```
+
+4. **Generate Prisma client**
+
+   ```bash
+   pnpm prisma generate
+   ```
+
+5. **Run database migrations** (if applicable)
+
+   ```bash
+   pnpm prisma db push
+   ```
+
+## Development
+
+Start the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command             | Description                        |
+|---------------------|------------------------------------|
+| `pnpm dev`          | Start development server           |
+| `pnpm build`        | Build for production               |
+| `pnpm start`        | Start production server            |
+| `pnpm lint`         | Run ESLint                         |
+| `pnpm prisma studio`| Open Prisma database GUI           |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                          # Next.js App Router
+│   ├── (public)/                 # Public pages group
+│   ├── (dashboard)/              # Protected pages group
+│   └── api/                      # API routes
+├── features/                     # Business logic by domain
+│   └── [feature-name]/
+│       ├── components/           # Feature-shared components
+│       ├── hooks/
+│       ├── services/
+│       ├── types/
+│       └── utils/
+├── components/                   # Global shared components
+│   ├── ui/                       # Shadcn components
+│   ├── layout/                   # Header, Footer, Sidebar
+│   └── common/                   # LoadingSpinner, ErrorMessage
+└── lib/                          # Global utilities, DB client
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design System
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project uses a 3-color design system:
 
-## Deploy on Vercel
+| Color   | Hex       | Usage                        |
+|---------|-----------|------------------------------|
+| Primary | `#32368C` | Navy blue - main brand color |
+| Green   | `#4CAF93` | Teal/mint - success states   |
+| Yellow  | `#F2C94C` | Golden - warnings, accents   |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Each color has scales from 50-950 available via Tailwind CSS classes:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```jsx
+className="bg-primary-500 text-primary-50"
+className="bg-green-500 text-green-50"
+className="bg-yellow-400 text-yellow-950"
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+The easiest way to deploy is using [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Add environment variables
+4. Deploy
+
+### Other Platforms
+
+Build the production bundle:
+
+```bash
+pnpm build
+pnpm start
+```
+
+## License
+
+This project is private and proprietary.
