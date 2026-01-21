@@ -89,12 +89,12 @@ const programs = [
   },
 ];
 
-const colorClasses: Record<string, { bg: string; text: string; border: string; light: string }> = {
-  red: { bg: "bg-red-500", text: "text-red-600", border: "border-red-500", light: "bg-red-50" },
-  blue: { bg: "bg-blue-500", text: "text-blue-600", border: "border-blue-500", light: "bg-blue-50" },
-  cyan: { bg: "bg-cyan-500", text: "text-cyan-600", border: "border-cyan-500", light: "bg-cyan-50" },
-  orange: { bg: "bg-orange-500", text: "text-orange-600", border: "border-orange-500", light: "bg-orange-50" },
-  green: { bg: "bg-green-500", text: "text-green-600", border: "border-green-500", light: "bg-green-50" },
+const colorClasses: Record<string, { bg: string; text: string; border: string; light: string; hoverBg: string }> = {
+  red: { bg: "bg-red-500", text: "text-red-600", border: "border-red-500", light: "bg-red-50", hoverBg: "hover:bg-red-500" },
+  blue: { bg: "bg-blue-500", text: "text-blue-600", border: "border-blue-500", light: "bg-blue-50", hoverBg: "hover:bg-blue-500" },
+  cyan: { bg: "bg-cyan-500", text: "text-cyan-600", border: "border-cyan-500", light: "bg-cyan-50", hoverBg: "hover:bg-cyan-500" },
+  orange: { bg: "bg-orange-500", text: "text-orange-600", border: "border-orange-500", light: "bg-orange-50", hoverBg: "hover:bg-orange-500" },
+  green: { bg: "bg-green-500", text: "text-green-600", border: "border-green-500", light: "bg-green-50", hoverBg: "hover:bg-green-500" },
 };
 
 export default function JurusanPage() {
@@ -129,7 +129,7 @@ export default function JurusanPage() {
               <Link
                 key={program.id}
                 href={`#${program.id}`}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 ${colorClasses[program.color].border} ${colorClasses[program.color].text} hover:${colorClasses[program.color].bg} hover:text-white transition-colors font-medium text-sm`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 ${colorClasses[program.color].border} ${colorClasses[program.color].text} ${colorClasses[program.color].hoverBg} hover:text-white transition-colors font-medium text-sm`}
               >
                 <span className="font-bold">{program.abbr}</span>
                 <span className="hidden sm:inline">{program.name}</span>
