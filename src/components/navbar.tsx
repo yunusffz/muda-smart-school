@@ -30,7 +30,7 @@ export function Navbar() {
   const menuItems = [
     { label: "BERANDA", href: "/" },
     { label: "PROFIL", href: "/profil" },
-    { label: "KONTAK", href: "/kontaks" },
+    { label: "KONTAK", href: "/kontak" },
   ];
 
   const isJurusanActive = pathname.startsWith("/jurusan");
@@ -43,7 +43,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/logo.jpg"
-              alt="Muda Smart School 2"
+              alt="Muda Smart School"
               width={80}
               height={80}
               className="rounded-md w-10 h-10"
@@ -74,7 +74,7 @@ export function Navbar() {
             })}
 
             {/* Jurusan Dropdown */}
-            <DropdownMenu modal={false}>
+            <DropdownMenu>
               <DropdownMenuTrigger
                 className={cn(
                   "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 flex items-center gap-1 outline-none",
@@ -86,7 +86,7 @@ export function Navbar() {
                 JURUSAN
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-72 max-h-none overflow-visible">
+              <DropdownMenuContent align="center" className="w-72">
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/jurusan" className="w-full font-semibold text-primary">
                     Lihat Semua Jurusan
