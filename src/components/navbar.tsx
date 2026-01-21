@@ -44,9 +44,9 @@ export function Navbar() {
             <Image
               src="/logo.jpg"
               alt="Muda Smart School"
-              width={40}
-              height={40}
-              className="rounded-md"
+              width={80}
+              height={80}
+              className="rounded-md w-10 h-10"
             />
             <span className="font-semibold text-lg text-primary">
               SMK MUHAMMADIYAH 2 CIBIRU
