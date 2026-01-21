@@ -1,0 +1,131 @@
+import Image from "next/image";
+
+const achievements = [
+  {
+    title: "Medali Emas Informatika",
+    event: "Olimpiade Nasional Sains dan Bahasa (ONSB) 2024",
+    level: "NASIONAL",
+    isGold: true,
+  },
+  {
+    title: "Medali Emas Bahasa Inggris",
+    event: "Olimpiade Nasional Sains dan Bahasa (ONSB) 2024",
+    level: "NASIONAL",
+    isGold: true,
+  },
+  {
+    title: "Medali Emas Teknik Bisnis Sepeda Motor",
+    event: "Olimpiade Ahmad Dahlan (Olympicad) VII 2024",
+    level: "NASIONAL",
+    isGold: true,
+  },
+  {
+    title: "Juara 1 Cerdas Cermat Kearsipan",
+    event: "Dispusipda Jawa Barat 2024",
+    level: "PROVINSI",
+    isGold: false,
+  },
+];
+
+const galleryImages = [
+  { src: "/gambar-1.jpg", alt: "Prestasi 1" },
+  { src: "/gambar-2.jpg", alt: "Prestasi 2" },
+  { src: "/gambar-3.jpg", alt: "Prestasi 3" },
+  { src: "/gambar-4.jpg", alt: "Prestasi 4" },
+];
+
+export default function AwardsSection() {
+  return (
+    <section className="py-14 md:py-16 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-yellow-900" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+              <span className="text-yellow-400 font-semibold text-sm">Prestasi</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-white">
+              Raihan Prestasi Gemilang
+            </h2>
+          </div>
+          <p className="text-gray-400 text-sm md:text-right max-w-xs">
+            3 Medali Emas Nasional
+          </p>
+        </div>
+
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+          {/* Achievements List */}
+          <div className="lg:col-span-3 space-y-3">
+            {achievements.map((achievement, index) => (
+              <div
+                key={index}
+                className={`flex items-center gap-4 bg-white/5 backdrop-blur rounded-xl p-4 border ${
+                  achievement.isGold
+                    ? "border-yellow-500/20 hover:border-yellow-500/40"
+                    : "border-primary-500/20 hover:border-primary-500/40"
+                } transition-colors`}
+              >
+                <div
+                  className={`w-10 h-10 ${
+                    achievement.isGold
+                      ? "bg-gradient-to-br from-yellow-400 to-amber-500"
+                      : "bg-gradient-to-br from-primary-400 to-primary-600"
+                  } rounded-full flex items-center justify-center flex-shrink-0`}
+                >
+                  {achievement.isGold ? (
+                    <svg className="w-5 h-5 text-yellow-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-white">{achievement.title}</h3>
+                    <span
+                      className={`text-[10px] ${
+                        achievement.level === "NASIONAL"
+                          ? "bg-red-500/20 text-red-400"
+                          : "bg-blue-500/20 text-blue-400"
+                      } px-2 py-0.5 rounded-full font-bold`}
+                    >
+                      {achievement.level}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-sm">{achievement.event}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Photo Grid */}
+          <div className="lg:col-span-2 grid grid-cols-2 gap-2">
+            {galleryImages.map((image, index) => (
+              <div key={index} className="group relative aspect-[4/3] rounded-lg overflow-hidden">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
