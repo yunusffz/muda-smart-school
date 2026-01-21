@@ -12,7 +12,7 @@ export default function GallerySection() {
             Galeri Sekolah
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-900">
-            Suasana Belajar di <span className="text-primary-600">SMK Muda</span>
+            Suasana Belajar di <span className="text-primary-600">SMK Muhammadiyah 2 Cibiru</span>
           </h2>
         </div>
 
