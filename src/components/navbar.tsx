@@ -31,6 +31,7 @@ export function Navbar() {
     { label: "BERANDA", href: "/" },
     { label: "PROFIL", href: "/profil" },
     { label: "KONTAK", href: "/kontak" },
+    { label: "PENDAFTARAN", href: "/pendaftaran" },
   ];
 
   const isJurusanActive = pathname.startsWith("/jurusan");
