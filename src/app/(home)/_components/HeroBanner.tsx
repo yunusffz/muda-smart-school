@@ -43,7 +43,7 @@ const heroSlides = [
     subtitle: "Bergabunglah bersama kami dan wujudkan masa depan cemerlang. Kuota terbatas!",
     cta: {
       text: "Daftar Sekarang",
-      href: "#pendaftaran",
+      href: "/registrasi",
     },
   },
 ];

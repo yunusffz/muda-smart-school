@@ -59,7 +59,7 @@ export default function CTABanner() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a
-              href="#pendaftaran"
+              href="/registrasi"
               className="inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-bold text-lg px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-yellow-400/25"
             >
               Daftar Sekarang
