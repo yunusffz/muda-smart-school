@@ -12,3 +12,80 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum JenisKelamin {
+  LAKI_LAKI
+  PEREMPUAN
+}
+
+enum ProgramKeahlian {
+  TEKNIK_KOMPUTER_JARINGAN
+  REKAYASA_PERANGKAT_LUNAK
+  MULTIMEDIA
+  AKUNTANSI
+  ADMINISTRASI_PERKANTORAN
+  PEMASARAN
+}
+
+enum Pendidikan {
+  SD
+  SMP
+  SMA
+  SMK
+  D1
+  D2
+  D3
+  D4
+  S1
+  S2
+  S3
+  TIDAK_SEKOLAH
+}
+
+model Pendaftaran {
+  id                String          @id @default(cuid())
+
+  // Identitas Diri
+  namaLengkap       String          @map("nama_lengkap")
+  jenisKelamin      JenisKelamin    @map("jenis_kelamin")
+  programKeahlian   ProgramKeahlian @map("program_keahlian")
+  nisn              String          @unique
+  nik               String          @unique
+  nomorKk           String          @map("nomor_kk")
+  tempatLahir       String          @map("tempat_lahir")
+  tanggalLahir      DateTime        @map("tanggal_lahir")
+  noHpMurid         String?         @map("no_hp_murid")
+  noHpOrtu          String          @map("no_hp_ortu")
+
+  // Alamat
+  alamatJalan       String          @map("alamat_jalan")
+  rt                String
+  rw                String
+  kelurahanDesa     String          @map("kelurahan_desa")
+  kecamatan         String
+  kotaKabupaten     String          @map("kota_kabupaten")
+  provinsi          String
+
+  // Data Ayah
+  namaAyah          String          @map("nama_ayah")
+  tahunLahirAyah    Int?            @map("tahun_lahir_ayah")
+  pendidikanAyah    Pendidikan      @map("pendidikan_ayah")
+  pekerjaanAyah     String?         @map("pekerjaan_ayah")
+
+  // Data Ibu
+  namaIbu           String          @map("nama_ibu")
+  tahunLahirIbu     Int?            @map("tahun_lahir_ibu")
+  pendidikanIbu     Pendidikan      @map("pendidikan_ibu")
+  pekerjaanIbu      String?         @map("pekerjaan_ibu")
+
+  // Asal Sekolah
+  namaAsalSekolah   String          @map("nama_asal_sekolah")
+  npsnAsalSekolah   String?         @map("npsn_asal_sekolah")
+  alamatAsalSekolah String          @map("alamat_asal_sekolah")
+
+  // Metadata
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+
+  @@map("pendaftaran")
+}
