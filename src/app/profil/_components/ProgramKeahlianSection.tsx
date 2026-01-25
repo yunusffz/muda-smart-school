@@ -99,7 +99,7 @@ export default function ProgramKeahlianSection() {
             <p className="text-white/80 mb-5">
               Daftarkan diri Anda sekarang dan raih masa depan cerah bersama kami!
             </p>
-            <a href="#" className="bg-white text-primary-600 font-semibold px-6 py-3 rounded-xl hover:bg-neutral-100 transition-colors">
+            <a href="/registrasi" className="bg-white text-primary-600 font-semibold px-6 py-3 rounded-xl hover:bg-neutral-100 transition-colors">
               Daftar Sekarang
             </a>
           </div>

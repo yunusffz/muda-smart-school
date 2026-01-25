@@ -132,7 +132,7 @@ export function Navbar() {
               asChild
               className="bg-primary hover:bg-primary hover:scale-110 transition-transform text-white rounded-lg"
             >
-              <Link href="/hubungi">Daftar Sekarang</Link>
+              <Link href="/registrasi">Daftar Sekarang</Link>
             </Button>
           </div>
 
@@ -231,7 +231,7 @@ export function Navbar() {
                 asChild
                 className="bg-primary hover:bg-primary/90 hover:scale-105 transition-transform text-white w-full"
               >
-                <Link href="/hubungi">Daftar Sekarang</Link>
+                <Link href="/registrasi">Daftar Sekarang</Link>
               </Button>
             </div>
           </div>
