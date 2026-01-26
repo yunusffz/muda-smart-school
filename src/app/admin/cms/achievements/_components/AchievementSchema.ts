@@ -19,7 +19,7 @@ export const achievementSchema = z.object({
   title: z.string().min(1, "Judul prestasi wajib diisi"),
   event: z.string().min(1, "Nama event/kompetisi wajib diisi"),
   level: z.enum(["INTERNASIONAL", "NASIONAL", "PROVINSI", "KOTA", "KECAMATAN", "SEKOLAH"], {
-    required_error: "Tingkat wajib dipilih",
+    message: "Tingkat wajib dipilih",
   }),
   medalType: z.enum(["GOLD", "SILVER", "BRONZE"]).nullable().optional(),
   year: z
