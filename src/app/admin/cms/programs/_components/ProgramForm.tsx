@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
+import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
 import { toast } from "sonner";
 import { programSchema, type ProgramFormData } from "./ProgramSchema";
 
@@ -72,7 +73,7 @@ export function ProgramForm({ defaultValues, programId }: ProgramFormProps) {
       }
 
       toast.success(
-        isEditing ? "Program berhasil diperbarui" : "Program berhasil dibuat"
+        isEditing ? "Program berhasil diperbarui" : "Program berhasil dibuat",
       );
       router.push("/admin/cms/programs");
       router.refresh();
@@ -87,7 +88,10 @@ export function ProgramForm({ defaultValues, programId }: ProgramFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Informasi Dasar */}
-        <FormCard title="Informasi Dasar" description="Data utama program keahlian">
+        <FormCard
+          title="Informasi Dasar"
+          description="Data utama program keahlian"
+        >
           <div className="grid gap-4 md:grid-cols-2">
             <FormField
               control={form.control}
@@ -96,7 +100,10 @@ export function ProgramForm({ defaultValues, programId }: ProgramFormProps) {
                 <FormItem>
                   <FormLabel>Nama Program</FormLabel>
                   <FormControl>
-                    <Input placeholder="Pengembangan Perangkat Lunak dan Gim" {...field} />
+                    <Input
+                      placeholder="Pengembangan Perangkat Lunak dan Gim"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -204,6 +211,29 @@ export function ProgramForm({ defaultValues, programId }: ProgramFormProps) {
           </div>
         </FormCard>
 
+        {/* Gambar Program */}
+        <FormCard
+          title="Gambar Program"
+          description="Pilih gambar dari galeri (opsional)"
+        >
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <GalleryPicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FormCard>
+
         {/* Kompetensi */}
         <ArrayFieldCard
           form={form}
@@ -279,7 +309,7 @@ function ArrayFieldCard({
   const removeItem = (index: number) => {
     form.setValue(
       name,
-      items.filter((_, i) => i !== index)
+      items.filter((_, i) => i !== index),
     );
   };
 
@@ -325,7 +355,8 @@ function ArrayFieldCard({
 
         {items.length === 0 && (
           <p className="text-sm text-muted-foreground">
-            Belum ada {title.toLowerCase()}. Ketik dan tekan Enter atau klik tombol + untuk menambah.
+            Belum ada {title.toLowerCase()}. Ketik dan tekan Enter atau klik
+            tombol + untuk menambah.
           </p>
         )}
       </div>

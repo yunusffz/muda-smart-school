@@ -1,10 +1,16 @@
-import { NextResponse } from "next/server";
-import { getGallery, createGallery } from "@/src/features/cms/services/gallery";
+import { NextRequest, NextResponse } from "next/server";
+import {
+  getGallery,
+  getActiveGallery,
+  createGallery,
+} from "@/src/features/cms/services/gallery";
 import { gallerySchema } from "@/src/app/admin/cms/gallery/_components/GallerySchema";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const gallery = await getGallery();
+    const active = request.nextUrl.searchParams.get("active");
+    const gallery =
+      active === "true" ? await getActiveGallery() : await getGallery();
     return NextResponse.json(gallery);
   } catch (error) {
     console.error("Error fetching gallery:", error);
