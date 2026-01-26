@@ -21,6 +21,7 @@ import {
   Phone,
   Layers,
   School,
+  Activity,
 } from "lucide-react";
 
 import {
@@ -87,6 +88,11 @@ const cmsMenuItems = [
     title: "Fasilitas",
     url: "/admin/cms/facilities",
     icon: Building2,
+  },
+  {
+    title: "Ekstrakurikuler",
+    url: "/admin/cms/extracurriculars",
+    icon: Activity,
   },
   {
     title: "FAQ",
@@ -193,7 +199,10 @@ export function AdminSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url || pathname.startsWith(item.url + "/")}
+                    isActive={
+                      pathname === item.url ||
+                      pathname.startsWith(item.url + "/")
+                    }
                     tooltip={item.title}
                   >
                     <Link href={item.url}>
@@ -216,7 +225,10 @@ export function AdminSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url || pathname.startsWith(item.url + "/")}
+                    isActive={
+                      pathname === item.url ||
+                      pathname.startsWith(item.url + "/")
+                    }
                     tooltip={item.title}
                   >
                     <Link href={item.url}>
@@ -239,7 +251,10 @@ export function AdminSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url || pathname.startsWith(item.url + "/")}
+                    isActive={
+                      pathname === item.url ||
+                      pathname.startsWith(item.url + "/")
+                    }
                     tooltip={item.title}
                   >
                     <Link href={item.url}>
@@ -261,7 +276,9 @@ export function AdminSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-medium">Admin</span>
-            <span className="text-xs text-muted-foreground">admin@muda.sch.id</span>
+            <span className="text-xs text-muted-foreground">
+              admin@muda.sch.id
+            </span>
           </div>
         </div>
       </SidebarFooter>
