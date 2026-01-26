@@ -11,21 +11,36 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { Menu, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/src/lib/utils";
+import type { ProgramWithRelations } from "@/src/features/cms/services/programs";
 
-const jurusanList = [
-  { label: "Teknik Otomotif", href: "/jurusan#teknik-otomotif", abbr: "TO" },
-  { label: "Pengembangan Perangkat Lunak dan Gim", href: "/jurusan#pplg", abbr: "PPLG" },
-  { label: "Teknik Jaringan Komputer dan Telekomunikasi", href: "/jurusan#tjkt", abbr: "TJKT" },
-  { label: "Manajemen Perkantoran dan Layanan Bisnis", href: "/jurusan#mplb", abbr: "MPLB" },
-  { label: "Akuntansi dan Keuangan Lembaga", href: "/jurusan#akl", abbr: "AKL" },
-];
+interface JurusanItem {
+  label: string;
+  href: string;
+  abbr: string;
+}
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isJurusanOpen, setIsJurusanOpen] = useState(false);
+  const [jurusanList, setJurusanList] = useState<JurusanItem[]>([]);
   const pathname = usePathname();
+
+  useEffect(() => {
+    fetch("/api/programs")
+      .then((res) => res.json())
+      .then((programs: ProgramWithRelations[]) => {
+        setJurusanList(
+          programs.map((p: ProgramWithRelations) => ({
+            label: p.name,
+            href: `/jurusan#${p.abbreviation.toLowerCase()}`,
+            abbr: p.abbreviation,
+          })),
+        );
+      })
+      .catch(() => {});
+  }, []);
 
   const menuItems = [
     { label: "BERANDA", href: "/" },
@@ -66,7 +81,7 @@ export function Navbar() {
                     "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300",
                     isActive
                       ? "text-primary after:w-full"
-                      : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary"
+                      : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
                   )}
                 >
                   {item.label}
@@ -81,7 +96,7 @@ export function Navbar() {
                   "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 flex items-center gap-1 outline-none",
                   isJurusanActive
                     ? "text-primary after:w-full"
-                    : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary"
+                    : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
                 )}
               >
                 JURUSAN
@@ -89,14 +104,24 @@ export function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-72">
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href="/jurusan" className="w-full font-semibold text-primary">
+                  <Link
+                    href="/jurusan"
+                    className="w-full font-semibold text-primary"
+                  >
                     Lihat Semua Jurusan
                   </Link>
                 </DropdownMenuItem>
                 <div className="h-px bg-border my-1" />
                 {jurusanList.map((jurusan) => (
-                  <DropdownMenuItem key={jurusan.href} asChild className="cursor-pointer">
-                    <Link href={jurusan.href} className="w-full flex items-center gap-2">
+                  <DropdownMenuItem
+                    key={jurusan.href}
+                    asChild
+                    className="cursor-pointer"
+                  >
+                    <Link
+                      href={jurusan.href}
+                      className="w-full flex items-center gap-2"
+                    >
                       <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">
                         {jurusan.abbr}
                       </span>
@@ -117,7 +142,7 @@ export function Navbar() {
                     "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300",
                     isActive
                       ? "text-primary after:w-full"
-                      : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary"
+                      : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
                   )}
                 >
                   {item.label}
@@ -159,7 +184,7 @@ export function Navbar() {
                       "relative text-sm font-medium",
                       isActive
                         ? "text-primary"
-                        : "text-muted-foreground hover:text-primary"
+                        : "text-muted-foreground hover:text-primary",
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -176,11 +201,16 @@ export function Navbar() {
                     "flex items-center justify-between w-full text-sm font-medium",
                     isJurusanActive
                       ? "text-primary"
-                      : "text-muted-foreground hover:text-primary"
+                      : "text-muted-foreground hover:text-primary",
                   )}
                 >
                   JURUSAN
-                  <ChevronDown className={cn("h-4 w-4 transition-transform", isJurusanOpen && "rotate-180")} />
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      isJurusanOpen && "rotate-180",
+                    )}
+                  />
                 </button>
                 {isJurusanOpen && (
                   <div className="mt-2 ml-4 flex flex-col gap-2">
@@ -218,7 +248,7 @@ export function Navbar() {
                       "relative text-sm font-medium",
                       isActive
                         ? "text-primary"
-                        : "text-muted-foreground hover:text-primary"
+                        : "text-muted-foreground hover:text-primary",
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
