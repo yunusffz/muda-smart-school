@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
-import { ImageUpload } from "@/src/app/admin/_components/ImageUpload";
+import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
 import { toast } from "sonner";
 import { heroSlideSchema, type HeroSlideFormData } from "./HeroSlideSchema";
 
@@ -178,7 +178,7 @@ export function HeroSlideForm({
         {/* Gambar Slide */}
         <FormCard
           title="Gambar Slide"
-          description="Upload gambar hero slide (wajib)"
+          description="Pilih gambar hero slide dari galeri (wajib)"
         >
           <FormField
             control={form.control}
@@ -186,10 +186,9 @@ export function HeroSlideForm({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload
+                  <GalleryPicker
                     value={field.value}
                     onChange={field.onChange}
-                    folder="hero-slides"
                     disabled={isLoading}
                   />
                 </FormControl>

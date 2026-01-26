@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
-import { ImageUpload } from "@/src/app/admin/_components/ImageUpload";
+import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
 import { toast } from "sonner";
 import {
   achievementSchema,
@@ -36,7 +36,10 @@ interface AchievementFormProps {
   achievementId?: string;
 }
 
-export function AchievementForm({ defaultValues, achievementId }: AchievementFormProps) {
+export function AchievementForm({
+  defaultValues,
+  achievementId,
+}: AchievementFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const isEditing = !!achievementId;
@@ -75,7 +78,7 @@ export function AchievementForm({ defaultValues, achievementId }: AchievementFor
       }
 
       toast.success(
-        isEditing ? "Prestasi berhasil diperbarui" : "Prestasi berhasil dibuat"
+        isEditing ? "Prestasi berhasil diperbarui" : "Prestasi berhasil dibuat",
       );
       router.push("/admin/cms/achievements");
       router.refresh();
@@ -100,7 +103,10 @@ export function AchievementForm({ defaultValues, achievementId }: AchievementFor
                   <FormItem>
                     <FormLabel>Judul Prestasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="Juara 1 Lomba Cerdas Cermat" {...field} />
+                      <Input
+                        placeholder="Juara 1 Lomba Cerdas Cermat"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -116,7 +122,10 @@ export function AchievementForm({ defaultValues, achievementId }: AchievementFor
                   <FormItem>
                     <FormLabel>Nama Event/Kompetisi</FormLabel>
                     <FormControl>
-                      <Input placeholder="Olimpiade Sains Nasional" {...field} />
+                      <Input
+                        placeholder="Olimpiade Sains Nasional"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -250,17 +259,19 @@ export function AchievementForm({ defaultValues, achievementId }: AchievementFor
         </FormCard>
 
         {/* Gambar Prestasi */}
-        <FormCard title="Gambar Prestasi" description="Upload foto dokumentasi prestasi (opsional)">
+        <FormCard
+          title="Gambar Prestasi"
+          description="Pilih foto dokumentasi prestasi dari galeri (opsional)"
+        >
           <FormField
             control={form.control}
             name="image"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload
+                  <GalleryPicker
                     value={field.value}
                     onChange={field.onChange}
-                    folder="achievements"
                     disabled={isLoading}
                   />
                 </FormControl>
