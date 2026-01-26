@@ -9,6 +9,13 @@ export async function getAchievements() {
   });
 }
 
+export async function getActiveAchievements() {
+  return prisma.achievement.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+  });
+}
+
 export async function getAchievementById(id: string) {
   return prisma.achievement.findUnique({
     where: { id },

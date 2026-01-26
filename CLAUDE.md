@@ -121,7 +121,9 @@ src/
 ### TypeScript
 - Use interfaces for objects
 - Type function parameters and returns
-- NEVER use `any`
+- NEVER use `any` (implicit or explicit)
+- Always explicitly type variables, parameters, and return types — never rely on implicit `any`
+- In `.map()`, `.filter()`, `.forEach()`, etc., always ensure the callback parameter has a known type (from a typed array or explicit annotation)
 
 ### Components
 - Functional components with TypeScript

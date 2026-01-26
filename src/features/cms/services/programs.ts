@@ -18,6 +18,18 @@ export async function getPrograms() {
   });
 }
 
+export async function getActivePrograms() {
+  return prisma.program.findMany({
+    where: { isActive: true },
+    include: {
+      skills: { orderBy: { order: "asc" } },
+      careers: { orderBy: { order: "asc" } },
+      facilities: { orderBy: { order: "asc" } },
+    },
+    orderBy: { order: "asc" },
+  });
+}
+
 export async function getProgramById(id: string) {
   return prisma.program.findUnique({
     where: { id },
