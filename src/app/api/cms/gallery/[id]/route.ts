@@ -1,0 +1,90 @@
+import { NextResponse } from "next/server";
+import {
+  getGalleryById,
+  updateGallery,
+  deleteGallery,
+  toggleGalleryStatus,
+} from "@/src/features/cms/services/gallery";
+import { gallerySchema } from "@/src/app/admin/cms/gallery/_components/GallerySchema";
+
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
+
+export async function GET(request: Request, { params }: RouteParams) {
+  try {
+    const { id } = await params;
+    const gallery = await getGalleryById(id);
+
+    if (!gallery) {
+      return NextResponse.json(
+        { error: "Galeri tidak ditemukan" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(gallery);
+  } catch (error) {
+    console.error("Error fetching gallery:", error);
+    return NextResponse.json(
+      { error: "Gagal mengambil data galeri" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PUT(request: Request, { params }: RouteParams) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+    const validated = gallerySchema.parse(body);
+    const gallery = await updateGallery(id, validated);
+    return NextResponse.json(gallery);
+  } catch (error) {
+    console.error("Error updating gallery:", error);
+    if (error instanceof Error && error.name === "ZodError") {
+      return NextResponse.json(
+        { error: "Data tidak valid", details: error },
+        { status: 400 },
+      );
+    }
+    return NextResponse.json(
+      { error: "Gagal memperbarui galeri" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: Request, { params }: RouteParams) {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+
+    if (typeof body.isActive === "boolean") {
+      const gallery = await toggleGalleryStatus(id, body.isActive);
+      return NextResponse.json(gallery);
+    }
+
+    return NextResponse.json({ error: "Operasi tidak valid" }, { status: 400 });
+  } catch (error) {
+    console.error("Error patching gallery:", error);
+    return NextResponse.json(
+      { error: "Gagal memperbarui galeri" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: Request, { params }: RouteParams) {
+  try {
+    const { id } = await params;
+    await deleteGallery(id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting gallery:", error);
+    return NextResponse.json(
+      { error: "Gagal menghapus galeri" },
+      { status: 500 },
+    );
+  }
+}
