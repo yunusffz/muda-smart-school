@@ -153,3 +153,235 @@ src/
 3. What's the feature domain?
 4. Should this use an existing Shadcn component?
 5. Does this need to be a server or client component?
+
+---
+
+## Component Splitting Rules - STRICTLY FOLLOW
+
+### Rule 1: Split by Section
+Each distinct section of a page should be its own component.
+
+```tsx
+// ✅ GOOD - page.tsx is clean, sections are split
+export default function ProfilPage() {
+  return (
+    <main>
+      <HeroSection />
+      <VisionMissionSection />
+      <FacilitiesSection />
+    </main>
+  );
+}
+
+// ❌ BAD - everything in one file
+export default function ProfilPage() {
+  return (
+    <main>
+      <section>{/* 100 lines of hero */}</section>
+      <section>{/* 100 lines of vision */}</section>
+    </main>
+  );
+}
+```
+
+### Rule 2: Component Naming Convention
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Section Component | `[Name]Section.tsx` | `HeroSection.tsx`, `FacilitiesSection.tsx` |
+| List Component | `[Name]List.tsx` | `NewsList.tsx`, `ProgramList.tsx` |
+| Card Component | `[Name]Card.tsx` | `NewsCard.tsx`, `TestimonialCard.tsx` |
+| Form Component | `[Name]Form.tsx` | `ProgramForm.tsx`, `NewsForm.tsx` |
+| Table Component | `[Name]Table.tsx` | `ProgramTable.tsx`, `NewsTable.tsx` |
+| Dialog/Modal | `[Name]Dialog.tsx` | `DeleteDialog.tsx`, `EditProgramDialog.tsx` |
+| Action Component | `[Name]Actions.tsx` | `TableActions.tsx`, `RowActions.tsx` |
+
+### Rule 3: File Size Limit
+- If a component exceeds **150 lines**, split it into smaller components
+- Extract repeated UI patterns into separate components
+
+---
+
+## Admin CMS Page Structure - STRICTLY FOLLOW
+
+### Folder Structure for CMS Pages
+
+```
+src/app/admin/cms/[feature]/
+├── page.tsx                    # Main list page (server component)
+├── [id]/
+│   └── page.tsx               # Edit page
+├── create/
+│   └── page.tsx               # Create page
+└── _components/
+    ├── [Feature]Table.tsx     # Data table component
+    ├── [Feature]Form.tsx      # Create/Edit form
+    ├── [Feature]Card.tsx      # Card view (if needed)
+    ├── [Feature]Actions.tsx   # Row actions (edit, delete)
+    ├── [Feature]Columns.tsx   # Table column definitions
+    ├── [Feature]Schema.tsx    # Zod validation schema
+    └── Delete[Feature]Dialog.tsx  # Delete confirmation
+```
+
+### Example: News CMS Structure
+
+```
+src/app/admin/cms/news/
+├── page.tsx                   # List all news
+├── [id]/
+│   └── page.tsx              # Edit news
+├── create/
+│   └── page.tsx              # Create news
+└── _components/
+    ├── NewsTable.tsx
+    ├── NewsForm.tsx
+    ├── NewsColumns.tsx
+    ├── NewsActions.tsx
+    ├── NewsSchema.ts
+    └── DeleteNewsDialog.tsx
+```
+
+### CMS Page Patterns
+
+#### List Page (page.tsx)
+```tsx
+// Server component - fetches data
+import { NewsTable } from "./_components/NewsTable";
+import { getNews } from "@/src/features/cms/services/news";
+
+export default async function NewsPage() {
+  const news = await getNews();
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Berita"
+        description="Kelola berita dan pengumuman"
+        action={<CreateButton href="/admin/cms/news/create" />}
+      />
+      <NewsTable data={news} />
+    </div>
+  );
+}
+```
+
+#### Form Component Pattern
+```tsx
+// Client component - handles form
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newsSchema, type NewsFormData } from "./NewsSchema";
+
+export function NewsForm({ defaultValues, onSubmit }: NewsFormProps) {
+  const form = useForm<NewsFormData>({
+    resolver: zodResolver(newsSchema),
+    defaultValues,
+  });
+
+  return (
+    <Form {...form}>
+      {/* form fields */}
+    </Form>
+  );
+}
+```
+
+---
+
+## Features Folder for CMS - Business Logic
+
+```
+src/features/cms/
+├── services/                  # API/Database calls
+│   ├── news.ts
+│   ├── programs.ts
+│   ├── testimonials.ts
+│   └── ...
+├── types/                     # Shared TypeScript types
+│   └── index.ts
+└── utils/                     # CMS utilities
+    └── slug.ts
+```
+
+### Service Pattern
+```tsx
+// src/features/cms/services/news.ts
+import { prisma } from "@/src/lib/prisma";
+
+export async function getNews() {
+  return prisma.news.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function getNewsById(id: string) {
+  return prisma.news.findUnique({ where: { id } });
+}
+
+export async function createNews(data: CreateNewsInput) {
+  return prisma.news.create({ data });
+}
+
+export async function updateNews(id: string, data: UpdateNewsInput) {
+  return prisma.news.update({ where: { id }, data });
+}
+
+export async function deleteNews(id: string) {
+  return prisma.news.delete({ where: { id } });
+}
+```
+
+---
+
+## Shared Admin Components
+
+Place reusable admin components in:
+
+```
+src/app/admin/_components/
+├── AdminSidebar.tsx           # Already exists
+├── PageHeader.tsx             # Page title + action button
+├── DataTable.tsx              # Generic data table wrapper
+├── DeleteDialog.tsx           # Reusable delete confirmation
+├── FormCard.tsx               # Card wrapper for forms
+├── StatusBadge.tsx            # Active/Inactive badge
+└── ImageUpload.tsx            # Image upload component
+```
+
+---
+
+## API Routes for CMS
+
+```
+src/app/api/cms/
+├── news/
+│   ├── route.ts              # GET (list), POST (create)
+│   └── [id]/
+│       └── route.ts          # GET, PUT, DELETE
+├── programs/
+│   ├── route.ts
+│   └── [id]/route.ts
+└── ...
+```
+
+### API Route Pattern
+```tsx
+// src/app/api/cms/news/route.ts
+import { NextResponse } from "next/server";
+import { prisma } from "@/src/lib/prisma";
+import { newsSchema } from "@/src/app/admin/cms/news/_components/NewsSchema";
+
+export async function GET() {
+  const news = await prisma.news.findMany();
+  return NextResponse.json(news);
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const validated = newsSchema.parse(body);
+  const news = await prisma.news.create({ data: validated });
+  return NextResponse.json(news, { status: 201 });
+}
+```

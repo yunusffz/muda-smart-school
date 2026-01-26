@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
 }
@@ -43,49 +42,353 @@ enum Pendidikan {
 }
 
 model Pendaftaran {
-  id                String          @id @default(cuid())
+  id String @id @default(cuid())
 
   // Identitas Diri
-  namaLengkap       String          @map("nama_lengkap")
-  jenisKelamin      JenisKelamin    @map("jenis_kelamin")
-  programKeahlian   ProgramKeahlian @map("program_keahlian")
-  nisn              String          @unique
-  nik               String          @unique
-  nomorKk           String          @map("nomor_kk")
-  tempatLahir       String          @map("tempat_lahir")
-  tanggalLahir      DateTime        @map("tanggal_lahir")
-  noHpMurid         String?         @map("no_hp_murid")
-  noHpOrtu          String          @map("no_hp_ortu")
+  namaLengkap     String          @map("nama_lengkap")
+  jenisKelamin    JenisKelamin    @map("jenis_kelamin")
+  programKeahlian ProgramKeahlian @map("program_keahlian")
+  nisn            String          @unique
+  nik             String          @unique
+  nomorKk         String          @map("nomor_kk")
+  tempatLahir     String          @map("tempat_lahir")
+  tanggalLahir    DateTime        @map("tanggal_lahir")
+  noHpMurid       String?         @map("no_hp_murid")
+  noHpOrtu        String          @map("no_hp_ortu")
 
   // Alamat
-  alamatJalan       String          @map("alamat_jalan")
-  rt                String
-  rw                String
-  kelurahanDesa     String          @map("kelurahan_desa")
-  kecamatan         String
-  kotaKabupaten     String          @map("kota_kabupaten")
-  provinsi          String
+  alamatJalan   String @map("alamat_jalan")
+  rt            String
+  rw            String
+  kelurahanDesa String @map("kelurahan_desa")
+  kecamatan     String
+  kotaKabupaten String @map("kota_kabupaten")
+  provinsi      String
 
   // Data Ayah
-  namaAyah          String          @map("nama_ayah")
-  tahunLahirAyah    Int?            @map("tahun_lahir_ayah")
-  pendidikanAyah    Pendidikan      @map("pendidikan_ayah")
-  pekerjaanAyah     String?         @map("pekerjaan_ayah")
+  namaAyah       String     @map("nama_ayah")
+  tahunLahirAyah Int?       @map("tahun_lahir_ayah")
+  pendidikanAyah Pendidikan @map("pendidikan_ayah")
+  pekerjaanAyah  String?    @map("pekerjaan_ayah")
 
   // Data Ibu
-  namaIbu           String          @map("nama_ibu")
-  tahunLahirIbu     Int?            @map("tahun_lahir_ibu")
-  pendidikanIbu     Pendidikan      @map("pendidikan_ibu")
-  pekerjaanIbu      String?         @map("pekerjaan_ibu")
+  namaIbu       String     @map("nama_ibu")
+  tahunLahirIbu Int?       @map("tahun_lahir_ibu")
+  pendidikanIbu Pendidikan @map("pendidikan_ibu")
+  pekerjaanIbu  String?    @map("pekerjaan_ibu")
 
   // Asal Sekolah
-  namaAsalSekolah   String          @map("nama_asal_sekolah")
-  npsnAsalSekolah   String?         @map("npsn_asal_sekolah")
-  alamatAsalSekolah String          @map("alamat_asal_sekolah")
+  namaAsalSekolah   String  @map("nama_asal_sekolah")
+  npsnAsalSekolah   String? @map("npsn_asal_sekolah")
+  alamatAsalSekolah String  @map("alamat_asal_sekolah")
 
   // Metadata
-  createdAt         DateTime        @default(now()) @map("created_at")
-  updatedAt         DateTime        @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("pendaftaran")
+}
+
+// ==========================================
+// CMS TABLES
+// ==========================================
+
+// Hero Slider untuk homepage
+model HeroSlide {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String?
+  image     String // URL gambar
+  ctaText   String?  @map("cta_text")
+  ctaLink   String?  @map("cta_link")
+  order     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("hero_slides")
+}
+
+// Program Keahlian (Jurusan)
+model Program {
+  id           String   @id @default(cuid())
+  name         String // Nama lengkap program
+  abbreviation String // Singkatan (PPLG, TJKT, dll)
+  description  String   @db.Text
+  color        String // Kode warna hex
+  image        String? // URL gambar
+  order        Int      @default(0)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  skills     ProgramSkill[]
+  careers    ProgramCareer[]
+  facilities ProgramFacility[]
+
+  @@map("programs")
+}
+
+// Kompetensi/Skill per Program
+model ProgramSkill {
+  id        String   @id @default(cuid())
+  programId String   @map("program_id")
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@map("program_skills")
+}
+
+// Prospek Karir per Program
+model ProgramCareer {
+  id        String   @id @default(cuid())
+  programId String   @map("program_id")
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@map("program_careers")
+}
+
+// Fasilitas per Program
+model ProgramFacility {
+  id        String   @id @default(cuid())
+  programId String   @map("program_id")
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@map("program_facilities")
+}
+
+// Berita & Pengumuman
+model News {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String    @db.Text
+  excerpt     String? // Ringkasan singkat
+  image       String?
+  category    String // Kategori berita
+  isFeatured  Boolean   @default(false) @map("is_featured")
+  isPublished Boolean   @default(false) @map("is_published")
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("news")
+}
+
+enum TestimonialType {
+  ALUMNI
+  ORANG_TUA
+  GURU
+  MITRA
+}
+
+// Testimoni
+model Testimonial {
+  id        String          @id @default(cuid())
+  name      String
+  role      String // Jabatan/Status
+  quote     String          @db.Text
+  type      TestimonialType
+  image     String? // Foto (opsional)
+  order     Int             @default(0)
+  isActive  Boolean         @default(true) @map("is_active")
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("testimonials")
+}
+
+enum MedalType {
+  GOLD
+  SILVER
+  BRONZE
+}
+
+enum AchievementLevel {
+  INTERNASIONAL
+  NASIONAL
+  PROVINSI
+  KOTA
+  KECAMATAN
+  SEKOLAH
+}
+
+// Prestasi & Penghargaan
+model Achievement {
+  id        String           @id @default(cuid())
+  title     String
+  event     String // Nama event/kompetisi
+  level     AchievementLevel
+  medalType MedalType?       @map("medal_type")
+  year      Int
+  image     String?
+  order     Int              @default(0)
+  isActive  Boolean          @default(true) @map("is_active")
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@map("achievements")
+}
+
+enum GalleryCategory {
+  FASILITAS
+  KEGIATAN
+  PRESTASI
+  EKSKUL
+  LAINNYA
+}
+
+// Galeri Foto
+model Gallery {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  image       String
+  category    GalleryCategory
+  order       Int             @default(0)
+  isActive    Boolean         @default(true) @map("is_active")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@map("gallery")
+}
+
+// Fasilitas Sekolah
+model Facility {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String? // Nama icon atau SVG
+  image       String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("facilities")
+}
+
+enum EkskulCategory {
+  ORGANISASI
+  KEPANDUAN
+  BELADIRI
+  OLAHRAGA
+  SENI
+  AKADEMIK
+  KEAGAMAAN
+  LAINNYA
+}
+
+// Ekstrakurikuler
+model Extracurricular {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  category    EkskulCategory
+  icon        String?
+  image       String?
+  order       Int            @default(0)
+  isActive    Boolean        @default(true) @map("is_active")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  @@map("extracurriculars")
+}
+
+// FAQ
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @db.Text
+  order     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("faqs")
+}
+
+enum ContactType {
+  WHATSAPP
+  PHONE
+  EMAIL
+}
+
+// Kontak
+model Contact {
+  id          String      @id @default(cuid())
+  name        String // Nama/Label kontak (Admin, Kesiswaan, dll)
+  value       String // Nomor HP / Email
+  type        ContactType
+  description String?
+  order       Int         @default(0)
+  isActive    Boolean     @default(true) @map("is_active")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("contacts")
+}
+
+enum SocialPlatform {
+  INSTAGRAM
+  FACEBOOK
+  YOUTUBE
+  TWITTER
+  TIKTOK
+  LINKEDIN
+  WEBSITE
+}
+
+// Social Media Links
+model SocialLink {
+  id        String         @id @default(cuid())
+  platform  SocialPlatform
+  url       String
+  username  String? // @username untuk display
+  order     Int            @default(0)
+  isActive  Boolean        @default(true) @map("is_active")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@map("social_links")
+}
+
+enum SettingType {
+  TEXT
+  TEXTAREA
+  HTML
+  JSON
+  IMAGE
+  NUMBER
+  BOOLEAN
+}
+
+// Pengaturan Sekolah (Key-Value Store)
+model SchoolSetting {
+  id        String      @id @default(cuid())
+  key       String      @unique
+  value     String      @db.Text
+  type      SettingType @default(TEXT)
+  label     String // Label untuk admin
+  group     String      @default("general") // Group kategori setting
+  order     Int         @default(0)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("school_settings")
 }
