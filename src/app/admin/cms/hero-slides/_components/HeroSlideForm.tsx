@@ -6,6 +6,7 @@ import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import { Textarea } from "@/src/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -24,47 +25,41 @@ import {
 import { FormCard } from "@/src/app/admin/_components/FormCard";
 import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
 import { toast } from "sonner";
-import {
-  achievementSchema,
-  achievementLevels,
-  medalTypes,
-  type AchievementFormData,
-} from "./AchievementSchema";
+import { heroSlideSchema, type HeroSlideFormData } from "./HeroSlideSchema";
 
-interface AchievementFormProps {
-  defaultValues?: Partial<AchievementFormData>;
-  achievementId?: string;
+interface HeroSlideFormProps {
+  defaultValues?: Partial<HeroSlideFormData>;
+  heroSlideId?: string;
 }
 
-export function AchievementForm({
+export function HeroSlideForm({
   defaultValues,
-  achievementId,
-}: AchievementFormProps) {
+  heroSlideId,
+}: HeroSlideFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const isEditing = !!achievementId;
+  const isEditing = !!heroSlideId;
 
-  const form = useForm<AchievementFormData>({
-    resolver: zodResolver(achievementSchema) as Resolver<AchievementFormData>,
+  const form = useForm<HeroSlideFormData>({
+    resolver: zodResolver(heroSlideSchema) as Resolver<HeroSlideFormData>,
     defaultValues: {
       title: "",
-      event: "",
-      level: "NASIONAL",
-      medalType: null,
-      year: new Date().getFullYear(),
+      subtitle: null,
       image: "",
+      ctaText: null,
+      ctaLink: null,
       order: 0,
       isActive: true,
       ...defaultValues,
     },
   });
 
-  const onSubmit = async (data: AchievementFormData) => {
+  const onSubmit = async (data: HeroSlideFormData) => {
     setIsLoading(true);
     try {
       const url = isEditing
-        ? `/api/cms/achievements/${achievementId}`
-        : "/api/cms/achievements";
+        ? `/api/cms/hero-slides/${heroSlideId}`
+        : "/api/cms/hero-slides";
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -74,16 +69,18 @@ export function AchievementForm({
       });
 
       if (!response.ok) {
-        throw new Error("Gagal menyimpan prestasi");
+        throw new Error("Gagal menyimpan hero slide");
       }
 
       toast.success(
-        isEditing ? "Prestasi berhasil diperbarui" : "Prestasi berhasil dibuat",
+        isEditing
+          ? "Hero slide berhasil diperbarui"
+          : "Hero slide berhasil dibuat",
       );
-      router.push("/admin/cms/achievements");
+      router.push("/admin/cms/hero-slides");
       router.refresh();
-    } catch (error) {
-      toast.error("Gagal menyimpan prestasi");
+    } catch {
+      toast.error("Gagal menyimpan hero slide");
     } finally {
       setIsLoading(false);
     }
@@ -92,8 +89,8 @@ export function AchievementForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Informasi Prestasi */}
-        <FormCard title="Informasi Prestasi" description="Data utama prestasi">
+        {/* Informasi Slide */}
+        <FormCard title="Informasi Slide" description="Data utama hero slide">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="md:col-span-2">
               <FormField
@@ -101,12 +98,9 @@ export function AchievementForm({
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Judul Prestasi</FormLabel>
+                    <FormLabel>Judul</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Juara 1 Lomba Cerdas Cermat"
-                        {...field}
-                      />
+                      <Input placeholder="Judul slide" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -117,14 +111,16 @@ export function AchievementForm({
             <div className="md:col-span-2">
               <FormField
                 control={form.control}
-                name="event"
+                name="subtitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama Event/Kompetisi</FormLabel>
+                    <FormLabel>Subtitle (Opsional)</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Olimpiade Sains Nasional"
+                      <Textarea
+                        placeholder="Subtitle slide"
                         {...field}
+                        value={field.value || ""}
+                        onChange={(e) => field.onChange(e.target.value || null)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -132,85 +128,6 @@ export function AchievementForm({
                 )}
               />
             </div>
-
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tingkat</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih tingkat" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {achievementLevels.map((level) => (
-                        <SelectItem key={level.value} value={level.value}>
-                          {level.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="medalType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Medali (Opsional)</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      field.onChange(value === "none" ? null : value)
-                    }
-                    defaultValue={field.value || "none"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih medali" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">Tidak ada</SelectItem>
-                      {medalTypes.map((medal) => (
-                        <SelectItem key={medal.value} value={medal.value}>
-                          {medal.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="year"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tahun</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min={2000}
-                      max={new Date().getFullYear()}
-                      {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}
@@ -258,10 +175,10 @@ export function AchievementForm({
           </div>
         </FormCard>
 
-        {/* Gambar Prestasi */}
+        {/* Gambar Slide */}
         <FormCard
-          title="Gambar Prestasi"
-          description="Pilih foto dokumentasi prestasi dari galeri (opsional)"
+          title="Gambar Slide"
+          description="Pilih gambar hero slide dari galeri (wajib)"
         >
           <FormField
             control={form.control}
@@ -279,6 +196,52 @@ export function AchievementForm({
               </FormItem>
             )}
           />
+        </FormCard>
+
+        {/* CTA (Call to Action) */}
+        <FormCard
+          title="Call to Action (Opsional)"
+          description="Tombol aksi yang ditampilkan pada slide"
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="ctaText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teks Tombol</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Contoh: Daftar Sekarang"
+                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ctaLink"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Link Tombol</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Contoh: /registrasi"
+                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </FormCard>
 
         {/* Actions */}
