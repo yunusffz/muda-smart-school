@@ -5,11 +5,14 @@ import TestimonialsSection from "./_components/TestimonialsSection";
 import NewsSection from "./_components/NewsSection";
 import CTABanner from "./_components/CTABanner";
 import Footer from "./_components/Footer";
+import { getActiveHeroSlides } from "@/src/features/cms/services/hero-slides";
 
-export default function Beranda() {
+export default async function Beranda() {
+  const slides = await getActiveHeroSlides();
+
   return (
     <main className="pt-16">
-      <HeroBanner />
+      <HeroBanner slides={slides} />
       <ProgramKeahlianSection />
       <AwardsSection />
       <TestimonialsSection />

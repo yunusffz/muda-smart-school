@@ -1,3 +1,6 @@
+import { getActiveAchievements } from "@/src/features/cms/services/achievements";
+import type { Achievement } from "@/src/features/cms/services/achievements";
+
 const misiList = [
   "Memotivasi Peserta Didik dalam meningkatkan pengetahuan dan wawasan intelektual.",
   "Memiliki kemampuan ilmu pengetahuan, penguasaan teknologi, daya analitik, kreatif, inovatif, profesional dan berwawasan luas.",
@@ -7,14 +10,9 @@ const misiList = [
   "Menumbuhkembangkan jiwa wirausaha yang tangguh dalam bidangnya masing-masing.",
 ];
 
-const prestasiList = [
-  { title: "Medali Emas Informatika", event: "ONSB 2024", level: "Nasional" },
-  { title: "Medali Emas Bahasa Inggris", event: "ONSB 2024", level: "Nasional" },
-  { title: "Medali Emas Teknik Bisnis Sepeda Motor", event: "Olympicad VII 2024", level: "Nasional" },
-  { title: "Juara 1 Cerdas Cermat Kearsipan", event: "Dispusipda Jabar", level: "Provinsi" },
-];
+export default async function VisionMissionSection() {
+  const prestasiList: Achievement[] = await getActiveAchievements();
 
-export default function VisionMissionSection() {
   return (
     <section className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -52,28 +50,30 @@ export default function VisionMissionSection() {
         </div>
 
         {/* Achievements Row */}
-        <div>
-          <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
-            <span className="w-1 h-6 bg-primary-500 rounded-full"></span>
-            Prestasi Siswa
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {prestasiList.map((prestasi, index) => (
-              <div key={index} className="bg-white rounded-lg p-4 border border-neutral-200 hover:border-primary-300 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                  </svg>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${prestasi.level === "Nasional" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}>
-                    {prestasi.level.toUpperCase()}
-                  </span>
+        {prestasiList.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-primary-500 rounded-full"></span>
+              Prestasi Siswa
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {prestasiList.map((prestasi) => (
+                <div key={prestasi.id} className="bg-white rounded-lg p-4 border border-neutral-200 hover:border-primary-300 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                    </svg>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${prestasi.level === "NASIONAL" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}>
+                      {prestasi.level}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-neutral-800 text-sm">{prestasi.title}</h3>
+                  <p className="text-neutral-500 text-xs mt-1">{prestasi.event}</p>
                 </div>
-                <h3 className="font-semibold text-neutral-800 text-sm">{prestasi.title}</h3>
-                <p className="text-neutral-500 text-xs mt-1">{prestasi.event}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
