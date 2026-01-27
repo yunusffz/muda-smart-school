@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getProgramById,
   updateProgram,
@@ -19,7 +20,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     if (!program) {
       return NextResponse.json(
         { error: "Program tidak ditemukan" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -28,7 +29,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     console.error("Error fetching program:", error);
     return NextResponse.json(
       { error: "Gagal mengambil data program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -39,18 +40,20 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = programSchema.parse(body);
     const program = await updateProgram(id, validated);
+    revalidatePath("/admin/cms/programs");
+    revalidatePath("/jurusan");
     return NextResponse.json(program);
   } catch (error) {
     console.error("Error updating program:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Data tidak valid", details: error },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { error: "Gagal memperbarui program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -63,18 +66,17 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Handle toggle status
     if (typeof body.isActive === "boolean") {
       const program = await toggleProgramStatus(id, body.isActive);
+      revalidatePath("/admin/cms/programs");
+      revalidatePath("/jurusan");
       return NextResponse.json(program);
     }
 
-    return NextResponse.json(
-      { error: "Operasi tidak valid" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Operasi tidak valid" }, { status: 400 });
   } catch (error) {
     console.error("Error patching program:", error);
     return NextResponse.json(
       { error: "Gagal memperbarui program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -83,12 +85,14 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteProgram(id);
+    revalidatePath("/admin/cms/programs");
+    revalidatePath("/jurusan");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting program:", error);
     return NextResponse.json(
       { error: "Gagal menghapus program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

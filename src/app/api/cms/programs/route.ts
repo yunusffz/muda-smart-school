@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getPrograms, createProgram } from "@/src/features/cms/services/programs";
+import { revalidatePath } from "next/cache";
+import {
+  getPrograms,
+  createProgram,
+} from "@/src/features/cms/services/programs";
 import { programSchema } from "@/src/app/admin/cms/programs/_components/ProgramSchema";
 
 export async function GET() {
@@ -10,7 +14,7 @@ export async function GET() {
     console.error("Error fetching programs:", error);
     return NextResponse.json(
       { error: "Gagal mengambil data program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -20,18 +24,20 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = programSchema.parse(body);
     const program = await createProgram(validated);
+    revalidatePath("/admin/cms/programs");
+    revalidatePath("/jurusan");
     return NextResponse.json(program, { status: 201 });
   } catch (error) {
     console.error("Error creating program:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Data tidak valid", details: error },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { error: "Gagal membuat program" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

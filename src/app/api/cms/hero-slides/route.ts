@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getHeroSlides,
   getActiveHeroSlides,
@@ -26,6 +27,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = heroSlideSchema.parse(body);
     const slide = await createHeroSlide(validated);
+    revalidatePath("/admin/cms/hero-slides");
+    revalidatePath("/");
     return NextResponse.json(slide, { status: 201 });
   } catch (error) {
     console.error("Error creating hero slide:", error);
