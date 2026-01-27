@@ -26,6 +26,8 @@ export async function POST(request: Request) {
     const program = await createProgram(validated);
     revalidatePath("/admin/cms/programs");
     revalidatePath("/jurusan");
+    revalidatePath("/");
+    revalidatePath("/profil");
     return NextResponse.json(program, { status: 201 });
   } catch (error) {
     console.error("Error creating program:", error);
