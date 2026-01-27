@@ -5,7 +5,7 @@ A modern school website built with Next.js, featuring a clean design system and 
 ## Tech Stack
 
 | Category       | Technology                          |
-|----------------|-------------------------------------|
+| -------------- | ----------------------------------- |
 | Framework      | Next.js 16 (App Router)             |
 | Language       | TypeScript                          |
 | Styling        | Tailwind CSS 4 + Shadcn/ui          |
@@ -65,6 +65,37 @@ Before you begin, ensure you have the following installed:
    pnpm prisma db push
    ```
 
+6. **Set up Husky git hooks**
+
+   ```bash
+   pnpm exec husky init
+   ```
+
+   Then configure the hooks:
+
+   **Pre-commit** (runs lint-staged on commit):
+
+   ```bash
+   echo "npx lint-staged" > .husky/pre-commit
+   ```
+
+   **Pre-push** (runs build check before push):
+
+   ```bash
+   cat > .husky/pre-push << 'EOF'
+   echo "🔨 Running build check before push..."
+
+   if ! pnpm build 2>&1; then
+     echo ""
+     echo "❌ Build failed! Push aborted."
+     echo "Fix the build errors above before pushing."
+     exit 1
+   fi
+
+   echo "✅ Build succeeded. Pushing..."
+   EOF
+   ```
+
 ## Development
 
 Start the development server:
@@ -77,13 +108,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Available Scripts
 
-| Command             | Description                        |
-|---------------------|------------------------------------|
-| `pnpm dev`          | Start development server           |
-| `pnpm build`        | Build for production               |
-| `pnpm start`        | Start production server            |
-| `pnpm lint`         | Run ESLint                         |
-| `pnpm prisma studio`| Open Prisma database GUI           |
+| Command              | Description              |
+| -------------------- | ------------------------ |
+| `pnpm dev`           | Start development server |
+| `pnpm build`         | Build for production     |
+| `pnpm start`         | Start production server  |
+| `pnpm lint`          | Run ESLint               |
+| `pnpm prisma studio` | Open Prisma database GUI |
 
 ## Project Structure
 
@@ -112,7 +143,7 @@ src/
 This project uses a 3-color design system:
 
 | Color   | Hex       | Usage                        |
-|---------|-----------|------------------------------|
+| ------- | --------- | ---------------------------- |
 | Primary | `#32368C` | Navy blue - main brand color |
 | Green   | `#4CAF93` | Teal/mint - success states   |
 | Yellow  | `#F2C94C` | Golden - warnings, accents   |
@@ -120,9 +151,9 @@ This project uses a 3-color design system:
 Each color has scales from 50-950 available via Tailwind CSS classes:
 
 ```jsx
-className="bg-primary-500 text-primary-50"
-className="bg-green-500 text-green-50"
-className="bg-yellow-400 text-yellow-950"
+className = "bg-primary-500 text-primary-50";
+className = "bg-green-500 text-green-50";
+className = "bg-yellow-400 text-yellow-950";
 ```
 
 ## Deployment

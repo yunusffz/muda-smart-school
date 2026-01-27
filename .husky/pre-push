@@ -1,1 +1,10 @@
-pnpm build 
+echo "🔨 Running build check before push..."
+
+if ! pnpm build 2>&1; then
+  echo ""
+  echo "❌ Build failed! Push aborted."
+  echo "Fix the build errors above before pushing."
+  exit 1
+fi
+
+echo "✅ Build succeeded. Pushing..."
