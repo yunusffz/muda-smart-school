@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getFacilities,
   createFacility,
@@ -23,6 +24,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = facilitySchema.parse(body);
     const facility = await createFacility(validated);
+    revalidatePath("/admin/cms/facilities");
+    revalidatePath("/profil");
     return NextResponse.json(facility, { status: 201 });
   } catch (error) {
     console.error("Error creating facility:", error);

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getExtracurricularById,
   updateExtracurricular,
@@ -39,6 +40,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = extracurricularSchema.parse(body);
     const extracurricular = await updateExtracurricular(id, validated);
+    revalidatePath("/admin/cms/extracurriculars");
     return NextResponse.json(extracurricular);
   } catch (error) {
     console.error("Error updating extracurricular:", error);
@@ -65,6 +67,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         id,
         body.isActive,
       );
+      revalidatePath("/admin/cms/extracurriculars");
       return NextResponse.json(extracurricular);
     }
 
@@ -82,6 +85,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteExtracurricular(id);
+    revalidatePath("/admin/cms/extracurriculars");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting extracurricular:", error);

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getAllSettings,
   bulkUpsertSettings,
@@ -116,6 +117,9 @@ export async function PUT(request: Request) {
 
     await bulkUpsertSettings(settingsToUpsert);
 
+    revalidatePath("/admin/cms/school-profile");
+    revalidatePath("/profil");
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error updating school settings:", error);

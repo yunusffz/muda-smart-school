@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getGalleryById,
   updateGallery,
@@ -39,6 +40,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = gallerySchema.parse(body);
     const gallery = await updateGallery(id, validated);
+    revalidatePath("/admin/cms/gallery");
     return NextResponse.json(gallery);
   } catch (error) {
     console.error("Error updating gallery:", error);
@@ -62,6 +64,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (typeof body.isActive === "boolean") {
       const gallery = await toggleGalleryStatus(id, body.isActive);
+      revalidatePath("/admin/cms/gallery");
       return NextResponse.json(gallery);
     }
 
@@ -79,6 +82,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteGallery(id);
+    revalidatePath("/admin/cms/gallery");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting gallery:", error);

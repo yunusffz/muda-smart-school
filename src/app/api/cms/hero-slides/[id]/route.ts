@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getHeroSlideById,
   updateHeroSlide,
@@ -39,6 +40,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = heroSlideSchema.parse(body);
     const slide = await updateHeroSlide(id, validated);
+    revalidatePath("/admin/cms/hero-slides");
+    revalidatePath("/");
     return NextResponse.json(slide);
   } catch (error) {
     console.error("Error updating hero slide:", error);
@@ -62,6 +65,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (typeof body.isActive === "boolean") {
       const slide = await toggleHeroSlideStatus(id, body.isActive);
+      revalidatePath("/admin/cms/hero-slides");
+      revalidatePath("/");
       return NextResponse.json(slide);
     }
 
@@ -79,6 +84,8 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteHeroSlide(id);
+    revalidatePath("/admin/cms/hero-slides");
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting hero slide:", error);

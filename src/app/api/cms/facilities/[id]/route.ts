@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getFacilityById,
   updateFacility,
@@ -39,6 +40,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = facilitySchema.parse(body);
     const facility = await updateFacility(id, validated);
+    revalidatePath("/admin/cms/facilities");
+    revalidatePath("/profil");
     return NextResponse.json(facility);
   } catch (error) {
     console.error("Error updating facility:", error);
@@ -62,6 +65,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (typeof body.isActive === "boolean") {
       const facility = await toggleFacilityStatus(id, body.isActive);
+      revalidatePath("/admin/cms/facilities");
+      revalidatePath("/profil");
       return NextResponse.json(facility);
     }
 
@@ -79,6 +84,8 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteFacility(id);
+    revalidatePath("/admin/cms/facilities");
+    revalidatePath("/profil");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting facility:", error);
