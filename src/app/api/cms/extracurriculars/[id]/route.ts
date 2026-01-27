@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
-  getGalleryById,
-  updateGallery,
-  deleteGallery,
-  toggleGalleryStatus,
-} from "@/src/features/cms/services/gallery";
-import { gallerySchema } from "@/src/app/admin/cms/gallery/_components/GallerySchema";
+  getExtracurricularById,
+  updateExtracurricular,
+  deleteExtracurricular,
+  toggleExtracurricularStatus,
+} from "@/src/features/cms/services/extracurriculars";
+import { extracurricularSchema } from "@/src/app/admin/cms/extracurriculars/_components/ExtracurricularSchema";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -15,20 +15,20 @@ interface RouteParams {
 export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const gallery = await getGalleryById(id);
+    const extracurricular = await getExtracurricularById(id);
 
-    if (!gallery) {
+    if (!extracurricular) {
       return NextResponse.json(
-        { error: "Galeri tidak ditemukan" },
+        { error: "Ekstrakurikuler tidak ditemukan" },
         { status: 404 },
       );
     }
 
-    return NextResponse.json(gallery);
+    return NextResponse.json(extracurricular);
   } catch (error) {
-    console.error("Error fetching gallery:", error);
+    console.error("Error fetching extracurricular:", error);
     return NextResponse.json(
-      { error: "Gagal mengambil data galeri" },
+      { error: "Gagal mengambil data ekstrakurikuler" },
       { status: 500 },
     );
   }
@@ -38,12 +38,12 @@ export async function PUT(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     const body = await request.json();
-    const validated = gallerySchema.parse(body);
-    const gallery = await updateGallery(id, validated);
-    revalidatePath("/admin/cms/gallery");
-    return NextResponse.json(gallery);
+    const validated = extracurricularSchema.parse(body);
+    const extracurricular = await updateExtracurricular(id, validated);
+    revalidatePath("/admin/cms/extracurriculars");
+    return NextResponse.json(extracurricular);
   } catch (error) {
-    console.error("Error updating gallery:", error);
+    console.error("Error updating extracurricular:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Data tidak valid", details: error },
@@ -51,7 +51,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       );
     }
     return NextResponse.json(
-      { error: "Gagal memperbarui galeri" },
+      { error: "Gagal memperbarui ekstrakurikuler" },
       { status: 500 },
     );
   }
@@ -63,16 +63,19 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     const body = await request.json();
 
     if (typeof body.isActive === "boolean") {
-      const gallery = await toggleGalleryStatus(id, body.isActive);
-      revalidatePath("/admin/cms/gallery");
-      return NextResponse.json(gallery);
+      const extracurricular = await toggleExtracurricularStatus(
+        id,
+        body.isActive,
+      );
+      revalidatePath("/admin/cms/extracurriculars");
+      return NextResponse.json(extracurricular);
     }
 
     return NextResponse.json({ error: "Operasi tidak valid" }, { status: 400 });
   } catch (error) {
-    console.error("Error patching gallery:", error);
+    console.error("Error patching extracurricular:", error);
     return NextResponse.json(
-      { error: "Gagal memperbarui galeri" },
+      { error: "Gagal memperbarui ekstrakurikuler" },
       { status: 500 },
     );
   }
@@ -81,13 +84,13 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    await deleteGallery(id);
-    revalidatePath("/admin/cms/gallery");
+    await deleteExtracurricular(id);
+    revalidatePath("/admin/cms/extracurriculars");
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting gallery:", error);
+    console.error("Error deleting extracurricular:", error);
     return NextResponse.json(
-      { error: "Gagal menghapus galeri" },
+      { error: "Gagal menghapus ekstrakurikuler" },
       { status: 500 },
     );
   }

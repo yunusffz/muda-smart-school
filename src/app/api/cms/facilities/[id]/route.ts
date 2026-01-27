@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
-  getGalleryById,
-  updateGallery,
-  deleteGallery,
-  toggleGalleryStatus,
-} from "@/src/features/cms/services/gallery";
-import { gallerySchema } from "@/src/app/admin/cms/gallery/_components/GallerySchema";
+  getFacilityById,
+  updateFacility,
+  deleteFacility,
+  toggleFacilityStatus,
+} from "@/src/features/cms/services/facilities";
+import { facilitySchema } from "@/src/app/admin/cms/facilities/_components/FacilitySchema";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -15,20 +15,20 @@ interface RouteParams {
 export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const gallery = await getGalleryById(id);
+    const facility = await getFacilityById(id);
 
-    if (!gallery) {
+    if (!facility) {
       return NextResponse.json(
-        { error: "Galeri tidak ditemukan" },
+        { error: "Fasilitas tidak ditemukan" },
         { status: 404 },
       );
     }
 
-    return NextResponse.json(gallery);
+    return NextResponse.json(facility);
   } catch (error) {
-    console.error("Error fetching gallery:", error);
+    console.error("Error fetching facility:", error);
     return NextResponse.json(
-      { error: "Gagal mengambil data galeri" },
+      { error: "Gagal mengambil data fasilitas" },
       { status: 500 },
     );
   }
@@ -38,12 +38,13 @@ export async function PUT(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     const body = await request.json();
-    const validated = gallerySchema.parse(body);
-    const gallery = await updateGallery(id, validated);
-    revalidatePath("/admin/cms/gallery");
-    return NextResponse.json(gallery);
+    const validated = facilitySchema.parse(body);
+    const facility = await updateFacility(id, validated);
+    revalidatePath("/admin/cms/facilities");
+    revalidatePath("/profil");
+    return NextResponse.json(facility);
   } catch (error) {
-    console.error("Error updating gallery:", error);
+    console.error("Error updating facility:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Data tidak valid", details: error },
@@ -51,7 +52,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       );
     }
     return NextResponse.json(
-      { error: "Gagal memperbarui galeri" },
+      { error: "Gagal memperbarui fasilitas" },
       { status: 500 },
     );
   }
@@ -63,16 +64,17 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     const body = await request.json();
 
     if (typeof body.isActive === "boolean") {
-      const gallery = await toggleGalleryStatus(id, body.isActive);
-      revalidatePath("/admin/cms/gallery");
-      return NextResponse.json(gallery);
+      const facility = await toggleFacilityStatus(id, body.isActive);
+      revalidatePath("/admin/cms/facilities");
+      revalidatePath("/profil");
+      return NextResponse.json(facility);
     }
 
     return NextResponse.json({ error: "Operasi tidak valid" }, { status: 400 });
   } catch (error) {
-    console.error("Error patching gallery:", error);
+    console.error("Error patching facility:", error);
     return NextResponse.json(
-      { error: "Gagal memperbarui galeri" },
+      { error: "Gagal memperbarui fasilitas" },
       { status: 500 },
     );
   }
@@ -81,13 +83,14 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    await deleteGallery(id);
-    revalidatePath("/admin/cms/gallery");
+    await deleteFacility(id);
+    revalidatePath("/admin/cms/facilities");
+    revalidatePath("/profil");
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting gallery:", error);
+    console.error("Error deleting facility:", error);
     return NextResponse.json(
-      { error: "Gagal menghapus galeri" },
+      { error: "Gagal menghapus fasilitas" },
       { status: 500 },
     );
   }

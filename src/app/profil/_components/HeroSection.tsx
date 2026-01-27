@@ -1,6 +1,21 @@
 import Image from "next/image";
+import { getSettingsMap } from "@/src/features/cms/services/school-settings";
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const settings = await getSettingsMap([
+    "school_name",
+    "school_tagline",
+    "school_logo",
+    "accreditation_grade",
+  ]);
+
+  const schoolName = settings.school_name || "SMK Muhammadiyah 2 Cibiru";
+  const tagline =
+    settings.school_tagline ||
+    "Lembaga pendidikan kejuruan yang berkomitmen mencetak generasi muda yang kompeten, berkarakter, dan siap menghadapi tantangan dunia kerja.";
+  const logo = settings.school_logo || "/logo.jpg";
+  const accreditation = settings.accreditation_grade || "A";
+
   return (
     <section className="relative bg-primary-900 py-20 md:py-28 overflow-hidden">
       {/* Decorative Elements */}
@@ -12,13 +27,15 @@ export default function HeroSection() {
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span className="text-green-400 text-sm font-medium">Profil Sekolah</span>
+              <span className="text-green-400 text-sm font-medium">
+                Profil Sekolah
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              SMK Muhammadiyah 2 Cibiru
+              {schoolName}
             </h1>
             <p className="text-lg md:text-xl text-primary-200 leading-relaxed">
-              Lembaga pendidikan kejuruan yang berkomitmen mencetak generasi muda yang kompeten, berkarakter, dan siap menghadapi tantangan dunia kerja.
+              {tagline}
             </p>
           </div>
 
@@ -27,15 +44,19 @@ export default function HeroSection() {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <div className="flex items-center gap-4">
                 <Image
-                  src="/logo.jpg"
-                  alt="Logo SMK Muhammadiyah 2 Cibiru"
+                  src={logo}
+                  alt={`Logo ${schoolName}`}
                   width={80}
                   height={80}
                   className="rounded-xl"
                 />
                 <div>
-                  <p className="text-yellow-400 font-semibold text-sm">Terakreditasi</p>
-                  <p className="text-3xl font-bold text-white">A</p>
+                  <p className="text-yellow-400 font-semibold text-sm">
+                    Terakreditasi
+                  </p>
+                  <p className="text-3xl font-bold text-white">
+                    {accreditation}
+                  </p>
                 </div>
               </div>
             </div>

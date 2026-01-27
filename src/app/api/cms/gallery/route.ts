@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getGallery,
   getActiveGallery,
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = gallerySchema.parse(body);
     const gallery = await createGallery(validated);
+    revalidatePath("/admin/cms/gallery");
     return NextResponse.json(gallery, { status: 201 });
   } catch (error) {
     console.error("Error creating gallery:", error);

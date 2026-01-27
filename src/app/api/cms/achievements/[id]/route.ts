@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getAchievementById,
   updateAchievement,
@@ -19,7 +20,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     if (!achievement) {
       return NextResponse.json(
         { error: "Prestasi tidak ditemukan" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -28,7 +29,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     console.error("Error fetching achievement:", error);
     return NextResponse.json(
       { error: "Gagal mengambil data prestasi" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -39,18 +40,19 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const validated = achievementSchema.parse(body);
     const achievement = await updateAchievement(id, validated);
+    revalidatePath("/admin/cms/achievements");
     return NextResponse.json(achievement);
   } catch (error) {
     console.error("Error updating achievement:", error);
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(
         { error: "Data tidak valid", details: error },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { error: "Gagal memperbarui prestasi" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -63,18 +65,16 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Handle toggle status
     if (typeof body.isActive === "boolean") {
       const achievement = await toggleAchievementStatus(id, body.isActive);
+      revalidatePath("/admin/cms/achievements");
       return NextResponse.json(achievement);
     }
 
-    return NextResponse.json(
-      { error: "Operasi tidak valid" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Operasi tidak valid" }, { status: 400 });
   } catch (error) {
     console.error("Error patching achievement:", error);
     return NextResponse.json(
       { error: "Gagal memperbarui prestasi" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -83,12 +83,13 @@ export async function DELETE(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
     await deleteAchievement(id);
+    revalidatePath("/admin/cms/achievements");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting achievement:", error);
     return NextResponse.json(
       { error: "Gagal menghapus prestasi" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
