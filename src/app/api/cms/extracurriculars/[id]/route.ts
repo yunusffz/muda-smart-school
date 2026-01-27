@@ -41,6 +41,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const validated = extracurricularSchema.parse(body);
     const extracurricular = await updateExtracurricular(id, validated);
     revalidatePath("/admin/cms/extracurriculars");
+    revalidatePath("/profil");
     return NextResponse.json(extracurricular);
   } catch (error) {
     console.error("Error updating extracurricular:", error);
@@ -68,6 +69,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         body.isActive,
       );
       revalidatePath("/admin/cms/extracurriculars");
+      revalidatePath("/profil");
       return NextResponse.json(extracurricular);
     }
 
@@ -86,6 +88,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const { id } = await params;
     await deleteExtracurricular(id);
     revalidatePath("/admin/cms/extracurriculars");
+    revalidatePath("/profil");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting extracurricular:", error);

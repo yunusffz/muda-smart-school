@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const validated = extracurricularSchema.parse(body);
     const extracurricular = await createExtracurricular(validated);
     revalidatePath("/admin/cms/extracurriculars");
+    revalidatePath("/profil");
     return NextResponse.json(extracurricular, { status: 201 });
   } catch (error) {
     console.error("Error creating extracurricular:", error);
