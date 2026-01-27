@@ -25,6 +25,8 @@ export async function POST(request: Request) {
     const validated = achievementSchema.parse(body);
     const achievement = await createAchievement(validated);
     revalidatePath("/admin/cms/achievements");
+    revalidatePath("/");
+    revalidatePath("/profil");
     return NextResponse.json(achievement, { status: 201 });
   } catch (error) {
     console.error("Error creating achievement:", error);

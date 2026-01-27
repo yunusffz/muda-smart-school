@@ -41,6 +41,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const validated = achievementSchema.parse(body);
     const achievement = await updateAchievement(id, validated);
     revalidatePath("/admin/cms/achievements");
+    revalidatePath("/");
+    revalidatePath("/profil");
     return NextResponse.json(achievement);
   } catch (error) {
     console.error("Error updating achievement:", error);
@@ -66,6 +68,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     if (typeof body.isActive === "boolean") {
       const achievement = await toggleAchievementStatus(id, body.isActive);
       revalidatePath("/admin/cms/achievements");
+      revalidatePath("/");
+      revalidatePath("/profil");
       return NextResponse.json(achievement);
     }
 
@@ -84,6 +88,8 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     const { id } = await params;
     await deleteAchievement(id);
     revalidatePath("/admin/cms/achievements");
+    revalidatePath("/");
+    revalidatePath("/profil");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting achievement:", error);
