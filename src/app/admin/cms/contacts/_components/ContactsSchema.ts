@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { MessageCircle, Phone, Mail } from "lucide-react";
 
 export const contactTypes = [
-  { value: "WHATSAPP", label: "Whatsapp" },
-  { value: "PHONE", label: "No Telepon" },
-  { value: "EMAIL", label: "Email" },
+  { value: "WHATSAPP", label: "WhatsApp", icon: MessageCircle },
+  { value: "PHONE", label: "No Telepon", icon: Phone },
+  { value: "EMAIL", label: "Email", icon: Mail },
 ] as const;
 
 export const contactSchema = z.object({

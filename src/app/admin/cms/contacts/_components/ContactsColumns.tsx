@@ -1,16 +1,23 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Medal, Trophy } from "lucide-react";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { ContactActions } from "./ContactsActions";
 import { contactTypes } from "./ContactsSchema";
 import type { Contact } from "@/src/features/cms/services/contacts";
 
+const getContactIcon = (contactType: string | null) => {
+  const type = contactTypes.find((t) => t.value === contactType);
+  if (!type) return null;
+  const Icon = type.icon;
+  return <Icon className="h-3 w-3" />;
+};
 
 const getContactLabel = (contactType: string | null) => {
   if (!contactType) return null;
-  return contactTypes.find((m) => m.value === contactType)?.label || contactType;
+  return (
+    contactTypes.find((m) => m.value === contactType)?.label || contactType
+  );
 };
 
 const getContactColor = (contactType: string | null) => {
@@ -26,7 +33,6 @@ const getContactColor = (contactType: string | null) => {
   }
 };
 
-
 export const contactsColumns: ColumnDef<Contact>[] = [
   {
     accessorKey: "order",
@@ -37,7 +43,7 @@ export const contactsColumns: ColumnDef<Contact>[] = [
   },
   {
     accessorKey: "name",
-    header: "Nama"
+    header: "Nama",
   },
   {
     accessorKey: "value",
@@ -54,10 +60,10 @@ export const contactsColumns: ColumnDef<Contact>[] = [
       return (
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${getContactColor(
-            contactType
+            contactType,
           )}`}
         >
-          <Medal className="h-3 w-3" />
+          {getContactIcon(contactType)}
           {getContactLabel(contactType)}
         </span>
       );
