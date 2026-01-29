@@ -157,7 +157,18 @@ export function ProgramForm({ defaultValues, programId }: ProgramFormProps) {
                 <FormItem>
                   <FormLabel>Urutan</FormLabel>
                   <FormControl>
-                    <Input type="number" min={0} {...field} />
+                    <Input
+                      type="number"
+                      min={0}
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value === ""
+                            ? 0
+                            : parseInt(e.target.value, 10),
+                        )
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
