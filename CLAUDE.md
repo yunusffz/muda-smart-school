@@ -164,6 +164,44 @@ pnpx prisma generate       # NOT npx prisma generate
 - Use Route Handlers pattern
 - Validate with Zod schemas
 
+### Zod v4 - STRICTLY FOLLOW
+
+This project uses **Zod v4**. The API has changed from v3.
+
+#### Enum Validation
+
+```tsx
+// ✅ CORRECT - Zod v4 syntax
+z.enum(["ADMIN", "USER"], {
+  message: "Role wajib dipilih",
+});
+
+// ❌ WRONG - Zod v3 syntax (DO NOT USE)
+z.enum(["ADMIN", "USER"], {
+  required_error: "Role wajib dipilih",
+});
+```
+
+#### Error Messages
+
+```tsx
+// ✅ CORRECT - Zod v4
+z.string({ message: "Field is required" });
+z.number({ message: "Must be a number" });
+
+// ❌ WRONG - Zod v3 (DO NOT USE)
+z.string({ required_error: "Field is required" });
+z.number({ invalid_type_error: "Must be a number" });
+```
+
+#### Key Changes from v3 to v4
+
+| v3 (OLD)             | v4 (NEW)  |
+| -------------------- | --------- |
+| `required_error`     | `message` |
+| `invalid_type_error` | `message` |
+| `errorMap`           | `error`   |
+
 ---
 
 ## Red Flags - NEVER DO

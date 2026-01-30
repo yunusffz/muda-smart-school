@@ -44,6 +44,7 @@ export async function POST(request: Request) {
         namaAsalSekolah: validatedData.namaAsalSekolah,
         npsnAsalSekolah: validatedData.npsnAsalSekolah || null,
         alamatAsalSekolah: validatedData.alamatAsalSekolah,
+        tahun_lulus: parseInt(validatedData.tahunLulus),
       },
     });
 
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
         message: "Pendaftaran berhasil disimpan",
         data: { id: pendaftaran.id },
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Registration error:", error);
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
           message: "Data tidak valid",
           errors: error,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
           success: false,
           message: `${field} sudah terdaftar`,
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -92,7 +93,7 @@ export async function POST(request: Request) {
         success: false,
         message: "Terjadi kesalahan server",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

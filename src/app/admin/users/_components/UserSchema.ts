@@ -14,7 +14,7 @@ export const createUserSchema = z.object({
     ),
   name: z.string().min(1, "Nama wajib diisi").max(100, "Nama terlalu panjang"),
   role: z.enum(["SUPER_ADMIN", "ADMIN", "TEACHER", "STUDENT"], {
-    required_error: "Role wajib dipilih",
+    message: "Role wajib dipilih",
   }),
   phone: z.string().optional(),
 });
@@ -22,10 +22,10 @@ export const createUserSchema = z.object({
 export const updateUserSchema = z.object({
   name: z.string().min(1, "Nama wajib diisi").max(100, "Nama terlalu panjang"),
   role: z.enum(["SUPER_ADMIN", "ADMIN", "TEACHER", "STUDENT"], {
-    required_error: "Role wajib dipilih",
+    message: "Role wajib dipilih",
   }),
   status: z.enum(["ACTIVE", "INACTIVE", "SUSPENDED"], {
-    required_error: "Status wajib dipilih",
+    message: "Status wajib dipilih",
   }),
   phone: z.string().optional(),
 });
