@@ -22,6 +22,7 @@ import {
   Layers,
   School,
   Activity,
+  UserCog,
 } from "lucide-react";
 
 import {
@@ -37,6 +38,9 @@ import {
   SidebarFooter,
   SidebarRail,
 } from "@/src/components/ui/sidebar";
+import { UserMenu } from "./UserMenu";
+import type { SessionUser } from "@/src/features/auth/types";
+import { canManageUsers } from "@/src/features/auth/utils/permissions";
 
 // Menu Utama
 const mainMenuItems = [
@@ -149,8 +153,22 @@ const settingsMenuItems = [
   },
 ];
 
-export function AdminSidebar() {
+// User Management (Super Admin only)
+const userManagementItems = [
+  {
+    title: "Kelola User",
+    url: "/admin/users",
+    icon: UserCog,
+  },
+];
+
+interface AdminSidebarProps {
+  user: SessionUser;
+}
+
+export function AdminSidebar({ user }: AdminSidebarProps) {
   const pathname = usePathname();
+  const showUserManagement = canManageUsers(user.role);
 
   return (
     <Sidebar>
@@ -267,20 +285,38 @@ export function AdminSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* User Management - Super Admin Only */}
+        {showUserManagement && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Administrasi</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {userManagementItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={
+                        pathname === item.url ||
+                        pathname.startsWith(item.url + "/")
+                      }
+                      tooltip={item.title}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-primary-600 font-medium">
-            A
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium">Admin</span>
-            <span className="text-xs text-muted-foreground">
-              admin@muda.sch.id
-            </span>
-          </div>
-        </div>
+        <UserMenu user={user} />
       </SidebarFooter>
 
       <SidebarRail />

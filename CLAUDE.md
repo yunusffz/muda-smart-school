@@ -1,6 +1,7 @@
 # Project Guidelines for Claude
 
 ## Project Overview
+
 Enterprise Next.js school website with TypeScript, Tailwind CSS, Shadcn/ui, Prisma, and Supabase.
 
 ---
@@ -12,7 +13,7 @@ All designs must follow the 3-color design system defined in `src/app/globals.cs
 ### Base Colors
 
 | Color   | Hex Code  | Usage                        |
-|---------|-----------|------------------------------|
+| ------- | --------- | ---------------------------- |
 | Primary | `#32368C` | Navy blue - main brand color |
 | Green   | `#4CAF93` | Teal/mint - success states   |
 | Yellow  | `#F2C94C` | Golden - warnings, accents   |
@@ -33,10 +34,11 @@ All designs must follow the 3-color design system defined in `src/app/globals.cs
 6. Use darker shades (700-950) for text and emphasis
 
 ### Tailwind Usage
+
 ```jsx
-className="bg-primary-500 text-primary-50"
-className="bg-green-500 text-green-50"
-className="bg-yellow-400 text-yellow-950"
+className = "bg-primary-500 text-primary-50";
+className = "bg-green-500 text-green-50";
+className = "bg-yellow-400 text-yellow-950";
 ```
 
 ---
@@ -79,14 +81,17 @@ src/
 ## Component Placement Rules - CRITICAL
 
 ### Rule 1: Page-Specific Components
+
 **Location:** `app/[route]/_components/`
 **When:** Component used ONLY on that specific page
 
 ### Rule 2: Feature-Shared Components
+
 **Location:** `features/[feature]/components/`
 **When:** Component used 2+ times within SAME feature
 
 ### Rule 3: Global Shared Components
+
 **Location:** `components/`
 **When:** Component used across MULTIPLE features
 
@@ -94,16 +99,38 @@ src/
 
 ## Technology Stack
 
-| Category | Technology |
-|----------|------------|
-| Framework | Next.js 14+ (App Router) |
-| Language | TypeScript (strict mode) |
-| Styling | Tailwind CSS + Shadcn/ui |
-| Icons | Lucide React |
-| Database | Prisma ORM + Supabase PostgreSQL |
-| Forms | React Hook Form + Zod |
-| Server State | React Query (@tanstack/react-query) |
-| Client State | Zustand (if needed) |
+| Category        | Technology                          |
+| --------------- | ----------------------------------- |
+| Framework       | Next.js 14+ (App Router)            |
+| Language        | TypeScript (strict mode)            |
+| Styling         | Tailwind CSS + Shadcn/ui            |
+| Icons           | Lucide React                        |
+| Database        | Prisma ORM + Supabase PostgreSQL    |
+| Forms           | React Hook Form + Zod               |
+| Server State    | React Query (@tanstack/react-query) |
+| Client State    | Zustand (if needed)                 |
+| Package Manager | pnpm (ALWAYS use pnpm, NOT npm)     |
+
+---
+
+## Package Manager - STRICTLY FOLLOW
+
+**ALWAYS use pnpm and pnpx instead of npm and npx:**
+
+```bash
+# Installing packages
+pnpm install           # NOT npm install
+pnpm add <package>     # NOT npm install <package>
+pnpm add -D <package>  # NOT npm install -D <package>
+
+# Running scripts
+pnpm dev               # NOT npm run dev
+pnpm build             # NOT npm run build
+
+# Running CLI tools
+pnpx prisma migrate dev    # NOT npx prisma migrate dev
+pnpx prisma generate       # NOT npx prisma generate
+```
 
 ---
 
@@ -119,6 +146,7 @@ src/
 ## Code Standards
 
 ### TypeScript
+
 - Use interfaces for objects
 - Type function parameters and returns
 - NEVER use `any` (implicit or explicit)
@@ -126,11 +154,13 @@ src/
 - In `.map()`, `.filter()`, `.forEach()`, etc., always ensure the callback parameter has a known type (from a typed array or explicit annotation)
 
 ### Components
+
 - Functional components with TypeScript
 - Named exports (except pages)
 - Use `@/` path aliases
 
 ### API Routes
+
 - Use Route Handlers pattern
 - Validate with Zod schemas
 
@@ -161,6 +191,7 @@ src/
 ## Component Splitting Rules - STRICTLY FOLLOW
 
 ### Rule 1: Split by Section
+
 Each distinct section of a page should be its own component.
 
 ```tsx
@@ -188,17 +219,18 @@ export default function ProfilPage() {
 
 ### Rule 2: Component Naming Convention
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Section Component | `[Name]Section.tsx` | `HeroSection.tsx`, `FacilitiesSection.tsx` |
-| List Component | `[Name]List.tsx` | `NewsList.tsx`, `ProgramList.tsx` |
-| Card Component | `[Name]Card.tsx` | `NewsCard.tsx`, `TestimonialCard.tsx` |
-| Form Component | `[Name]Form.tsx` | `ProgramForm.tsx`, `NewsForm.tsx` |
-| Table Component | `[Name]Table.tsx` | `ProgramTable.tsx`, `NewsTable.tsx` |
-| Dialog/Modal | `[Name]Dialog.tsx` | `DeleteDialog.tsx`, `EditProgramDialog.tsx` |
-| Action Component | `[Name]Actions.tsx` | `TableActions.tsx`, `RowActions.tsx` |
+| Type              | Pattern             | Example                                     |
+| ----------------- | ------------------- | ------------------------------------------- |
+| Section Component | `[Name]Section.tsx` | `HeroSection.tsx`, `FacilitiesSection.tsx`  |
+| List Component    | `[Name]List.tsx`    | `NewsList.tsx`, `ProgramList.tsx`           |
+| Card Component    | `[Name]Card.tsx`    | `NewsCard.tsx`, `TestimonialCard.tsx`       |
+| Form Component    | `[Name]Form.tsx`    | `ProgramForm.tsx`, `NewsForm.tsx`           |
+| Table Component   | `[Name]Table.tsx`   | `ProgramTable.tsx`, `NewsTable.tsx`         |
+| Dialog/Modal      | `[Name]Dialog.tsx`  | `DeleteDialog.tsx`, `EditProgramDialog.tsx` |
+| Action Component  | `[Name]Actions.tsx` | `TableActions.tsx`, `RowActions.tsx`        |
 
 ### Rule 3: File Size Limit
+
 - If a component exceeds **150 lines**, split it into smaller components
 - Extract repeated UI patterns into separate components
 
@@ -246,6 +278,7 @@ src/app/admin/cms/news/
 ### CMS Page Patterns
 
 #### List Page (page.tsx)
+
 ```tsx
 // Server component - fetches data
 import { NewsTable } from "./_components/NewsTable";
@@ -268,6 +301,7 @@ export default async function NewsPage() {
 ```
 
 #### Form Component Pattern
+
 ```tsx
 // Client component - handles form
 "use client";
@@ -282,11 +316,7 @@ export function NewsForm({ defaultValues, onSubmit }: NewsFormProps) {
     defaultValues,
   });
 
-  return (
-    <Form {...form}>
-      {/* form fields */}
-    </Form>
-  );
+  return <Form {...form}>{/* form fields */}</Form>;
 }
 ```
 
@@ -308,6 +338,7 @@ src/features/cms/
 ```
 
 ### Service Pattern
+
 ```tsx
 // src/features/cms/services/news.ts
 import { prisma } from "@/src/lib/prisma";
@@ -369,6 +400,7 @@ src/app/api/cms/
 ```
 
 ### API Route Pattern
+
 ```tsx
 // src/app/api/cms/news/route.ts
 import { NextResponse } from "next/server";
