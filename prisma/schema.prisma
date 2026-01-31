@@ -7,44 +7,23 @@ datasource db {
   provider = "postgresql"
 }
 
-// ==========================================
-// AUTH & USER MANAGEMENT
-// ==========================================
-
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  TEACHER
-  STUDENT
-}
-
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-}
-
 model User {
-  id          String     @id // Syncs with Supabase auth.users.id
-  email       String     @unique
-  name        String
-  role        UserRole   @default(STUDENT)
-  status      UserStatus @default(ACTIVE)
-  avatar      String?
-  phone       String?
-  lastLoginAt DateTime?  @map("last_login_at")
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  createdById String?    @map("created_by_id")
-  createdBy   User?      @relation("CreatedByUser", fields: [createdById], references: [id])
-  createdUsers User[]    @relation("CreatedByUser")
+  id           String     @id
+  email        String     @unique
+  name         String
+  role         UserRole   @default(STUDENT)
+  status       UserStatus @default(ACTIVE)
+  avatar       String?
+  phone        String?
+  lastLoginAt  DateTime?  @map("last_login_at")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  createdById  String?    @map("created_by_id")
+  createdBy    User?      @relation("CreatedByUser", fields: [createdById], references: [id])
+  createdUsers User[]     @relation("CreatedByUser")
 
   @@map("users")
 }
-
-// ==========================================
-// PENDAFTARAN
-// ==========================================
 
 model Pendaftaran {
   id                  String            @id @default(cuid())
@@ -307,6 +286,19 @@ model SchoolSetting {
   updatedAt DateTime    @updatedAt @map("updated_at")
 
   @@map("school_settings")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
 }
 
 enum JenisKelamin {
