@@ -1,97 +1,103 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
-import { registrasiSchema } from "@/src/app/registrasi/_components/schema";
+import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
+import {
+  getAllRegistrations,
+  createRegistration,
+  convertZodToPrisma,
+  checkDuplicateNISN,
+  checkDuplicateNIK,
+} from "@/src/features/registration/services";
+import { registrasiSchema } from "@/src/features/registration/services/registration.schema";
 
-export async function POST(request: Request) {
+// GET: Get all registrations
+export async function GET(request: NextRequest) {
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const status = searchParams.get("status");
+    
+    let registrations;
+    
+    if (status) {
+      // Filter by status
+      const { getRegistrationsByStatus } = await import("@/src/features/registration/services");
+      registrations = await getRegistrationsByStatus(status as any);
+    } else {
+      // Get all
+      registrations = await getAllRegistrations();
+    }
+    
+    return NextResponse.json(registrations);
+  } catch (error) {
+    
+    return NextResponse.json(
+      { error: "Gagal mengambil data pendaftaran" },
+      { status: 500 }
+    );
+  }
+}
+
+// POST: Create new registration
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // Validate with Zod
+    
+    // 1. Validate with Zod
     const validatedData = registrasiSchema.parse(body);
-
-    // Create record in database
-    const pendaftaran = await prisma.pendaftaran.create({
-      data: {
-        namaLengkap: validatedData.namaLengkap,
-        jenisKelamin: validatedData.jenisKelamin,
-        programKeahlian: validatedData.programKeahlian,
-        nisn: validatedData.nisn,
-        nik: validatedData.nik,
-        nomorKk: validatedData.nomorKk,
-        tempatLahir: validatedData.tempatLahir,
-        tanggalLahir: new Date(validatedData.tanggalLahir),
-        noHpMurid: validatedData.noHpMurid || null,
-        noHpOrtu: validatedData.noHpOrtu,
-        alamatJalan: validatedData.alamatJalan,
-        rt: validatedData.rt,
-        rw: validatedData.rw,
-        kelurahanDesa: validatedData.kelurahanDesa,
-        kecamatan: validatedData.kecamatan,
-        kotaKabupaten: validatedData.kotaKabupaten,
-        provinsi: validatedData.provinsi,
-        namaAyah: validatedData.namaAyah,
-        tahunLahirAyah: validatedData.tahunLahirAyah
-          ? parseInt(validatedData.tahunLahirAyah)
-          : null,
-        pendidikanAyah: validatedData.pendidikanAyah,
-        pekerjaanAyah: validatedData.pekerjaanAyah || null,
-        namaIbu: validatedData.namaIbu,
-        tahunLahirIbu: validatedData.tahunLahirIbu
-          ? parseInt(validatedData.tahunLahirIbu)
-          : null,
-        pendidikanIbu: validatedData.pendidikanIbu,
-        pekerjaanIbu: validatedData.pekerjaanIbu || null,
-        namaAsalSekolah: validatedData.namaAsalSekolah,
-        npsnAsalSekolah: validatedData.npsnAsalSekolah || null,
-        alamatAsalSekolah: validatedData.alamatAsalSekolah,
-      },
-    });
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Pendaftaran berhasil disimpan",
-        data: { id: pendaftaran.id },
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Registration error:", error);
-
-    if (error instanceof Error && error.name === "ZodError") {
+    
+    // 2. Check duplicates
+    const [nisnExists, nikExists] = await Promise.all([
+      checkDuplicateNISN(validatedData.nisn),
+      checkDuplicateNIK(validatedData.nik),
+    ]);
+    
+    if (nisnExists) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Data tidak valid",
-          errors: error,
+        { error: "NISN sudah terdaftar" },
+        { status: 400 }
+      );
+    }
+    
+    if (nikExists) {
+      return NextResponse.json(
+        { error: "NIK sudah terdaftar" },
+        { status: 400 }
+      );
+    }
+    
+    // 3. Convert Zod to Prisma format
+    const prismaData = convertZodToPrisma(validatedData);
+    
+    // 4. Create in database
+    const registration = await createRegistration(prismaData);
+    
+    // 5. Revalidate cache
+    revalidatePath("/admin/registrations");
+    revalidatePath("/api/registrations");
+    
+    return NextResponse.json(registration, { status: 201 });
+  } catch (error: any) {
+    
+    // Zod validation error
+    if (error.name === "ZodError") {
+      return NextResponse.json(
+        { 
+          error: "Data tidak valid", 
+          details: error.errors 
         },
         { status: 400 }
       );
     }
-
-    // Handle Prisma unique constraint errors
-    if (
-      error instanceof Error &&
-      error.message.includes("Unique constraint failed")
-    ) {
-      let field = "Data";
-      if (error.message.includes("nisn")) field = "NISN";
-      else if (error.message.includes("nik")) field = "NIK";
-
+    
+    // Custom error dari service
+    if (error.message?.includes("sudah terdaftar")) {
       return NextResponse.json(
-        {
-          success: false,
-          message: `${field} sudah terdaftar`,
-        },
-        { status: 409 }
+        { error: error.message },
+        { status: 400 }
       );
     }
-
+    
     return NextResponse.json(
-      {
-        success: false,
-        message: "Terjadi kesalahan server",
-      },
+      { error: "Gagal membuat pendaftaran" },
       { status: 500 }
     );
   }

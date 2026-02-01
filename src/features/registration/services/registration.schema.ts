@@ -6,12 +6,11 @@ export const jenisKelaminOptions = [
 ] as const;
 
 export const programKeahlianOptions = [
-  { value: "TEKNIK_KOMPUTER_JARINGAN", label: "Teknik Komputer dan Jaringan" },
-  { value: "REKAYASA_PERANGKAT_LUNAK", label: "Rekayasa Perangkat Lunak" },
-  { value: "MULTIMEDIA", label: "Multimedia" },
-  { value: "AKUNTANSI", label: "Akuntansi" },
-  { value: "ADMINISTRASI_PERKANTORAN", label: "Administrasi Perkantoran" },
-  { value: "PEMASARAN", label: "Pemasaran" },
+  { value: "TEKNIK_OTOMOTIF", label: "Teknik Otomotif" },
+  { value: "PEMROGRAMAN_PERANGKAT_LUNAK_DAN_GIM", label: "Pemrograman Perangkat Lunak dan Gim" },
+  { value: "TEKNIK_JARINGAN_KOMPUTER_DAN_TELEKOMUNIKASI", label: "Teknik Jaringan Komputer dan Telekomunikasi" },
+  { value: "MANAJEMEN_PERKANTORAN_DAN_LAYANAN_BISNIS", label: "Manajemen Perkantoran dan Layanan Bisnis" },
+  { value: "AKUNTANSI_DAN_KEUANGAN_LEMBAGA", label: "Akuntansi dan Keuangan Lembaga" },
 ] as const;
 
 export const pendidikanOptions = [
@@ -37,12 +36,11 @@ export const registrasiSchema = z.object({
   }),
   programKeahlian: z.enum(
     [
-      "TEKNIK_KOMPUTER_JARINGAN",
-      "REKAYASA_PERANGKAT_LUNAK",
-      "MULTIMEDIA",
-      "AKUNTANSI",
-      "ADMINISTRASI_PERKANTORAN",
-      "PEMASARAN",
+      "TEKNIK_OTOMOTIF",
+      "PEMROGRAMAN_PERANGKAT_LUNAK_DAN_GIM",
+      "TEKNIK_JARINGAN_KOMPUTER_DAN_TELEKOMUNIKASI",
+      "MANAJEMEN_PERKANTORAN_DAN_LAYANAN_BISNIS",
+      "AKUNTANSI_DAN_KEUANGAN_LEMBAGA",
     ],
     { message: "Pilih program keahlian" }
   ),
@@ -69,6 +67,15 @@ export const registrasiSchema = z.object({
     .min(10, "Nomor HP minimal 10 digit")
     .max(15, "Nomor HP maksimal 15 digit")
     .regex(/^\d+$/, "Nomor HP hanya boleh angka"),
+  emailMurid: z.string().email("Email tidak valid").optional().or(z.literal("")),
+  noTelpAyah: z
+    .string()
+    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .optional(),
+  noTelpIbu: z
+    .string()
+    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .optional(),
 
   // Alamat
   alamatJalan: z.string().min(5, "Alamat minimal 5 karakter"),
@@ -78,6 +85,12 @@ export const registrasiSchema = z.object({
   kecamatan: z.string().min(2, "Kecamatan minimal 2 karakter"),
   kotaKabupaten: z.string().min(2, "Kota/Kabupaten minimal 2 karakter"),
   provinsi: z.string().min(2, "Provinsi minimal 2 karakter"),
+  kodePos: z
+    .string()
+    .regex(/^\d+$/, "Kode pos hanya boleh angka")
+    .length(5, "Kode pos harus 5 digit")
+    .optional()
+    .or(z.literal("")),
 
   // Data Ayah
   namaAyah: z.string().min(3, "Nama ayah minimal 3 karakter"),
@@ -129,6 +142,36 @@ export const registrasiSchema = z.object({
   ),
   pekerjaanIbu: z.string().optional(),
 
+  // Data Wali (Opsional)
+  namaWali: z.string().optional(),
+  tahunLahirWali: z
+    .string()
+    .refine((val) => val === "" || /^\d+$/.test(val), "Tahun lahir hanya boleh angka")
+    .optional(),
+  pendidikanWali: z.enum(
+    [
+      "SD",
+      "SMP",
+      "SMA",
+      "SMK",
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "S1",
+      "S2",
+      "S3",
+      "TIDAK_SEKOLAH",
+    ],
+    { message: "Pilih pendidikan wali" }
+  ).optional(),
+  pekerjaanWali: z.string().optional(),
+  noTelpWali: z
+    .string()
+    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .optional(),
+  hubunganWali: z.string().optional(),
+
   // Asal Sekolah
   namaAsalSekolah: z.string().min(3, "Nama sekolah minimal 3 karakter"),
   npsnAsalSekolah: z
@@ -136,6 +179,15 @@ export const registrasiSchema = z.object({
     .refine((val) => val === "" || /^\d+$/.test(val), "NPSN hanya boleh angka")
     .optional(),
   alamatAsalSekolah: z.string().min(5, "Alamat sekolah minimal 5 karakter"),
+  tahunLulus: z
+    .string()
+    .regex(/^\d+$/, "Tahun lulus hanya boleh angka")
+    .length(4, "Tahun lulus harus 4 digit")
+    .refine((val) => {
+      const year = parseInt(val);
+      const currentYear = new Date().getFullYear();
+      return year >= 2022 && year <= currentYear;
+    }, `Tahun lulus harus antara 2022-${new Date().getFullYear()}`),
 });
 
 export type RegistrasiFormData = z.infer<typeof registrasiSchema>;
@@ -164,4 +216,6 @@ export const requiredFields: Set<keyof RegistrasiFormData> = new Set([
   "pendidikanIbu",
   "namaAsalSekolah",
   "alamatAsalSekolah",
+  "tahunLulus",
 ]);
+
