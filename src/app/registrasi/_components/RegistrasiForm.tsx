@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, MapPin, Users, School, Loader2 } from "lucide-react";
+import { User, MapPin, Users, School, Loader2, Phone, Mail } from "lucide-react";
 import { toast } from "sonner";
+
 import {
   registrasiSchema,
   type RegistrasiFormData,
@@ -13,7 +14,8 @@ import {
   programKeahlianOptions,
   pendidikanOptions,
   requiredFields,
-} from "./schema";
+} from "../../../features/registration/services/registration.schema";
+
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import {
@@ -88,7 +90,10 @@ export default function RegistrasiForm() {
     resolver: zodResolver(registrasiSchema),
     mode: "onChange",
     defaultValues: {
+      // Identitas Diri
       namaLengkap: "",
+      jenisKelamin: undefined,
+      programKeahlian: undefined,
       nisn: "",
       nik: "",
       nomorKk: "",
@@ -96,6 +101,11 @@ export default function RegistrasiForm() {
       tanggalLahir: "",
       noHpMurid: "",
       noHpOrtu: "",
+      emailMurid: "",
+      noTelpAyah: "",
+      noTelpIbu: "",
+
+      // Alamat
       alamatJalan: "",
       rt: "",
       rw: "",
@@ -103,15 +113,33 @@ export default function RegistrasiForm() {
       kecamatan: "",
       kotaKabupaten: "",
       provinsi: "",
+      kodePos: "",
+
+      // Data Ayah
       namaAyah: "",
       tahunLahirAyah: "",
+      pendidikanAyah: undefined,
       pekerjaanAyah: "",
+
+      // Data Ibu
       namaIbu: "",
       tahunLahirIbu: "",
+      pendidikanIbu: undefined,
       pekerjaanIbu: "",
+
+      // Data Wali (Opsional)
+      namaWali: "",
+      tahunLahirWali: "",
+      pendidikanWali: undefined,
+      pekerjaanWali: "",
+      noTelpWali: "",
+      hubunganWali: "",
+
+      // Asal Sekolah
       namaAsalSekolah: "",
       npsnAsalSekolah: "",
       alamatAsalSekolah: "",
+      tahunLulus: "",
     },
   });
 
@@ -163,9 +191,11 @@ export default function RegistrasiForm() {
               name="namaLengkap"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="namaLengkap">Nama Lengkap</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="namaLengkap">Nama Lengkap</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan nama lengkap" {...field} />
+                    <Input placeholder="Masukkan nama lengkap sesuai akta lahir" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -177,11 +207,10 @@ export default function RegistrasiForm() {
               name="jenisKelamin"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="jenisKelamin">Jenis Kelamin</FieldLabel></FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel>
+                    <FieldLabel name="jenisKelamin">Jenis Kelamin</FieldLabel>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih jenis kelamin" />
@@ -205,11 +234,10 @@ export default function RegistrasiForm() {
               name="programKeahlian"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="programKeahlian">Program Keahlian yang Diminati</FieldLabel></FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel>
+                    <FieldLabel name="programKeahlian">Program Keahlian</FieldLabel>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih program keahlian" />
@@ -233,9 +261,11 @@ export default function RegistrasiForm() {
               name="nisn"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="nisn">NISN</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="nisn">NISN</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan NISN (10 digit)" {...field} />
+                    <Input placeholder="10 digit NISN" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -247,9 +277,11 @@ export default function RegistrasiForm() {
               name="nik"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="nik">Nomor Induk Kependudukan (NIK)</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="nik">NIK</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan NIK (16 digit)" {...field} />
+                    <Input placeholder="16 digit NIK" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -261,12 +293,11 @@ export default function RegistrasiForm() {
               name="nomorKk"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="nomorKk">Nomor Kartu Keluarga (KK)</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="nomorKk">Nomor KK</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Masukkan Nomor KK (16 digit)"
-                      {...field}
-                    />
+                    <Input placeholder="16 digit Nomor Kartu Keluarga" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -278,9 +309,11 @@ export default function RegistrasiForm() {
               name="tempatLahir"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="tempatLahir">Tempat Lahir</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="tempatLahir">Tempat Lahir</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan tempat lahir" {...field} />
+                    <Input placeholder="Kota tempat lahir" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -292,7 +325,9 @@ export default function RegistrasiForm() {
               name="tanggalLahir"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="tanggalLahir">Tanggal Lahir</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="tanggalLahir">Tanggal Lahir</FieldLabel>
+                  </FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -306,9 +341,9 @@ export default function RegistrasiForm() {
               name="noHpMurid"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="noHpMurid">Nomor HP (WhatsApp) Calon Murid</FieldLabel></FormLabel>
+                  <FormLabel>Nomor HP (WhatsApp) Calon Murid</FormLabel>
                   <FormControl>
-                    <Input placeholder="Contoh: 081234567890" {...field} />
+                    <Input placeholder="081234567890 (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -320,9 +355,25 @@ export default function RegistrasiForm() {
               name="noHpOrtu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="noHpOrtu">Nomor HP (WhatsApp) Orang Tua</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="noHpOrtu">Nomor HP (WhatsApp) Orang Tua</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Contoh: 081234567890" {...field} />
+                    <Input placeholder="081234567890" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="emailMurid"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Calon Murid</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="contoh@email.com (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -339,9 +390,11 @@ export default function RegistrasiForm() {
               name="alamatJalan"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="alamatJalan">Nama Jalan/Gang/Kampung/Komplek/Perumahan</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="alamatJalan">Alamat Jalan</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan alamat lengkap" {...field} />
+                    <Input placeholder="Jl. Nama Jalan No. X, Gang/Perumahan" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -354,7 +407,9 @@ export default function RegistrasiForm() {
                 name="rt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel><FieldLabel name="rt">RT</FieldLabel></FormLabel>
+                    <FormLabel>
+                      <FieldLabel name="rt">RT</FieldLabel>
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="001" {...field} />
                     </FormControl>
@@ -368,9 +423,11 @@ export default function RegistrasiForm() {
                 name="rw"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel><FieldLabel name="rw">RW</FieldLabel></FormLabel>
+                    <FormLabel>
+                      <FieldLabel name="rw">RW</FieldLabel>
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="001" {...field} />
+                      <Input placeholder="002" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -383,9 +440,11 @@ export default function RegistrasiForm() {
               name="kelurahanDesa"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="kelurahanDesa">Kelurahan/Desa</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="kelurahanDesa">Kelurahan/Desa</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan kelurahan/desa" {...field} />
+                    <Input placeholder="Nama kelurahan/desa" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -397,9 +456,11 @@ export default function RegistrasiForm() {
               name="kecamatan"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="kecamatan">Kecamatan</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="kecamatan">Kecamatan</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan kecamatan" {...field} />
+                    <Input placeholder="Nama kecamatan" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -411,9 +472,11 @@ export default function RegistrasiForm() {
               name="kotaKabupaten"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="kotaKabupaten">Kota/Kabupaten</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="kotaKabupaten">Kota/Kabupaten</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan kota/kabupaten" {...field} />
+                    <Input placeholder="Nama kota/kabupaten" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -425,9 +488,25 @@ export default function RegistrasiForm() {
               name="provinsi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="provinsi">Provinsi</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="provinsi">Provinsi</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan provinsi" {...field} />
+                    <Input placeholder="Nama provinsi" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="kodePos"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Kode Pos</FormLabel>
+                  <FormControl>
+                    <Input placeholder="12345 (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -444,9 +523,11 @@ export default function RegistrasiForm() {
               name="namaAyah"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="namaAyah">Nama Ayah</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="namaAyah">Nama Ayah</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan nama ayah" {...field} />
+                    <Input placeholder="Nama lengkap ayah" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -458,9 +539,9 @@ export default function RegistrasiForm() {
               name="tahunLahirAyah"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="tahunLahirAyah">Tahun Lahir</FieldLabel></FormLabel>
+                  <FormLabel>Tahun Lahir Ayah</FormLabel>
                   <FormControl>
-                    <Input placeholder="Contoh: 1975" {...field} />
+                    <Input placeholder="1975 (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -472,11 +553,10 @@ export default function RegistrasiForm() {
               name="pendidikanAyah"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="pendidikanAyah">Pendidikan Terakhir</FieldLabel></FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel>
+                    <FieldLabel name="pendidikanAyah">Pendidikan Terakhir</FieldLabel>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih pendidikan" />
@@ -499,10 +579,24 @@ export default function RegistrasiForm() {
               control={form.control}
               name="pekerjaanAyah"
               render={({ field }) => (
-                <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="pekerjaanAyah">Pekerjaan</FieldLabel></FormLabel>
+                <FormItem>
+                  <FormLabel>Pekerjaan Ayah</FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan pekerjaan ayah" {...field} />
+                    <Input placeholder="Pekerjaan ayah (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="noTelpAyah"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Nomor Telepon Ayah</FormLabel>
+                  <FormControl>
+                    <Input placeholder="081234567890 (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -519,9 +613,11 @@ export default function RegistrasiForm() {
               name="namaIbu"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="namaIbu">Nama Ibu</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="namaIbu">Nama Ibu</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan nama ibu" {...field} />
+                    <Input placeholder="Nama lengkap ibu" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -533,9 +629,9 @@ export default function RegistrasiForm() {
               name="tahunLahirIbu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="tahunLahirIbu">Tahun Lahir</FieldLabel></FormLabel>
+                  <FormLabel>Tahun Lahir Ibu</FormLabel>
                   <FormControl>
-                    <Input placeholder="Contoh: 1978" {...field} />
+                    <Input placeholder="1978 (opsional)" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -547,11 +643,10 @@ export default function RegistrasiForm() {
               name="pendidikanIbu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="pendidikanIbu">Pendidikan Terakhir</FieldLabel></FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel>
+                    <FieldLabel name="pendidikanIbu">Pendidikan Terakhir</FieldLabel>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih pendidikan" />
@@ -574,10 +669,124 @@ export default function RegistrasiForm() {
               control={form.control}
               name="pekerjaanIbu"
               render={({ field }) => (
-                <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="pekerjaanIbu">Pekerjaan</FieldLabel></FormLabel>
+                <FormItem>
+                  <FormLabel>Pekerjaan Ibu</FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan pekerjaan ibu" {...field} />
+                    <Input placeholder="Pekerjaan ibu (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="noTelpIbu"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Nomor Telepon Ibu</FormLabel>
+                  <FormControl>
+                    <Input placeholder="081234567890 (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </FormSection>
+
+        {/* Data Wali (Opsional) */}
+        <FormSection title="Data Wali (Opsional)" icon={<Users className="size-5" />}>
+          <div className="grid gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="namaWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama Wali</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nama wali (jika diperlukan)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tahunLahirWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tahun Lahir Wali</FormLabel>
+                  <FormControl>
+                    <Input placeholder="1970 (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pendidikanWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pendidikan Wali</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih pendidikan (opsional)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {pendidikanOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pekerjaanWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pekerjaan Wali</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Pekerjaan wali (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="noTelpWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nomor Telepon Wali</FormLabel>
+                  <FormControl>
+                    <Input placeholder="081234567890 (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hubunganWali"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hubungan dengan Siswa</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Contoh: Paman, Bibi, Kakek" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -594,9 +803,11 @@ export default function RegistrasiForm() {
               name="namaAsalSekolah"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel><FieldLabel name="namaAsalSekolah">Nama SMP/MTs/PKBM</FieldLabel></FormLabel>
+                  <FormLabel>
+                    <FieldLabel name="namaAsalSekolah">Nama SMP/MTs/Sederajat</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan nama sekolah asal" {...field} />
+                    <Input placeholder="Nama lengkap sekolah asal" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -608,9 +819,28 @@ export default function RegistrasiForm() {
               name="npsnAsalSekolah"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel><FieldLabel name="npsnAsalSekolah">NPSN SMP/MTs/PKBM</FieldLabel></FormLabel>
+                  <FormLabel>NPSN Sekolah Asal</FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan NPSN (8 digit)" {...field} />
+                    <Input placeholder="8 digit NPSN (opsional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tahunLulus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <FieldLabel name="tahunLulus">Tahun Lulus</FieldLabel>
+                  </FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder={`2022-${new Date().getFullYear()}`} 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -621,13 +851,12 @@ export default function RegistrasiForm() {
               control={form.control}
               name="alamatAsalSekolah"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel><FieldLabel name="alamatAsalSekolah">Alamat SMP/MTs</FieldLabel></FormLabel>
+                <FormItem className="md:col-span-2">
+                  <FormLabel>
+                    <FieldLabel name="alamatAsalSekolah">Alamat Sekolah Asal</FieldLabel>
+                  </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Masukkan alamat sekolah asal"
-                      {...field}
-                    />
+                    <Input placeholder="Alamat lengkap sekolah asal" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -662,7 +891,8 @@ export default function RegistrasiForm() {
             <AlertDialogTitle>Konfirmasi Pendaftaran</AlertDialogTitle>
             <AlertDialogDescription>
               Apakah Anda yakin data yang diisi sudah benar? Data yang sudah
-              dikirim tidak dapat diubah.
+              dikirim tidak dapat diubah. Pastikan semua data sudah sesuai
+              dengan dokumen asli.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
