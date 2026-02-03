@@ -68,6 +68,7 @@ export interface CreateRegistrationInput {
   npsnAsalSekolah?: string;
   alamatAsalSekolah: string;
   tahunLulus: number;
+  
 }
 
 // ======================
