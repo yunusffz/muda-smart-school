@@ -51,7 +51,7 @@ const mainMenuItems = [
   },
   {
     title: "Pendaftaran",
-    url: "/admin/pendaftaran",
+    url: "/admin/cms/registrations",
     icon: FileText,
   },
 ];
