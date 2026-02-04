@@ -9,6 +9,12 @@ const PROTECTED_PREFIXES = ["/admin", "/api/cms", "/api/auth/users"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get("host") ?? "";
+
+  // Redirect spmb subdomain to /registrasi
+  if (hostname.startsWith("spmb.") && pathname === "/") {
+    return NextResponse.redirect(new URL("/registrasi", request.url));
+  }
 
   // Check if this is a protected route
   const isProtectedRoute = PROTECTED_PREFIXES.some((prefix) =>
