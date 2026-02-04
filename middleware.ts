@@ -11,9 +11,14 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host") ?? "";
 
-  // Redirect spmb subdomain to /registrasi
-  if (hostname.startsWith("spmb.") && pathname === "/") {
-    return NextResponse.redirect(new URL("/registrasi", request.url));
+  // Redirect all spmb subdomain traffic to main domain
+  if (hostname.startsWith("spmb.")) {
+    const mainDomain = hostname.replace("spmb.", "");
+    const destination = pathname === "/" ? "/registrasi" : pathname;
+    return NextResponse.redirect(
+      new URL(destination, `https://${mainDomain}`),
+      301,
+    );
   }
 
   // Check if this is a protected route
