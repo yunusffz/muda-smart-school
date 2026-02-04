@@ -16,6 +16,14 @@ export async function getActiveAchievements() {
   });
 }
 
+export async function getHighlightedAchievements(limit: number = 5) {
+  return prisma.achievement.findMany({
+    where: { isActive: true, isHighlight: true },
+    orderBy: { order: "asc" },
+    take: limit,
+  });
+}
+
 export async function getAchievementById(id: string) {
   return prisma.achievement.findUnique({
     where: { id },
@@ -31,6 +39,7 @@ export interface CreateAchievementInput {
   image?: string;
   order?: number;
   isActive?: boolean;
+  isHighlight?: boolean;
 }
 
 export async function createAchievement(data: CreateAchievementInput) {
@@ -48,9 +57,13 @@ export interface UpdateAchievementInput {
   image?: string;
   order?: number;
   isActive?: boolean;
+  isHighlight?: boolean;
 }
 
-export async function updateAchievement(id: string, data: UpdateAchievementInput) {
+export async function updateAchievement(
+  id: string,
+  data: UpdateAchievementInput,
+) {
   return prisma.achievement.update({
     where: { id },
     data,
@@ -65,5 +78,15 @@ export async function toggleAchievementStatus(id: string, isActive: boolean) {
   return prisma.achievement.update({
     where: { id },
     data: { isActive },
+  });
+}
+
+export async function toggleAchievementHighlight(
+  id: string,
+  isHighlight: boolean,
+) {
+  return prisma.achievement.update({
+    where: { id },
+    data: { isHighlight },
   });
 }

@@ -55,6 +55,7 @@ export function AchievementForm({
       image: "",
       order: 0,
       isActive: true,
+      isHighlight: false,
       ...defaultValues,
     },
   });
@@ -249,6 +250,31 @@ export function AchievementForm({
                     <SelectContent>
                       <SelectItem value="true">Aktif</SelectItem>
                       <SelectItem value="false">Nonaktif</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isHighlight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tampilkan di Beranda</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === "true")}
+                    defaultValue={field.value ? "true" : "false"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih opsi" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="true">Ya</SelectItem>
+                      <SelectItem value="false">Tidak</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
