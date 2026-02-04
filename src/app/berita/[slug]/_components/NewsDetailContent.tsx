@@ -61,6 +61,7 @@ export default function NewsDetailContent({ news }: NewsDetailContentProps) {
               src={news.image}
               alt={news.title}
               fill
+              sizes="(max-width: 768px) 100vw, 720px"
               className="object-cover"
               priority
             />
