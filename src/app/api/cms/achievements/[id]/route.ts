@@ -5,6 +5,7 @@ import {
   updateAchievement,
   deleteAchievement,
   toggleAchievementStatus,
+  toggleAchievementHighlight,
 } from "@/src/features/cms/services/achievements";
 import { achievementSchema } from "@/src/app/admin/cms/achievements/_components/AchievementSchema";
 
@@ -67,6 +68,18 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Handle toggle status
     if (typeof body.isActive === "boolean") {
       const achievement = await toggleAchievementStatus(id, body.isActive);
+      revalidatePath("/admin/cms/achievements");
+      revalidatePath("/");
+      revalidatePath("/profil");
+      return NextResponse.json(achievement);
+    }
+
+    // Handle toggle highlight
+    if (typeof body.isHighlight === "boolean") {
+      const achievement = await toggleAchievementHighlight(
+        id,
+        body.isHighlight,
+      );
       revalidatePath("/admin/cms/achievements");
       revalidatePath("/");
       revalidatePath("/profil");

@@ -18,9 +18,12 @@ export const medalTypes = [
 export const achievementSchema = z.object({
   title: z.string().min(1, "Judul prestasi wajib diisi"),
   event: z.string().min(1, "Nama event/kompetisi wajib diisi"),
-  level: z.enum(["INTERNASIONAL", "NASIONAL", "PROVINSI", "KOTA", "KECAMATAN", "SEKOLAH"], {
-    message: "Tingkat wajib dipilih",
-  }),
+  level: z.enum(
+    ["INTERNASIONAL", "NASIONAL", "PROVINSI", "KOTA", "KECAMATAN", "SEKOLAH"],
+    {
+      message: "Tingkat wajib dipilih",
+    },
+  ),
   medalType: z.enum(["GOLD", "SILVER", "BRONZE"]).nullable().optional(),
   year: z
     .number()
@@ -30,6 +33,7 @@ export const achievementSchema = z.object({
   image: z.string().optional(),
   order: z.number().int().min(0),
   isActive: z.boolean(),
+  isHighlight: z.boolean(),
 });
 
 export type AchievementFormData = z.infer<typeof achievementSchema>;

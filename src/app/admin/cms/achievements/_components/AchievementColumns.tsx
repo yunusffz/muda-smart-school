@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Medal, Trophy } from "lucide-react";
+import { Medal, Trophy, Star } from "lucide-react";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { AchievementActions } from "./AchievementActions";
 import { achievementLevels, medalTypes } from "./AchievementSchema";
@@ -76,7 +76,7 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
     cell: ({ row }) => (
       <span
         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getLevelColor(
-          row.original.level
+          row.original.level,
         )}`}
       >
         {getLevelLabel(row.original.level)}
@@ -94,7 +94,7 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
       return (
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${getMedalColor(
-            medalType
+            medalType,
           )}`}
         >
           <Medal className="h-3 w-3" />
@@ -114,6 +114,19 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
     accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => <StatusBadge isActive={row.original.isActive} />,
+  },
+  {
+    accessorKey: "isHighlight",
+    header: "Beranda",
+    cell: ({ row }) =>
+      row.original.isHighlight ? (
+        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-700">
+          <Star className="h-3 w-3 fill-yellow-500" />
+          Tampil
+        </span>
+      ) : (
+        <span className="text-muted-foreground">-</span>
+      ),
   },
   {
     id: "actions",
