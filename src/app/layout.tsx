@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://smkmuh2cibiru.sch.id"),
   title: {
-    default: "SMK Muhammadiyah 2 Cibiru - Sekolah Kejuruan Unggulan di Bandung",
+    default: "SMK Muhammadiyah 2 Cibiru | SMK Unggulan Bandung",
     template: "%s | SMK Muhammadiyah 2 Cibiru",
   },
   description:
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "SMK Muhammadiyah 2 Cibiru" }],
   openGraph: {
-    title: "SMK Muhammadiyah 2 Cibiru - Sekolah Kejuruan Unggulan di Bandung",
+    title: "SMK Muhammadiyah 2 Cibiru | SMK Unggulan Bandung",
     description:
       "Sekolah menengah kejuruan unggulan di Bandung dengan 5 program keahlian: PPLG, TJKT, Otomotif, MPLB, dan AKL. Mendidik generasi terampil dan berakhlak mulia.",
     url: "https://smkmuh2cibiru.sch.id",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SMK Muhammadiyah 2 Cibiru - Sekolah Kejuruan Unggulan di Bandung",
+    title: "SMK Muhammadiyah 2 Cibiru | SMK Unggulan Bandung",
     description:
       "Sekolah menengah kejuruan unggulan di Bandung dengan 5 program keahlian: PPLG, TJKT, Otomotif, MPLB, dan AKL.",
     images: [
