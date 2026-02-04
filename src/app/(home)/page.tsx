@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     absolute: "SMK Muhammadiyah 2 Cibiru | SMK Unggulan Bandung",
   },
   description:
-    "SMK Muhammadiyah 2 Cibiru adalah sekolah kejuruan unggulan di Bandung dengan 5 program keahlian: PPLG, TJKT, Otomotif, MPLB, dan AKL. Daftar sekarang dan raih masa depan cerah bersama kami!",
+    "SMK Muhammadiyah 2 Cibiru Bandung dengan 5 jurusan unggulan: PPLG, TJKT, Otomotif, MPLB, dan AKL. Daftar sekarang dan mulai masa depanmu!",
 };
 
 export default async function Beranda() {
