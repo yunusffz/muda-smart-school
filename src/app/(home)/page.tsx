@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroBanner from "./_components/HeroBanner";
 import ProgramKeahlianSection from "./_components/ProgramKeahlianSection";
 import AwardsSection from "./_components/AwardsSection";
@@ -6,6 +7,12 @@ import NewsSection from "./_components/NewsSection";
 import CTABanner from "./_components/CTABanner";
 import Footer from "./_components/Footer";
 import { getActiveHeroSlides } from "@/src/features/cms/services/hero-slides";
+
+export const metadata: Metadata = {
+  title: "SMK Muhammadiyah 2 Cibiru - Sekolah Kejuruan Unggulan di Bandung",
+  description:
+    "SMK Muhammadiyah 2 Cibiru menyediakan 5 program keahlian unggulan: PPLG, TJKT, Otomotif, MPLB, dan AKL. Daftar sekarang dan raih masa depan cerah!",
+};
 
 export default async function Beranda() {
   const slides = await getActiveHeroSlides();
