@@ -51,6 +51,7 @@ export default function HeroBanner({ slides }: HeroBannerProps) {
                 src={slide.image}
                 alt={slide.title}
                 fill
+                sizes="100vw"
                 priority={index === 0}
                 className="object-cover"
               />

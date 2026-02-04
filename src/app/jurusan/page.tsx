@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getActivePrograms } from "@/src/features/cms/services/programs";
 import type { ProgramWithRelations } from "@/src/features/cms/services/programs";
 import { QuickNav } from "./_components/QuickNav";
+
+export const metadata: Metadata = {
+  title: "Program Keahlian (Jurusan)",
+  description:
+    "Pilih jurusan sesuai minat dan bakat: PPLG, TJKT, Teknik Otomotif, MPLB, dan AKL. Program keahlian unggulan SMK Muhammadiyah 2 Cibiru Bandung.",
+};
 
 function hexToRgb(hex: string): string {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -77,6 +84,7 @@ export default async function JurusanPage() {
                         src={program.image}
                         alt={program.name}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover"
                       />
                     ) : (

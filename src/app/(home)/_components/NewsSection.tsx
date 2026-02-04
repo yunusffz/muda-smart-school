@@ -63,6 +63,7 @@ export default async function NewsSection() {
                 src={featured.image || "/gambar-1.jpg"}
                 alt={featured.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 66vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -122,6 +123,7 @@ export default async function NewsSection() {
                       src={item.image || "/gambar-1.jpg"}
                       alt={item.title}
                       fill
+                      sizes="96px"
                       className="object-cover"
                     />
                   </div>
