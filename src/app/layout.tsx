@@ -75,9 +75,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
-  alternates: {
-    canonical: "https://smkmuh2cibiru.sch.id",
-  },
 };
 
 const organizationJsonLd = {
