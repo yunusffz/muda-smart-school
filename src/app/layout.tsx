@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Muda Smart School",
-  description: "Sekolah pintar untuk masa depan cerah",
+  title: "SMK Muhammadiyah 2 Cibiru",
+  description: "SMK Muhammadiyah 2 Cibiru",
 };
 
 export default function RootLayout({
@@ -20,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body
-        className={`${inter.variable} antialiased font-sans`}
-      >
+      <body className={`${inter.variable} antialiased font-sans`}>
         {children}
         <Toaster position="top-center" richColors />
       </body>
