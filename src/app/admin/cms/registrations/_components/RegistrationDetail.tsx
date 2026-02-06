@@ -1,7 +1,17 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/src/components/ui/tabs";
 import type { Pendaftaran } from "@/src/features/registration/services";
 
 interface RegistrationDetailProps {
@@ -12,7 +22,7 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
   // Format tanggal
   const formatDate = (date: Date | null) => {
     if (!date) return "-";
-    return new Date(date).toLocaleDateString('id-ID');
+    return new Date(date).toLocaleDateString("id-ID");
   };
 
   // Format tahun
@@ -37,17 +47,41 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
-              <DetailItem label="Nama Lengkap" value={registration.namaLengkap} />
-              <DetailItem label="Jenis Kelamin" value={registration.jenisKelamin === "LAKI_LAKI" ? "Laki-laki" : "Perempuan"} />
-              <DetailItem label="Program Keahlian" value={registration.programKeahlian} />
+              <DetailItem
+                label="Nama Lengkap"
+                value={registration.namaLengkap}
+              />
+              <DetailItem
+                label="Jenis Kelamin"
+                value={
+                  registration.jenisKelamin === "LAKI_LAKI"
+                    ? "Laki-laki"
+                    : "Perempuan"
+                }
+              />
+              <DetailItem
+                label="Program Keahlian"
+                value={registration.programKeahlian}
+              />
               <DetailItem label="NISN" value={registration.nisn} />
               <DetailItem label="NIK" value={registration.nik} />
               <DetailItem label="No. KK" value={registration.nomorKk} />
-              <DetailItem label="Tempat Lahir" value={registration.tempatLahir} />
-              <DetailItem label="Tanggal Lahir" value={formatDate(registration.tanggalLahir)} />
-              <DetailItem label="No. HP Siswa" value={registration.noHpMurid || "-"} />
-              <DetailItem label="Email Siswa" value={registration.emailMurid || "-"} />
-              <DetailItem label="No. HP Orang Tua" value={registration.noHpOrtu} />
+              <DetailItem
+                label="Tempat Lahir"
+                value={registration.tempatLahir}
+              />
+              <DetailItem
+                label="Tanggal Lahir"
+                value={formatDate(registration.tanggalLahir)}
+              />
+              <DetailItem
+                label="No. HP Siswa"
+                value={registration.noHpMurid || "-"}
+              />
+              <DetailItem
+                label="Email Siswa"
+                value={registration.emailMurid || "-"}
+              />
             </div>
           </CardContent>
         </Card>
@@ -64,10 +98,22 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 <DetailItem label="Nama Ayah" value={registration.namaAyah} />
-                <DetailItem label="Tahun Lahir" value={formatYear(registration.tahunLahirAyah)} />
-                <DetailItem label="Pendidikan" value={registration.pendidikanAyah} />
-                <DetailItem label="Pekerjaan" value={registration.pekerjaanAyah || "-"} />
-                <DetailItem label="No. Telepon" value={registration.noTelpAyah || "-"} />
+                <DetailItem
+                  label="Tahun Lahir"
+                  value={formatYear(registration.tahunLahirAyah)}
+                />
+                <DetailItem
+                  label="Pendidikan"
+                  value={registration.pendidikanAyah}
+                />
+                <DetailItem
+                  label="Pekerjaan"
+                  value={registration.pekerjaanAyah || "-"}
+                />
+                <DetailItem
+                  label="No. Telepon"
+                  value={registration.noTelpAyah || "-"}
+                />
               </div>
             </CardContent>
           </Card>
@@ -80,10 +126,22 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 <DetailItem label="Nama Ibu" value={registration.namaIbu} />
-                <DetailItem label="Tahun Lahir" value={formatYear(registration.tahunLahirIbu)} />
-                <DetailItem label="Pendidikan" value={registration.pendidikanIbu} />
-                <DetailItem label="Pekerjaan" value={registration.pekerjaanIbu || "-"} />
-                <DetailItem label="No. Telepon" value={registration.noTelpIbu || "-"} />
+                <DetailItem
+                  label="Tahun Lahir"
+                  value={formatYear(registration.tahunLahirIbu)}
+                />
+                <DetailItem
+                  label="Pendidikan"
+                  value={registration.pendidikanIbu}
+                />
+                <DetailItem
+                  label="Pekerjaan"
+                  value={registration.pekerjaanIbu || "-"}
+                />
+                <DetailItem
+                  label="No. Telepon"
+                  value={registration.noTelpIbu || "-"}
+                />
               </div>
             </CardContent>
           </Card>
@@ -92,15 +150,31 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
           {registration.namaWali && (
             <Card>
               <CardHeader>
-                <CardTitle>Data Wali {registration.hubunganWali && `(${registration.hubunganWali})`}</CardTitle>
+                <CardTitle>
+                  Data Wali{" "}
+                  {registration.hubunganWali &&
+                    `(${registration.hubunganWali})`}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-2">
                   <DetailItem label="Nama Wali" value={registration.namaWali} />
-                  <DetailItem label="Tahun Lahir" value={formatYear(registration.tahunLahirWali)} />
-                  <DetailItem label="Pendidikan" value={registration.pendidikanWali || "-"} />
-                  <DetailItem label="Pekerjaan" value={registration.pekerjaanWali || "-"} />
-                  <DetailItem label="No. Telepon" value={registration.noTelpWali || "-"} />
+                  <DetailItem
+                    label="Tahun Lahir"
+                    value={formatYear(registration.tahunLahirWali)}
+                  />
+                  <DetailItem
+                    label="Pendidikan"
+                    value={registration.pendidikanWali || "-"}
+                  />
+                  <DetailItem
+                    label="Pekerjaan"
+                    value={registration.pekerjaanWali || "-"}
+                  />
+                  <DetailItem
+                    label="No. Telepon"
+                    value={registration.noTelpWali || "-"}
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -116,10 +190,22 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
-              <DetailItem label="Nama Sekolah" value={registration.namaAsalSekolah} />
-              <DetailItem label="NPSN" value={registration.npsnAsalSekolah || "-"} />
-              <DetailItem label="Alamat Sekolah" value={registration.alamatAsalSekolah} />
-              <DetailItem label="Tahun Lulus" value={registration.tahunLulus.toString()} />
+              <DetailItem
+                label="Nama Sekolah"
+                value={registration.namaAsalSekolah}
+              />
+              <DetailItem
+                label="NPSN"
+                value={registration.npsnAsalSekolah || "-"}
+              />
+              <DetailItem
+                label="Alamat Sekolah"
+                value={registration.alamatAsalSekolah}
+              />
+              <DetailItem
+                label="Tahun Lulus"
+                value={registration.tahunLulus.toString()}
+              />
             </div>
           </CardContent>
         </Card>
@@ -131,13 +217,28 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
-              <DetailItem label="Alamat Jalan" value={registration.alamatJalan} />
-              <DetailItem label="RT/RW" value={`${registration.rt}/${registration.rw}`} />
-              <DetailItem label="Kelurahan/Desa" value={registration.kelurahanDesa} />
+              <DetailItem
+                label="Alamat Jalan"
+                value={registration.alamatJalan}
+              />
+              <DetailItem
+                label="RT/RW"
+                value={`${registration.rt}/${registration.rw}`}
+              />
+              <DetailItem
+                label="Kelurahan/Desa"
+                value={registration.kelurahanDesa}
+              />
               <DetailItem label="Kecamatan" value={registration.kecamatan} />
-              <DetailItem label="Kota/Kabupaten" value={registration.kotaKabupaten} />
+              <DetailItem
+                label="Kota/Kabupaten"
+                value={registration.kotaKabupaten}
+              />
               <DetailItem label="Provinsi" value={registration.provinsi} />
-              <DetailItem label="Kode Pos" value={registration.kodePos || "-"} />
+              <DetailItem
+                label="Kode Pos"
+                value={registration.kodePos || "-"}
+              />
             </div>
           </CardContent>
         </Card>
@@ -151,8 +252,14 @@ export function RegistrationDetail({ registration }: RegistrationDetailProps) {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
-              <DetailItem label="No. Pendaftaran" value={registration.nomorPendaftaran || "-"} />
-              <DetailItem label="Tanggal Pendaftaran" value={formatDate(registration.tanggalPendaftaran)} />
+              <DetailItem
+                label="No. Pendaftaran"
+                value={registration.nomorPendaftaran || "-"}
+              />
+              <DetailItem
+                label="Tanggal Pendaftaran"
+                value={formatDate(registration.tanggalPendaftaran)}
+              />
               <DetailItem label="Status" value={registration.status} />
             </div>
           </CardContent>

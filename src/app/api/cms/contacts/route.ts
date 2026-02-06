@@ -8,8 +8,8 @@ import { contactSchema } from "@/src/app/admin/cms/contacts/_components/Contacts
 
 export async function GET() {
   try {
-    const contacts = await getContacts(); 
-    return NextResponse.json(contacts); 
+    const contacts = await getContacts();
+    return NextResponse.json(contacts);
   } catch (error) {
     console.error("Error fetching contacts:", error);
     return NextResponse.json(
@@ -24,24 +24,24 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = contactSchema.parse(body);
     const contact = await createContact(validated);
-    
+
     revalidatePath("/admin/cms/contacts");
     return NextResponse.json(contact, { status: 201 });
   } catch (error) {
-    console.error("Error creating contact:", error); // [PERUBAHAN 6]
-    
-    if (error instanceof Error && "errors" in error) { // [PERUBAHAN 7]
+    console.error("Error creating contact:", error);
+
+    if (error instanceof Error && "errors" in error) {
       return NextResponse.json(
-        { 
-          error: "Data tidak valid", 
-          details: error.errors // [PERUBAHAN 7]
+        {
+          error: "Data tidak valid",
+          details: error.errors,
         },
         { status: 400 },
       );
     }
-    
+
     return NextResponse.json(
-      { error: "Gagal membuat kontak" }, // [PERUBAHAN 8]
+      { error: "Gagal membuat kontak" },
       { status: 500 },
     );
   }
