@@ -63,3 +63,40 @@ export async function toggleGalleryStatus(id: string, isActive: boolean) {
     data: { isActive },
   });
 }
+
+// src/features/cms/services/gallery.ts (tambahkan fungsi ini)
+
+export async function getGalleryByCategory(category: GalleryCategory) {
+  return prisma.gallery.findMany({
+    where: {
+      category,
+      isActive: true,
+    },
+    orderBy: { order: "asc" },
+  });
+}
+
+export async function getGalleryByCategories(categories: GalleryCategory[]) {
+  return prisma.gallery.findMany({
+    where: {
+      category: { in: categories },
+      isActive: true,
+    },
+    orderBy: { order: "asc" },
+  });
+}
+
+export async function getGroupedGallery() {
+  const galleries = await getActiveGallery();
+
+  return galleries.reduce(
+    (acc, gallery) => {
+      if (!acc[gallery.category]) {
+        acc[gallery.category] = [];
+      }
+      acc[gallery.category].push(gallery);
+      return acc;
+    },
+    {} as Record<GalleryCategory, Gallery[]>,
+  );
+}
