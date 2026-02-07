@@ -4,7 +4,7 @@ import HeroSection from "./_components/HeroSection";
 import GelombangPendaftaran from "./_components/GelombangPendaftaran";
 import PersyaratanAdministrasi from "./_components/PersyaratanAdministrasi";
 import { GraduationCap } from "lucide-react";
-import RegistrasiForm from "./_components/RegistrasiForm";
+import RegistrasiForm from "@/src/app/registrasi/_components/RegistrasiForm";
 import ContactLocationSection from "./_components/ContactLocationSection";
 import CTABanner from "./_components/CTABanner";
 
@@ -12,10 +12,6 @@ export const metadata = {
   title: "Pendaftaran Siswa Baru | Muda Smart School",
   description: "Formulir pendaftaran siswa baru Muda Smart School",
 };
-
-
-
-
 
 export default function PendaftaranPage() {
   return (

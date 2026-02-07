@@ -4,7 +4,7 @@ import type {
   JenisKelamin,
   ProgramKeahlian,
   Pendidikan,
-  StatusPendaftaran
+  StatusPendaftaran,
 } from "@prisma/client";
 import type { RegistrasiFormData } from "./registration.schema";
 
@@ -27,9 +27,8 @@ export interface CreateRegistrationInput {
   tanggalLahir: Date;
 
   // Kontak
-  noHpMurid?: string;
+  noHpMurid: string;
   emailMurid?: string;
-  noHpOrtu: string;
 
   // Alamat
   alamatJalan: string;
@@ -43,16 +42,16 @@ export interface CreateRegistrationInput {
 
   // Data Ayah
   namaAyah: string;
-  tahunLahirAyah?: number;
+  tahunLahirAyah: number;
   pendidikanAyah: Pendidikan;
-  pekerjaanAyah?: string;
+  pekerjaanAyah: string;
   noTelpAyah?: string;
 
   // Data Ibu
   namaIbu: string;
-  tahunLahirIbu?: number;
+  tahunLahirIbu: number;
   pendidikanIbu: Pendidikan;
-  pekerjaanIbu?: string;
+  pekerjaanIbu: string;
   noTelpIbu?: string;
 
   // Data Wali (Opsional)
@@ -65,10 +64,9 @@ export interface CreateRegistrationInput {
 
   // Sekolah Asal
   namaAsalSekolah: string;
-  npsnAsalSekolah?: string;
+  npsnAsalSekolah: string;
   alamatAsalSekolah: string;
   tahunLulus: number;
-  
 }
 
 // ======================
@@ -105,7 +103,7 @@ export async function createRegistration(data: CreateRegistrationInput) {
 
   // 2. Generate nomor pendaftaran
   const currentYear = new Date().getFullYear().toString();
-  
+
   // Cari nomor terakhir tahun ini
   const lastRegistration = await prisma.pendaftaran.findFirst({
     where: {
@@ -114,17 +112,19 @@ export async function createRegistration(data: CreateRegistrationInput) {
       },
     },
     orderBy: {
-      nomorPendaftaran: 'desc',
+      nomorPendaftaran: "desc",
     },
   });
 
   let sequenceNumber = 1;
   if (lastRegistration?.nomorPendaftaran) {
-    const lastNumber = parseInt(lastRegistration.nomorPendaftaran.split('-')[2]);
+    const lastNumber = parseInt(
+      lastRegistration.nomorPendaftaran.split("-")[2],
+    );
     sequenceNumber = lastNumber + 1;
   }
 
-  const nomorPendaftaran = `SPMB-${currentYear}-${sequenceNumber.toString().padStart(3, '0')}`;
+  const nomorPendaftaran = `SPMB-${currentYear}-${sequenceNumber.toString().padStart(3, "0")}`;
 
   // 3. Create dengan nomor pendaftaran
   return prisma.pendaftaran.create({
@@ -139,7 +139,9 @@ export async function createRegistration(data: CreateRegistrationInput) {
 // 4. HELPER: Convert Zod to Prisma
 // ======================
 
-export function convertZodToPrisma(data: RegistrasiFormData): CreateRegistrationInput {
+export function convertZodToPrisma(
+  data: RegistrasiFormData,
+): CreateRegistrationInput {
   // Helper untuk konversi string ke number
   const toNumber = (val: string | undefined): number | undefined => {
     if (!val || val.trim() === "") return undefined;
@@ -159,9 +161,8 @@ export function convertZodToPrisma(data: RegistrasiFormData): CreateRegistration
     tanggalLahir: new Date(data.tanggalLahir),
 
     // Kontak
-    noHpMurid: data.noHpMurid || undefined,
+    noHpMurid: data.noHpMurid,
     emailMurid: data.emailMurid || undefined,
-    noHpOrtu: data.noHpOrtu,
 
     // Alamat
     alamatJalan: data.alamatJalan,
@@ -175,16 +176,16 @@ export function convertZodToPrisma(data: RegistrasiFormData): CreateRegistration
 
     // Data Ayah
     namaAyah: data.namaAyah,
-    tahunLahirAyah: toNumber(data.tahunLahirAyah),
+    tahunLahirAyah: toNumber(data.tahunLahirAyah)!,
     pendidikanAyah: data.pendidikanAyah,
-    pekerjaanAyah: data.pekerjaanAyah || undefined,
+    pekerjaanAyah: data.pekerjaanAyah,
     noTelpAyah: data.noTelpAyah || undefined,
 
     // Data Ibu
     namaIbu: data.namaIbu,
-    tahunLahirIbu: toNumber(data.tahunLahirIbu),
+    tahunLahirIbu: toNumber(data.tahunLahirIbu)!,
     pendidikanIbu: data.pendidikanIbu,
-    pekerjaanIbu: data.pekerjaanIbu || undefined,
+    pekerjaanIbu: data.pekerjaanIbu,
     noTelpIbu: data.noTelpIbu || undefined,
 
     // Data Wali
@@ -197,7 +198,7 @@ export function convertZodToPrisma(data: RegistrasiFormData): CreateRegistration
 
     // Sekolah Asal
     namaAsalSekolah: data.namaAsalSekolah,
-    npsnAsalSekolah: data.npsnAsalSekolah || undefined,
+    npsnAsalSekolah: data.npsnAsalSekolah,
     alamatAsalSekolah: data.alamatAsalSekolah,
     tahunLulus: toNumber(data.tahunLulus)!,
   };
@@ -267,38 +268,10 @@ export interface UpdateRegistrationInput {
   divalidasiOleh?: string;
 }
 
-export async function updateRegistration(id: string, data: UpdateRegistrationInput) {
-  // Jika update NISN/NIK, cek duplikasi
-  if (data.nisn || data.nik) {
-    const existing = await prisma.pendaftaran.findFirst({
-      where: {
-        AND: [
-          { id: { not: id } }, // Exclude current record
-          {
-            OR: [
-              ...(data.nisn ? [{ nisn: data.nisn }] : []),
-              ...(data.nik ? [{ nik: data.nik }] : [])
-            ]
-          }
-        ]
-      }
-    });
-
-    if (existing) {
-      throw new Error("NISN atau NIK sudah digunakan oleh pendaftar lain");
-    }
-  }
-
-  return prisma.pendaftaran.update({
-    where: { id },
-    data,
-  });
-}
-
 // Update status =
 export async function updateRegistrationStatus(
   id: string,
-  status: string // Ubah dari StatusPendaftaran ke string
+  status: string, // Ubah dari StatusPendaftaran ke string
 ) {
   // Validasi status
   const validStatuses = ["PENDING", "DIVERIFIKASI", "DITOLAK", "DITERIMA"];
@@ -311,7 +284,7 @@ export async function updateRegistrationStatus(
   return prisma.pendaftaran.update({
     where: { id },
     data: {
-      status: status as StatusPendaftaran // Cast ke enum
+      status: status as StatusPendaftaran, // Cast ke enum
     },
   });
 }
@@ -338,37 +311,27 @@ export async function softDeleteRegistration(id: string) {
 // 7. UTILITY FUNCTIONS
 // ======================
 
-// Check if NISN/NIK exists
-export async function checkDuplicateNISN(nisn: string, excludeId?: string) {
-  const whereClause: any = { nisn };
-  if (excludeId) {
-    whereClause.id = { not: excludeId };
-  }
-
-  const existing = await prisma.pendaftaran.findFirst({
-    where: whereClause,
-  });
-
-  return !!existing;
-}
-
-export async function checkDuplicateNIK(nik: string, excludeId?: string) {
-  const whereClause: any = { nik };
-  if (excludeId) {
-    whereClause.id = { not: excludeId };
-  }
-
-  const existing = await prisma.pendaftaran.findFirst({
-    where: whereClause,
-  });
-
-  return !!existing;
-}
-
 // Get by status (untuk filter admin)
-export async function getRegistrationsByStatus(status: StatusPendaftaran) {
+
+export function isValidStatus(status: string): status is StatusPendaftaran {
+  const validStatuses = [
+    "PENDING",
+    "DIVERIFIKASI",
+    "DITOLAK",
+    "DITERIMA",
+  ] as const;
+  return validStatuses.includes(status as StatusPendaftaran);
+}
+
+export async function getRegistrationsByStatus(status: string) {
+  if (!isValidStatus(status)) {
+    throw new Error(`Status "${status}" tidak valid`);
+  }
+
   return prisma.pendaftaran.findMany({
-    where: { status },
+    where: {
+      status: status as StatusPendaftaran,
+    },
     orderBy: { createdAt: "desc" },
   });
 }
@@ -395,14 +358,13 @@ export async function searchRegistrations(query: string) {
   return prisma.pendaftaran.findMany({
     where: {
       OR: [
-        { namaLengkap: { contains: query, mode: 'insensitive' } },
+        { namaLengkap: { contains: query, mode: "insensitive" } },
         { nisn: { contains: query } },
         { nik: { contains: query } },
-        { namaAsalSekolah: { contains: query, mode: 'insensitive' } },
-      ]
+        { namaAsalSekolah: { contains: query, mode: "insensitive" } },
+      ],
     },
     orderBy: { createdAt: "desc" },
     take: 50, // Limit results
   });
 }
-

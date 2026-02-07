@@ -7,10 +7,22 @@ export const jenisKelaminOptions = [
 
 export const programKeahlianOptions = [
   { value: "TEKNIK_OTOMOTIF", label: "Teknik Otomotif" },
-  { value: "PEMROGRAMAN_PERANGKAT_LUNAK_DAN_GIM", label: "Pemrograman Perangkat Lunak dan Gim" },
-  { value: "TEKNIK_JARINGAN_KOMPUTER_DAN_TELEKOMUNIKASI", label: "Teknik Jaringan Komputer dan Telekomunikasi" },
-  { value: "MANAJEMEN_PERKANTORAN_DAN_LAYANAN_BISNIS", label: "Manajemen Perkantoran dan Layanan Bisnis" },
-  { value: "AKUNTANSI_DAN_KEUANGAN_LEMBAGA", label: "Akuntansi dan Keuangan Lembaga" },
+  {
+    value: "PEMROGRAMAN_PERANGKAT_LUNAK_DAN_GIM",
+    label: "Pemrograman Perangkat Lunak dan Gim",
+  },
+  {
+    value: "TEKNIK_JARINGAN_KOMPUTER_DAN_TELEKOMUNIKASI",
+    label: "Teknik Jaringan Komputer dan Telekomunikasi",
+  },
+  {
+    value: "MANAJEMEN_PERKANTORAN_DAN_LAYANAN_BISNIS",
+    label: "Manajemen Perkantoran dan Layanan Bisnis",
+  },
+  {
+    value: "AKUNTANSI_DAN_KEUANGAN_LEMBAGA",
+    label: "Akuntansi dan Keuangan Lembaga",
+  },
 ] as const;
 
 export const pendidikanOptions = [
@@ -63,21 +75,25 @@ export const registrasiSchema = z.object({
     .refine(
       (val) => val === "" || /^\d+$/.test(val),
       "Nomor HP hanya boleh angka",
-    )
-    .optional(),
-  noHpOrtu: z
+    ),
+  emailMurid: z
     .string()
-    .min(10, "Nomor HP minimal 10 digit")
-    .max(15, "Nomor HP maksimal 15 digit")
-    .regex(/^\d+$/, "Nomor HP hanya boleh angka"),
-  emailMurid: z.string().email("Email tidak valid").optional().or(z.literal("")),
+    .email("Email tidak valid")
+    .optional()
+    .or(z.literal("")),
   noTelpAyah: z
     .string()
-    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .refine(
+      (val) => val === "" || /^\d+$/.test(val),
+      "Nomor telepon hanya boleh angka",
+    )
     .optional(),
   noTelpIbu: z
     .string()
-    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .refine(
+      (val) => val === "" || /^\d+$/.test(val),
+      "Nomor telepon hanya boleh angka",
+    )
     .optional(),
 
   // Alamat
@@ -102,8 +118,7 @@ export const registrasiSchema = z.object({
     .refine(
       (val) => val === "" || /^\d+$/.test(val),
       "Tahun lahir hanya boleh angka",
-    )
-    .optional(),
+    ),
   pendidikanAyah: z.enum(
     [
       "SD",
@@ -121,7 +136,7 @@ export const registrasiSchema = z.object({
     ],
     { message: "Pilih pendidikan ayah" },
   ),
-  pekerjaanAyah: z.string().optional(),
+  pekerjaanAyah: z.string(),
 
   // Data Ibu
   namaIbu: z.string().min(3, "Nama ibu minimal 3 karakter"),
@@ -130,8 +145,7 @@ export const registrasiSchema = z.object({
     .refine(
       (val) => val === "" || /^\d+$/.test(val),
       "Tahun lahir hanya boleh angka",
-    )
-    .optional(),
+    ),
   pendidikanIbu: z.enum(
     [
       "SD",
@@ -149,35 +163,43 @@ export const registrasiSchema = z.object({
     ],
     { message: "Pilih pendidikan ibu" },
   ),
-  pekerjaanIbu: z.string().optional(),
+  pekerjaanIbu: z.string(),
 
   // Data Wali (Opsional)
   namaWali: z.string().optional(),
   tahunLahirWali: z
     .string()
-    .refine((val) => val === "" || /^\d+$/.test(val), "Tahun lahir hanya boleh angka")
+    .refine(
+      (val) => val === "" || /^\d+$/.test(val),
+      "Tahun lahir hanya boleh angka",
+    )
     .optional(),
-  pendidikanWali: z.enum(
-    [
-      "SD",
-      "SMP",
-      "SMA",
-      "SMK",
-      "D1",
-      "D2",
-      "D3",
-      "D4",
-      "S1",
-      "S2",
-      "S3",
-      "TIDAK_SEKOLAH",
-    ],
-    { message: "Pilih pendidikan wali" }
-  ).optional(),
+  pendidikanWali: z
+    .enum(
+      [
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "S1",
+        "S2",
+        "S3",
+        "TIDAK_SEKOLAH",
+      ],
+      { message: "Pilih pendidikan wali" },
+    )
+    .optional(),
   pekerjaanWali: z.string().optional(),
   noTelpWali: z
     .string()
-    .refine((val) => val === "" || /^\d+$/.test(val), "Nomor telepon hanya boleh angka")
+    .refine(
+      (val) => val === "" || /^\d+$/.test(val),
+      "Nomor telepon hanya boleh angka",
+    )
     .optional(),
   hubunganWali: z.string().optional(),
 
@@ -185,8 +207,7 @@ export const registrasiSchema = z.object({
   namaAsalSekolah: z.string().min(3, "Nama sekolah minimal 3 karakter"),
   npsnAsalSekolah: z
     .string()
-    .refine((val) => val === "" || /^\d+$/.test(val), "NPSN hanya boleh angka")
-    .optional(),
+    .refine((val) => val === "" || /^\d+$/.test(val), "NPSN hanya boleh angka"),
   alamatAsalSekolah: z.string().min(5, "Alamat sekolah minimal 5 karakter"),
   tahunLulus: z
     .string()
@@ -211,7 +232,7 @@ export const requiredFields: Set<keyof RegistrasiFormData> = new Set([
   "nomorKk",
   "tempatLahir",
   "tanggalLahir",
-  "noHpOrtu",
+  "noHpMurid",
   "alamatJalan",
   "rt",
   "rw",
@@ -226,5 +247,9 @@ export const requiredFields: Set<keyof RegistrasiFormData> = new Set([
   "namaAsalSekolah",
   "alamatAsalSekolah",
   "tahunLulus",
+  "pekerjaanAyah",
+  "pekerjaanIbu",
+  "npsnAsalSekolah",
+  "tahunLahirAyah",
+  "tahunLahirIbu",
 ]);
-

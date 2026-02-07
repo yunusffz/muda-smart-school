@@ -15,11 +15,13 @@ const defaultVision =
   "Mewujudkan lulusan yang cerdas, berkualitas, terampil, kompetitif, berjiwa wirausaha, berkemajuan, dan berakhlak karimah.";
 
 export default async function VisionMissionSection() {
-  const [prestasiList, settings]: [Achievement[], Record<string, string>] =
+  const [allPrestasi, settings]: [Achievement[], Record<string, string>] =
     await Promise.all([
       getActiveAchievements(),
       getSettingsMap(["vision_text", "missions"]),
     ]);
+
+  const prestasiList = allPrestasi.slice(0, 12);
 
   const visionText = settings.vision_text || defaultVision;
 

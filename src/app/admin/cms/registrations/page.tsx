@@ -1,10 +1,21 @@
 import Link from "next/link";
-import { Plus, Download, Filter, Users, CheckCircle, XCircle, FileCheck} from "lucide-react";
+import {
+  Plus,
+  Download,
+  Filter,
+  Users,
+  CheckCircle,
+  XCircle,
+  FileCheck,
+} from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { PageHeader } from "@/src/app/admin/_components/PageHeader";
 import { RegistrationTable } from "./_components/RegistrationTable";
 import { StatsCards } from "./_components/StatsCards";
-import { getAllRegistrations, getRegistrationStats } from "@/src/features/registration/services";
+import {
+  getAllRegistrations,
+  getRegistrationStats,
+} from "@/src/features/registration/services";
 
 export default async function RegistrationsPage() {
   // Fetch data parallel untuk performa lebih baik
@@ -28,14 +39,6 @@ export default async function RegistrationsPage() {
                 Export Semua
               </Link>
             </Button>
-            
-            {/* Tambah Manual (Opsional) */}
-            <Button size="sm" asChild>
-              <Link href="/admin/registrations/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Tambah Manual
-              </Link>
-            </Button>
           </div>
         }
       />
@@ -55,7 +58,7 @@ export default async function RegistrationsPage() {
                 {registrations.length} data
               </span>
             </div>
-            
+
             {/* Quick Status Filter */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Filter className="h-4 w-4" />
