@@ -64,8 +64,6 @@ export async function toggleGalleryStatus(id: string, isActive: boolean) {
   });
 }
 
-// src/features/cms/services/gallery.ts (tambahkan fungsi ini)
-
 export async function getGalleryByCategory(category: GalleryCategory) {
   return prisma.gallery.findMany({
     where: {

@@ -68,12 +68,7 @@ export default async function GallerySection() {
     );
   }
 
-  // Konfigurasi layout masonry berdasarkan jumlah gambar
-  // Layout yang sama dengan kode asli:
-  // - Gambar pertama: col-span-2 row-span-2 (besar)
-  // - Gambar kedua dan ketiga: col-span-1 (kotak kecil)
-  // - Gambar keempat: col-span-2 aspect-video (panjang)
-  // - Sisanya: mengikuti pattern
+  // Masonry Layout Gallery
 
   return (
     <section className="py-16 md:py-24 bg-neutral-100">
