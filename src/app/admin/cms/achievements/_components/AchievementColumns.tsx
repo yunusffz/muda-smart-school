@@ -24,6 +24,16 @@ const getMedalColor = (medalType: string | null) => {
       return "text-gray-600 bg-gray-100";
     case "BRONZE":
       return "text-orange-700 bg-orange-100";
+    case "JUARA_1":
+      return "text-yellow-700 bg-yellow-100";
+    case "JUARA_2":
+      return "text-gray-700 bg-gray-100";
+    case "JUARA_3":
+      return "text-orange-700 bg-orange-100";
+    case "HARAPAN_1":
+    case "HARAPAN_2":
+    case "HARAPAN_3":
+      return "text-primary-700 bg-primary-100";
     default:
       return "";
   }
@@ -85,19 +95,21 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
   },
   {
     accessorKey: "medalType",
-    header: "Medali",
+    header: "Peringkat",
     cell: ({ row }) => {
       const medalType = row.original.medalType;
       if (!medalType) {
         return <span className="text-muted-foreground">-</span>;
       }
+      const isMedal = ["GOLD", "SILVER", "BRONZE"].includes(medalType);
+      const IconComponent = isMedal ? Medal : Trophy;
       return (
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${getMedalColor(
             medalType,
           )}`}
         >
-          <Medal className="h-3 w-3" />
+          <IconComponent className="h-3 w-3" />
           {getMedalLabel(medalType)}
         </span>
       );
