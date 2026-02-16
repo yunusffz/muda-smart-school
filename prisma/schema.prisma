@@ -339,6 +339,12 @@ enum MedalType {
   GOLD
   SILVER
   BRONZE
+  JUARA_1
+  JUARA_2
+  JUARA_3
+  HARAPAN_1
+  HARAPAN_2
+  HARAPAN_3
 }
 
 enum AchievementLevel {
