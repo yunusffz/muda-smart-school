@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { NewsActions } from "./NewsActions";
 import type { News } from "@prisma/client";
@@ -36,14 +37,14 @@ export const newsColumns: ColumnDef<News>[] = [
   },
   {
     accessorKey: "title",
-    header: "Judul",
+    header: ({ column }) => <SortableHeader column={column} label="Judul" />,
     cell: ({ row }) => (
       <div className="max-w-xs truncate font-medium">{row.original.title}</div>
     ),
   },
   {
     accessorKey: "category",
-    header: "Kategori",
+    header: ({ column }) => <SortableHeader column={column} label="Kategori" />,
     cell: ({ row }) => {
       const colors =
         categoryBadgeColors[row.original.category] ||
@@ -82,7 +83,7 @@ export const newsColumns: ColumnDef<News>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Dibuat",
+    header: ({ column }) => <SortableHeader column={column} label="Dibuat" />,
     cell: ({ row }) => (
       <span className="text-sm text-muted-foreground">
         {new Date(row.original.createdAt).toLocaleDateString("id-ID")}

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ColumnDef } from "@tanstack/react-table";
 import { ImageIcon } from "lucide-react";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { GalleryActions } from "./GalleryActions";
 import { galleryCategories } from "./GallerySchema";
@@ -31,11 +32,18 @@ const getCategoryColor = (category: string) => {
 
 export const galleryColumns: ColumnDef<Gallery>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "image",
@@ -60,14 +68,14 @@ export const galleryColumns: ColumnDef<Gallery>[] = [
   },
   {
     accessorKey: "title",
-    header: "Judul",
+    header: ({ column }) => <SortableHeader column={column} label="Judul" />,
     cell: ({ row }) => (
       <span className="font-medium">{row.original.title}</span>
     ),
   },
   {
     accessorKey: "category",
-    header: "Kategori",
+    header: ({ column }) => <SortableHeader column={column} label="Kategori" />,
     cell: ({ row }) => (
       <span
         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getCategoryColor(

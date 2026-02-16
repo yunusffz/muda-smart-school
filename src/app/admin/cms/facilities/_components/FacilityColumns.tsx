@@ -2,21 +2,31 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Building2 } from "lucide-react";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { FacilityActions } from "./FacilityActions";
 import type { Facility } from "@/src/features/cms/services/facilities";
 
 export const facilityColumns: ColumnDef<Facility>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "name",
-    header: "Fasilitas",
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Fasilitas" />
+    ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         {row.original.icon ? (

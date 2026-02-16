@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Medal, Trophy, Star } from "lucide-react";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { AchievementActions } from "./AchievementActions";
 import { achievementLevels, medalTypes } from "./AchievementSchema";
@@ -60,15 +61,22 @@ const getLevelColor = (level: string) => {
 
 export const achievementColumns: ColumnDef<Achievement>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "title",
-    header: "Prestasi",
+    header: ({ column }) => <SortableHeader column={column} label="Prestasi" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Trophy className="h-4 w-4 text-yellow-500" />
@@ -78,11 +86,13 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
   },
   {
     accessorKey: "event",
-    header: "Event/Kompetisi",
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Event/Kompetisi" />
+    ),
   },
   {
     accessorKey: "level",
-    header: "Tingkat",
+    header: ({ column }) => <SortableHeader column={column} label="Tingkat" />,
     cell: ({ row }) => (
       <span
         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getLevelColor(
@@ -117,7 +127,7 @@ export const achievementColumns: ColumnDef<Achievement>[] = [
   },
   {
     accessorKey: "year",
-    header: "Tahun",
+    header: ({ column }) => <SortableHeader column={column} label="Tahun" />,
     cell: ({ row }) => (
       <span className="text-muted-foreground">{row.original.year}</span>
     ),

@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { ContactActions } from "./ContactsActions";
 import { contactTypes } from "./ContactsSchema";
@@ -35,15 +36,22 @@ const getContactColor = (contactType: string | null) => {
 
 export const contactsColumns: ColumnDef<Contact>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "name",
-    header: "Nama",
+    header: ({ column }) => <SortableHeader column={column} label="Nama" />,
   },
   {
     accessorKey: "value",
@@ -51,7 +59,7 @@ export const contactsColumns: ColumnDef<Contact>[] = [
   },
   {
     accessorKey: "type",
-    header: "Tipe",
+    header: ({ column }) => <SortableHeader column={column} label="Tipe" />,
     cell: ({ row }) => {
       const contactType = row.original.type;
       if (!contactType) {

@@ -1,21 +1,31 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { ProgramActions } from "./ProgramActions";
 import type { ProgramWithRelations } from "@/src/features/cms/services/programs";
 
 export const programColumns: ColumnDef<ProgramWithRelations>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "abbreviation",
-    header: "Singkatan",
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Singkatan" />
+    ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <div
@@ -28,7 +38,9 @@ export const programColumns: ColumnDef<ProgramWithRelations>[] = [
   },
   {
     accessorKey: "name",
-    header: "Nama Program",
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Nama Program" />
+    ),
   },
   {
     accessorKey: "skills",

@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Activity } from "lucide-react";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { ExtracurricularActions } from "./ExtracurricularActions";
 import { ekskulCategories } from "./ExtracurricularSchema";
@@ -36,15 +37,24 @@ const getCategoryColor = (category: string): string => {
 
 export const extracurricularColumns: ColumnDef<Extracurricular>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "name",
-    header: "Ekstrakurikuler",
+    header: ({ column }) => (
+      <SortableHeader column={column} label="Ekstrakurikuler" />
+    ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         {row.original.icon ? (
@@ -72,7 +82,7 @@ export const extracurricularColumns: ColumnDef<Extracurricular>[] = [
   },
   {
     accessorKey: "category",
-    header: "Kategori",
+    header: ({ column }) => <SortableHeader column={column} label="Kategori" />,
     cell: ({ row }) => (
       <span
         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getCategoryColor(
