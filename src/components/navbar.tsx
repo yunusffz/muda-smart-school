@@ -23,6 +23,7 @@ interface JurusanItem {
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfilOpen, setIsProfilOpen] = useState(false);
   const [isJurusanOpen, setIsJurusanOpen] = useState(false);
   const [jurusanList, setJurusanList] = useState<JurusanItem[]>([]);
   const pathname = usePathname();
@@ -44,11 +45,20 @@ export function Navbar() {
 
   const menuItems = [
     { label: "BERANDA", href: "/" },
-    { label: "PROFIL", href: "/profil" },
     { label: "KONTAK", href: "/kontak" },
     { label: "PENDAFTARAN", href: "/pendaftaran" },
   ];
 
+  const profilItems = [
+    { label: "Profil Sekolah", href: "/profil" },
+    { label: "Prestasi", href: "/prestasi" },
+    { label: "Galeri", href: "/galeri" },
+  ];
+
+  const isProfilActive =
+    pathname === "/profil" ||
+    pathname.startsWith("/prestasi") ||
+    pathname.startsWith("/galeri");
   const isJurusanActive = pathname.startsWith("/jurusan");
 
   return (
@@ -71,23 +81,46 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {menuItems.slice(0, 2).map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300",
-                    isActive
-                      ? "text-primary after:w-full"
-                      : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
-                  )}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+            {/* Beranda */}
+            <Link
+              href="/"
+              className={cn(
+                "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300",
+                pathname === "/"
+                  ? "text-primary after:w-full"
+                  : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
+              )}
+            >
+              BERANDA
+            </Link>
+
+            {/* Profil Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={cn(
+                  "relative text-sm font-medium p-2 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 flex items-center gap-1 outline-none",
+                  isProfilActive
+                    ? "text-primary after:w-full"
+                    : "text-muted-foreground after:w-0 hover:after:w-full hover:text-primary",
+                )}
+              >
+                PROFIL
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center">
+                {profilItems.map((item) => (
+                  <DropdownMenuItem
+                    key={item.href}
+                    asChild
+                    className="cursor-pointer"
+                  >
+                    <Link href={item.href} className="w-full">
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Jurusan Dropdown */}
             <DropdownMenu>
@@ -132,7 +165,7 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {menuItems.slice(2).map((item) => {
+            {menuItems.slice(1).map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
@@ -174,24 +207,59 @@ export function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-4">
-              {menuItems.slice(0, 2).map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
+              {/* Beranda */}
+              <Link
+                href="/"
+                className={cn(
+                  "relative text-sm font-medium",
+                  pathname === "/"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-primary",
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                BERANDA
+              </Link>
+
+              {/* Mobile Profil Accordion */}
+              <div>
+                <button
+                  onClick={() => setIsProfilOpen(!isProfilOpen)}
+                  className={cn(
+                    "flex items-center justify-between w-full text-sm font-medium",
+                    isProfilActive
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-primary",
+                  )}
+                >
+                  PROFIL
+                  <ChevronDown
                     className={cn(
-                      "relative text-sm font-medium",
-                      isActive
-                        ? "text-primary"
-                        : "text-muted-foreground hover:text-primary",
+                      "h-4 w-4 transition-transform",
+                      isProfilOpen && "rotate-180",
                     )}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
+                  />
+                </button>
+                {isProfilOpen && (
+                  <div className="mt-2 ml-4 flex flex-col gap-2">
+                    {profilItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "text-sm",
+                          pathname === item.href
+                            ? "text-primary font-semibold"
+                            : "text-muted-foreground hover:text-primary",
+                        )}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Mobile Jurusan Accordion */}
               <div>
@@ -238,7 +306,7 @@ export function Navbar() {
                 )}
               </div>
 
-              {menuItems.slice(2).map((item) => {
+              {menuItems.slice(1).map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
