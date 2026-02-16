@@ -18,14 +18,15 @@ export default function PrestasiListSection({
     );
   }
 
-  const goldAchievements = achievements.filter((a) => a.medalType === "GOLD");
-  const silverAchievements = achievements.filter(
-    (a) => a.medalType === "SILVER",
-  );
-  const bronzeAchievements = achievements.filter(
-    (a) => a.medalType === "BRONZE",
-  );
-  const otherAchievements = achievements.filter((a) => !a.medalType);
+  const juara1Count = achievements.filter(
+    (a) => a.medalType === "GOLD" || a.medalType === "JUARA_1",
+  ).length;
+  const juara2Count = achievements.filter(
+    (a) => a.medalType === "SILVER" || a.medalType === "JUARA_2",
+  ).length;
+  const juara3Count = achievements.filter(
+    (a) => a.medalType === "BRONZE" || a.medalType === "JUARA_3",
+  ).length;
 
   return (
     <section className="py-12 md:py-16">
@@ -34,21 +35,21 @@ export default function PrestasiListSection({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
             <div className="text-3xl font-bold text-yellow-600">
-              {goldAchievements.length}
+              {juara1Count}
             </div>
-            <div className="text-sm text-yellow-700">Medali Emas</div>
+            <div className="text-sm text-yellow-700">Juara 1 / Emas</div>
           </div>
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">
             <div className="text-3xl font-bold text-gray-600">
-              {silverAchievements.length}
+              {juara2Count}
             </div>
-            <div className="text-sm text-gray-700">Medali Perak</div>
+            <div className="text-sm text-gray-700">Juara 2 / Perak</div>
           </div>
           <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
             <div className="text-3xl font-bold text-orange-600">
-              {bronzeAchievements.length}
+              {juara3Count}
             </div>
-            <div className="text-sm text-orange-700">Medali Perunggu</div>
+            <div className="text-sm text-orange-700">Juara 3 / Perunggu</div>
           </div>
           <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 text-center">
             <div className="text-3xl font-bold text-primary-600">

@@ -3,17 +3,25 @@
 import Image from "next/image";
 import { ColumnDef } from "@tanstack/react-table";
 import { ImageIcon } from "lucide-react";
+import { SortableHeader } from "@/src/app/admin/_components/SortableHeader";
 import { StatusBadge } from "@/src/app/admin/_components/StatusBadge";
 import { HeroSlideActions } from "./HeroSlideActions";
 import type { HeroSlide } from "@/src/features/cms/services/hero-slides";
 
 export const heroSlideColumns: ColumnDef<HeroSlide>[] = [
   {
-    accessorKey: "order",
+    id: "no",
     header: "No",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.order + 1}</span>
-    ),
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+      const pageRows = table.getRowModel().rows;
+      const visualIndex = pageRows.findIndex((r) => r.id === row.id);
+      return (
+        <span className="text-muted-foreground">
+          {pageIndex * pageSize + visualIndex + 1}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "image",
@@ -38,14 +46,14 @@ export const heroSlideColumns: ColumnDef<HeroSlide>[] = [
   },
   {
     accessorKey: "title",
-    header: "Judul",
+    header: ({ column }) => <SortableHeader column={column} label="Judul" />,
     cell: ({ row }) => (
       <span className="font-medium">{row.original.title}</span>
     ),
   },
   {
     accessorKey: "subtitle",
-    header: "Subtitle",
+    header: ({ column }) => <SortableHeader column={column} label="Subtitle" />,
     cell: ({ row }) => {
       const subtitle = row.original.subtitle;
       if (!subtitle) return <span className="text-muted-foreground">-</span>;

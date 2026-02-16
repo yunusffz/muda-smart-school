@@ -10,9 +10,15 @@ export const achievementLevels = [
 ] as const;
 
 export const medalTypes = [
-  { value: "GOLD", label: "Emas" },
-  { value: "SILVER", label: "Perak" },
-  { value: "BRONZE", label: "Perunggu" },
+  { value: "GOLD", label: "Medali Emas" },
+  { value: "SILVER", label: "Medali Perak" },
+  { value: "BRONZE", label: "Medali Perunggu" },
+  { value: "JUARA_1", label: "Juara 1" },
+  { value: "JUARA_2", label: "Juara 2" },
+  { value: "JUARA_3", label: "Juara 3" },
+  { value: "HARAPAN_1", label: "Harapan 1" },
+  { value: "HARAPAN_2", label: "Harapan 2" },
+  { value: "HARAPAN_3", label: "Harapan 3" },
 ] as const;
 
 export const achievementSchema = z.object({
@@ -24,7 +30,20 @@ export const achievementSchema = z.object({
       message: "Tingkat wajib dipilih",
     },
   ),
-  medalType: z.enum(["GOLD", "SILVER", "BRONZE"]).nullable().optional(),
+  medalType: z
+    .enum([
+      "GOLD",
+      "SILVER",
+      "BRONZE",
+      "JUARA_1",
+      "JUARA_2",
+      "JUARA_3",
+      "HARAPAN_1",
+      "HARAPAN_2",
+      "HARAPAN_3",
+    ])
+    .nullable()
+    .optional(),
   year: z
     .number()
     .int()

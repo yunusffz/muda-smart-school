@@ -10,6 +10,7 @@ export default function PrestasiCard({ achievement }: PrestasiCardProps) {
   const getMedalInfo = (medalType: string | null) => {
     switch (medalType) {
       case "GOLD":
+      case "JUARA_1":
         return {
           icon: Trophy,
           bgColor: "bg-gradient-to-br from-yellow-400 to-amber-500",
@@ -18,20 +19,32 @@ export default function PrestasiCard({ achievement }: PrestasiCardProps) {
           cardBg: "bg-yellow-50",
         };
       case "SILVER":
+      case "JUARA_2":
         return {
-          icon: Medal,
+          icon: medalType === "SILVER" ? Medal : Trophy,
           bgColor: "bg-gradient-to-br from-gray-300 to-gray-400",
           iconColor: "text-gray-700",
           borderColor: "border-gray-300",
           cardBg: "bg-gray-50",
         };
       case "BRONZE":
+      case "JUARA_3":
         return {
-          icon: Medal,
+          icon: medalType === "BRONZE" ? Medal : Trophy,
           bgColor: "bg-gradient-to-br from-orange-400 to-orange-500",
           iconColor: "text-orange-900",
           borderColor: "border-orange-300",
           cardBg: "bg-orange-50",
+        };
+      case "HARAPAN_1":
+      case "HARAPAN_2":
+      case "HARAPAN_3":
+        return {
+          icon: Award,
+          bgColor: "bg-gradient-to-br from-primary-400 to-primary-500",
+          iconColor: "text-white",
+          borderColor: "border-primary-200",
+          cardBg: "bg-primary-50",
         };
       default:
         return {

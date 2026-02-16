@@ -167,7 +167,7 @@ export function AchievementForm({
               name="medalType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Medali (Opsional)</FormLabel>
+                  <FormLabel>Peringkat (Opsional)</FormLabel>
                   <Select
                     onValueChange={(value) =>
                       field.onChange(value === "none" ? null : value)
@@ -176,7 +176,7 @@ export function AchievementForm({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Pilih medali" />
+                        <SelectValue placeholder="Pilih peringkat" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

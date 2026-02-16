@@ -7,7 +7,7 @@ import type { Achievement } from "@/src/features/cms/services/achievements";
 export default async function AwardsSection() {
   const achievements: Achievement[] = await getHighlightedAchievements(5);
   const goldCount = achievements.filter(
-    (a: Achievement) => a.medalType === "GOLD",
+    (a: Achievement) => a.medalType === "GOLD" || a.medalType === "JUARA_1",
   ).length;
   const achievementsWithImage = achievements.filter(
     (a: Achievement) => a.image,
@@ -43,7 +43,7 @@ export default async function AwardsSection() {
           </div>
           {goldCount > 0 && (
             <p className="text-gray-400 text-sm md:text-right max-w-xs">
-              {goldCount} Medali Emas Nasional
+              {goldCount} Juara 1 / Emas
             </p>
           )}
         </div>
@@ -53,7 +53,9 @@ export default async function AwardsSection() {
           {/* Achievements List */}
           <div className="lg:col-span-3 space-y-3">
             {achievements.map((achievement) => {
-              const isGold = achievement.medalType === "GOLD";
+              const isGold =
+                achievement.medalType === "GOLD" ||
+                achievement.medalType === "JUARA_1";
               return (
                 <div
                   key={achievement.id}
