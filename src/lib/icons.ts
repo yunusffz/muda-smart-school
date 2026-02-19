@@ -108,7 +108,6 @@ import {
   Archive,
   ClipboardList,
   Settings,
-  Tool,
   Lightbulb,
   Sun,
   Moon,
@@ -235,6 +234,7 @@ export const ICONS: IconEntry[] = [
   { name: "ClipboardList", label: "Daftar", icon: ClipboardList },
   { name: "Settings", label: "Pengaturan", icon: Settings },
   { name: "Lightbulb", label: "Ide", icon: Lightbulb },
+
   { name: "Sun", label: "Sinar", icon: Sun },
   { name: "Moon", label: "Malam", icon: Moon },
   { name: "Wind", label: "Ventilasi", icon: Wind },
