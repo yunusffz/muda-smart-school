@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { message, history } = chatSchema.parse(body);
 
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_KEY;
+    const apiKey = process.env.GEMINI_KEY;
     if (!apiKey) {
       return NextResponse.json(
         { error: "Konfigurasi AI tidak tersedia" },
