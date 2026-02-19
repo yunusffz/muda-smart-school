@@ -6,6 +6,7 @@ import TestimonialsSection from "./_components/TestimonialsSection";
 import NewsSection from "./_components/NewsSection";
 import CTABanner from "./_components/CTABanner";
 import Footer from "./_components/Footer";
+import AIChatWidget from "./_components/AIChatWidget";
 import { getActiveHeroSlides } from "@/src/features/cms/services/hero-slides";
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default async function Beranda() {
       <NewsSection />
       <CTABanner />
       <Footer />
+      <AIChatWidget />
     </main>
   );
 }
