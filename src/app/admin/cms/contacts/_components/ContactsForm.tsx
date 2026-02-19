@@ -9,6 +9,7 @@ import { Input } from "@/src/components/ui/input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,13 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import { Switch } from "@/src/components/ui/switch";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
 import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
 import { toast } from "sonner";
 import {
   contactSchema,
   contactTypes,
-  type ContactFormData
+  type ContactFormData,
 } from "./ContactsSchema";
 
 interface ContactFormProps {
@@ -35,10 +37,7 @@ interface ContactFormProps {
   contactId?: string;
 }
 
-export function ContactsForm({
-  defaultValues,
-  contactId,
-}: ContactFormProps) {
+export function ContactsForm({ defaultValues, contactId }: ContactFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const isEditing = !!contactId;
@@ -100,10 +99,7 @@ export function ContactsForm({
                   <FormItem>
                     <FormLabel>Nama Kontak</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Admin 1"
-                        {...field}
-                      />
+                      <Input placeholder="Admin 1" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -149,7 +145,6 @@ export function ContactsForm({
               />
             </div>
 
-
             {/* Field Type */}
             <FormField
               control={form.control}
@@ -191,7 +186,9 @@ export function ContactsForm({
                       type="number"
                       min={0}
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -203,30 +200,25 @@ export function ContactsForm({
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(value === "true")}
-                    defaultValue={field.value ? "true" : "false"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="true">Aktif</SelectItem>
-                      <SelectItem value="false">Nonaktif</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
+                <FormItem className="md:col-span-2 flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Status Aktif</FormLabel>
+                    <FormDescription>
+                      Kontak akan ditampilkan di halaman website.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
           </div>
         </FormCard>
-
-
 
         {/* Actions */}
         <div className="flex gap-4">
