@@ -26,7 +26,7 @@ export interface CreateFacilityInput {
   name: string;
   description?: string | null;
   icon?: string | null;
-  image?: string | null;
+  images?: string[];
   order?: number;
   isActive?: boolean;
 }
@@ -41,7 +41,7 @@ export interface UpdateFacilityInput {
   name?: string;
   description?: string | null;
   icon?: string | null;
-  image?: string | null;
+  images?: string[];
   order?: number;
   isActive?: boolean;
 }

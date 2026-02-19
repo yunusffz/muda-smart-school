@@ -18,7 +18,7 @@ import {
 } from "@/src/components/ui/form";
 import { Switch } from "@/src/components/ui/switch";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
-import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
+import { GalleryMultiPicker } from "@/src/app/admin/_components/GalleryMultiPicker";
 import { toast } from "sonner";
 import { facilitySchema, type FacilityFormData } from "./FacilitySchema";
 
@@ -38,7 +38,7 @@ export function FacilityForm({ defaultValues, facilityId }: FacilityFormProps) {
       name: "",
       description: "",
       icon: "",
-      image: "",
+      images: [],
       order: 0,
       isActive: true,
       ...defaultValues,
@@ -189,17 +189,17 @@ export function FacilityForm({ defaultValues, facilityId }: FacilityFormProps) {
         </FormCard>
 
         <FormCard
-          title="Gambar Fasilitas"
-          description="Pilih foto fasilitas dari galeri (opsional)"
+          title="Galeri Foto"
+          description="Pilih satu atau lebih foto fasilitas dari galeri (opsional)"
         >
           <FormField
             control={form.control}
-            name="image"
+            name="images"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <GalleryPicker
-                    value={field.value ?? undefined}
+                  <GalleryMultiPicker
+                    value={field.value}
                     onChange={field.onChange}
                     disabled={isLoading}
                   />
