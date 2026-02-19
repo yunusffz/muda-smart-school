@@ -19,6 +19,7 @@ import {
 import { Switch } from "@/src/components/ui/switch";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
 import { GalleryMultiPicker } from "@/src/app/admin/_components/GalleryMultiPicker";
+import { IconPicker } from "@/src/app/admin/_components/IconPicker";
 import { toast } from "sonner";
 import { facilitySchema, type FacilityFormData } from "./FacilitySchema";
 
@@ -127,18 +128,14 @@ export function FacilityForm({ defaultValues, facilityId }: FacilityFormProps) {
                 name="icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Icon SVG Path (Opsional)</FormLabel>
+                    <FormLabel>Icon (Opsional)</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="M12 2L2 7l10 5 10-5-10-5z..."
-                        {...field}
-                        value={field.value ?? ""}
+                      <IconPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        disabled={isLoading}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Path data SVG untuk ikon fasilitas (stroke-based, viewBox
-                      24x24)
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
