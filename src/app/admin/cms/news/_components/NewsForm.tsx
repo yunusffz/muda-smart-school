@@ -6,9 +6,12 @@ import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import { Textarea } from "@/src/components/ui/textarea";
+import { Switch } from "@/src/components/ui/switch";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,6 +26,7 @@ import {
 } from "@/src/components/ui/select";
 import { FormCard } from "@/src/app/admin/_components/FormCard";
 import { GalleryPicker } from "@/src/app/admin/_components/GalleryPicker";
+import { TiptapEditor } from "@/src/app/admin/_components/TiptapEditor";
 import { toast } from "sonner";
 import { newsSchema, type NewsFormData } from "./NewsSchema";
 import { generateSlug } from "@/src/features/cms/utils/slug";
@@ -118,6 +122,10 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
                   <FormControl>
                     <Input placeholder="slug-berita" {...field} />
                   </FormControl>
+                  <FormDescription>
+                    Dibuat otomatis dari judul. Hanya huruf kecil, angka, dan
+                    tanda hubung.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -127,7 +135,7 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="md:col-span-2">
                   <FormLabel>Kategori</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -149,31 +157,6 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="isFeatured"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Berita Unggulan</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(value === "true")}
-                    defaultValue={field.value ? "true" : "false"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="true">Ya</SelectItem>
-                      <SelectItem value="false">Tidak</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
         </FormCard>
 
@@ -186,10 +169,10 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
               <FormItem>
                 <FormLabel>Konten</FormLabel>
                 <FormControl>
-                  <textarea
-                    className="flex min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="Tulis konten berita..."
-                    {...field}
+                  <TiptapEditor
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -211,12 +194,15 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
                 <FormItem>
                   <FormLabel>Ringkasan (Opsional)</FormLabel>
                   <FormControl>
-                    <textarea
-                      className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    <Textarea
                       placeholder="Ringkasan singkat berita..."
+                      className="min-h-[100px] resize-none"
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription>
+                    Ditampilkan sebagai preview di halaman daftar berita.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -242,35 +228,56 @@ export function NewsForm({ defaultValues, newsId }: NewsFormProps) {
           </div>
         </FormCard>
 
-        {/* Status Publikasi */}
+        {/* Pengaturan */}
         <FormCard
-          title="Status Publikasi"
-          description="Atur status publikasi berita"
+          title="Pengaturan"
+          description="Atur visibilitas dan status berita"
         >
-          <FormField
-            control={form.control}
-            name="isPublished"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(value === "true")}
-                  defaultValue={field.value ? "true" : "false"}
-                >
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Berita Unggulan</FormLabel>
+                    <FormDescription>
+                      Tampilkan berita ini di bagian unggulan halaman utama.
+                    </FormDescription>
+                  </div>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih status" />
-                    </SelectTrigger>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLoading}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="true">Dipublikasikan</SelectItem>
-                    <SelectItem value="false">Draft</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isPublished"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Publikasikan</FormLabel>
+                    <FormDescription>
+                      Berita akan terlihat oleh publik saat diaktifkan.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
         </FormCard>
 
         {/* Actions */}

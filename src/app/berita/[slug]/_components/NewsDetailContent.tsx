@@ -69,9 +69,10 @@ export default function NewsDetailContent({ news }: NewsDetailContentProps) {
         )}
 
         {/* Content */}
-        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
-          {news.content}
-        </div>
+        <div
+          className="tiptap-content text-gray-700"
+          dangerouslySetInnerHTML={{ __html: news.content }}
+        />
       </div>
     </article>
   );
