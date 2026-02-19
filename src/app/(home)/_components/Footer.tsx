@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { version } from "../../../../package.json";
 
 const socialLinks = [
   {
@@ -147,9 +148,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
-            &copy; 2026 SMK Muhammadiyah 2 Cibiru. All rights reserved.
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="text-gray-500 text-sm">
+              &copy; 2026 SMK Muhammadiyah 2 Cibiru. All rights reserved.
+            </p>
+            <span className="text-xs font-mono text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full border border-gray-700">
+              v{version}
+            </span>
+          </div>
           <div className="flex items-center gap-4">
             {socialLinks.map((social, index) => (
               <a
