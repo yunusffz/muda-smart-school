@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0](https://github.com/yunusffz/muda-smart-school/compare/v0.2.0...v1.0.0) (2026-02-19)
+
+### Features
+
+- add iconpicker component for selecting facility icons ([9c8edb6](https://github.com/yunusffz/muda-smart-school/commit/9c8edb6fd6f912526c2fe5a5732b7fa6cbc287a4))
+- display version number in footer component ([e922dc6](https://github.com/yunusffz/muda-smart-school/commit/e922dc6b2b07023f601533cd43fe76dcd9b96328))
+- implement gallerymultipicker component for multi-image selection ([a569410](https://github.com/yunusffz/muda-smart-school/commit/a56941032d0b8ca59962aa3fa469478f1df87aa1))
+- integrate tiptap editor and add styles for content ([b907d5b](https://github.com/yunusffz/muda-smart-school/commit/b907d5b04a463644367985ffaa03583118a96bb3))
+- replace select with switch for active status in forms ([5127c2a](https://github.com/yunusffz/muda-smart-school/commit/5127c2a8bb07f9ac5990bd8c7efd3ed5dd4c21f2))
+
+### Bug Fixes
+
+- change image field to images array in Facility model ([0fad11f](https://github.com/yunusffz/muda-smart-school/commit/0fad11f43b1c3f03b9669fc8fc08b15aa0860d95))
+- drop image column and add images array in facilities table ([fba8998](https://github.com/yunusffz/muda-smart-school/commit/fba8998d9d6be352d4ddecae3d8bb7013b365906))
+- remove unused tool icon from icons list ([561e69c](https://github.com/yunusffz/muda-smart-school/commit/561e69c86a286f62eb3e2186e3b042238f299a4e))
+- update image field to use images array in edit facility page ([dea7556](https://github.com/yunusffz/muda-smart-school/commit/dea75566fb4abc872367ea2ca9b6fba40fde3c6a))
+
 ## 0.2.0 (2026-02-19)
 
 ### Features
