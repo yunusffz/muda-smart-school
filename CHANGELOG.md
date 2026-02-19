@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/yunusffz/muda-smart-school/compare/v1.0.0...v1.1.0) (2026-02-19)
+
+### Features
+
+- add ai chat widget and api for generative ai responses ([f88832d](https://github.com/yunusffz/muda-smart-school/commit/f88832d7a6c53ad4978dccbb4bd5fcb8b7791cdd))
+
+### Bug Fixes
+
+- update api key environment variable for chat route ([f9de3de](https://github.com/yunusffz/muda-smart-school/commit/f9de3de4b3a7441ab4109cd42c00be37e8aef0ce))
+
 ## [1.0.0](https://github.com/yunusffz/muda-smart-school/compare/v0.2.0...v1.0.0) (2026-02-19)
 
 ### Features
