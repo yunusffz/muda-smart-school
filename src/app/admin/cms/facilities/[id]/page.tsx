@@ -24,7 +24,7 @@ export default async function EditFacilityPage({
     name: facility.name,
     description: facility.description || "",
     icon: facility.icon || "",
-    image: facility.image || "",
+    images: facility.images ?? [],
     order: facility.order,
     isActive: facility.isActive,
   };
