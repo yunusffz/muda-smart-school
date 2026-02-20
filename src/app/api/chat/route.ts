@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { SYSTEM_PROMPT } from "@/src/lib/school-info";
+import { getAiChatSetting } from "@/src/features/cms/services/ai-chat";
 
 const chatSchema = z.object({
   message: z.string({ message: "Pesan wajib diisi" }).min(1).max(500),
@@ -29,10 +29,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const setting = await getAiChatSetting();
+
+    if (!setting.isActive) {
+      return NextResponse.json(
+        { error: "AI Chat sementara tidak tersedia" },
+        { status: 503 },
+      );
+    }
+
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction: setting.systemPrompt,
     });
 
     const chat = model.startChat({

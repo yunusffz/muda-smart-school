@@ -23,6 +23,7 @@ import {
   School,
   Activity,
   UserCog,
+  Bot,
 } from "lucide-react";
 
 import {
@@ -112,6 +113,11 @@ const cmsMenuItems = [
     title: "Profil Sekolah",
     url: "/admin/cms/school-profile",
     icon: Globe,
+  },
+  {
+    title: "AI Chat",
+    url: "/admin/cms/ai-chat",
+    icon: Bot,
   },
 ];
 

@@ -14,18 +14,32 @@ interface ChatHistory {
   parts: { text: string }[];
 }
 
-const GREETING =
-  "Halo! Saya asisten virtual SMK Muhammadiyah 2 Cibiru. Ada yang bisa saya bantu? 😊";
+interface ChatConfig {
+  isActive: boolean;
+  welcomeMessage: string;
+  suggestions: string[];
+}
 
 export default function AIChatWidget() {
+  const [config, setConfig] = useState<ChatConfig | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "model", text: GREETING },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch("/api/chat/config")
+      .then((res) => res.json())
+      .then((data: ChatConfig) => {
+        setConfig(data);
+        setMessages([{ role: "model", text: data.welcomeMessage }]);
+      })
+      .catch(() => {
+        setConfig({ isActive: false, welcomeMessage: "", suggestions: [] });
+      });
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,7 +50,7 @@ export default function AIChatWidget() {
 
   const getHistory = (): ChatHistory[] =>
     messages
-      .filter((_, i) => i > 0) // skip greeting
+      .filter((_, i) => i > 0)
       .map((m) => ({
         role: m.role,
         parts: [{ text: m.text }],
@@ -124,6 +138,8 @@ export default function AIChatWidget() {
       sendMessage();
     }
   };
+
+  if (!config?.isActive) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
@@ -223,19 +239,17 @@ export default function AIChatWidget() {
           </div>
 
           {/* Quick suggestions */}
-          {messages.length === 1 && (
+          {messages.length === 1 && config.suggestions.length > 0 && (
             <div className="px-4 py-2 bg-gray-50 border-t border-gray-100 flex flex-wrap gap-2">
-              {["Jurusan apa saja?", "Cara daftar?", "Ada beasiswa?"].map(
-                (q) => (
-                  <button
-                    key={q}
-                    onClick={() => sendQuickMessage(q)}
-                    className="text-xs bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 rounded-full px-3 py-1 transition-colors"
-                  >
-                    {q}
-                  </button>
-                ),
-              )}
+              {config.suggestions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => sendQuickMessage(q)}
+                  className="text-xs bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 rounded-full px-3 py-1 transition-colors"
+                >
+                  {q}
+                </button>
+              ))}
             </div>
           )}
 
