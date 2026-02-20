@@ -273,6 +273,18 @@ model SocialLink {
   @@map("social_links")
 }
 
+model AiChatSetting {
+  id             String   @id @default(cuid())
+  systemPrompt   String   @map("system_prompt")
+  welcomeMessage String   @default("Halo! Saya asisten virtual SMK Muhammadiyah 2 Cibiru. Ada yang bisa saya bantu? 😊") @map("welcome_message")
+  suggestions    String[] @default([])
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("ai_chat_settings")
+}
+
 model SchoolSetting {
   id        String      @id @default(cuid())
   key       String      @unique
