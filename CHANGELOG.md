@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/yunusffz/muda-smart-school/compare/v1.1.0...v1.2.0) (2026-02-20)
+
+### Features
+
+- add aichatsettings model and migration for ai chat settings ([b221221](https://github.com/yunusffz/muda-smart-school/commit/b221221f04451c01b69d78dce41880f5d52dd17a))
+- implement ai chat settings management and form ([f74836d](https://github.com/yunusffz/muda-smart-school/commit/f74836dd74ac38d0950dd689a9fae606265007e6))
+- integrate ai chat widget into multiple layouts ([c361762](https://github.com/yunusffz/muda-smart-school/commit/c3617629f537c4a4c81ca5d081b97cd8adc5fc6c))
+
+### Bug Fixes
+
+- update error handling to use error.issues in ai chat route ([5a17532](https://github.com/yunusffz/muda-smart-school/commit/5a1753290eb2dfecfdb003a928ad89cc6ed774c8))
+
 ## [1.1.0](https://github.com/yunusffz/muda-smart-school/compare/v1.0.0...v1.1.0) (2026-02-19)
 
 ### Features
