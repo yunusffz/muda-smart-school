@@ -30,7 +30,7 @@ export async function PUT(request: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Data tidak valid", details: error.errors },
+        { error: "Data tidak valid", details: error.issues },
         { status: 400 },
       );
     }
