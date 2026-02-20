@@ -1,4 +1,5 @@
 import { Navbar } from "@/src/components/navbar";
+import AIChatWidget from "@/src/components/common/AIChatWidget";
 
 export default function PrestasiLayout({
   children,
@@ -9,6 +10,7 @@ export default function PrestasiLayout({
     <>
       <Navbar />
       {children}
+      <AIChatWidget />
     </>
   );
 }
