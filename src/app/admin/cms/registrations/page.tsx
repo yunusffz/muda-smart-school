@@ -1,13 +1,5 @@
 import Link from "next/link";
-import {
-  Plus,
-  Download,
-  Filter,
-  Users,
-  CheckCircle,
-  XCircle,
-  FileCheck,
-} from "lucide-react";
+import { Download, Filter, Users } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { PageHeader } from "@/src/app/admin/_components/PageHeader";
 import { RegistrationTable } from "./_components/RegistrationTable";
