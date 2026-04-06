@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -40,14 +40,28 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [programFilter, setProgramFilter] = useState<string>("all");
 
-  // Prepare data with filtering
-  const filteredData = data.filter((item) => {
-    // Filter by program keahlian
-    if (programFilter !== "all" && item.programKeahlian !== programFilter) {
-      return false;
+  // Prepare data with filtering - memoized to avoid reprocessing on every render
+  const filteredData = useMemo(
+    () =>
+      data.filter((item) => {
+        if (programFilter !== "all" && item.programKeahlian !== programFilter) {
+          return false;
+        }
+        return true;
+      }),
+    [data, programFilter],
+  );
+
+  const handleStatusFilterChange = useCallback((value: string) => {
+    if (value === "all") {
+      setColumnFilters((prev) => prev.filter((f) => f.id !== "status"));
+    } else {
+      setColumnFilters((prev) => [
+        ...prev.filter((f) => f.id !== "status"),
+        { id: "status", value },
+      ]);
     }
-    return true;
-  });
+  }, []);
 
   const table = useReactTable({
     data: filteredData,
@@ -78,11 +92,11 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
           data: filteredData,
           filters: {
             program: programFilter,
-            status: columnFilters.find(f => f.id === "status")?.value,
+            status: columnFilters.find((f) => f.id === "status")?.value,
           },
         }),
       });
-      
+
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -114,13 +128,10 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
               className="max-w-sm"
             />
           </div>
-          
+
           {/* Program Filter */}
           <div className="w-full sm:w-[200px]">
-            <Select
-              value={programFilter}
-              onValueChange={setProgramFilter}
-            >
+            <Select value={programFilter} onValueChange={setProgramFilter}>
               <SelectTrigger>
                 <SelectValue placeholder="Filter Program" />
               </SelectTrigger>
@@ -142,25 +153,19 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
               </SelectContent>
             </Select>
           </div>
-          
+
           {/* Status Filter */}
           <div className="w-full sm:w-[200px]">
             <StatusFilter
-              value={(columnFilters.find(f => f.id === "status")?.value as string) || "all"}
-              onChange={(value) => {
-                if (value === "all") {
-                  setColumnFilters(columnFilters.filter(f => f.id !== "status"));
-                } else {
-                  setColumnFilters([
-                    ...columnFilters.filter(f => f.id !== "status"),
-                    { id: "status", value },
-                  ]);
-                }
-              }}
+              value={
+                (columnFilters.find((f) => f.id === "status")
+                  ?.value as string) || "all"
+              }
+              onChange={handleStatusFilterChange}
             />
           </div>
         </div>
-        
+
         {/* Export Button */}
         <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" />
@@ -180,7 +185,7 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -199,7 +204,7 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
